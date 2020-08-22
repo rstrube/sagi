@@ -38,7 +38,7 @@ HOSTNAME="soagi"
 
 # Locale Configuration
 # To list out all timezones in US run "ls -l /usr/share/zoneinfo/America"
-KEYS="en"
+KEYS="us"
 TIMEZONE="/usr/share/zoneinfo/America/Denver"
 LOCALE="en_US.UTF-8 UTF-8"
 LANG="en_US.UTF-8"
@@ -69,7 +69,7 @@ function install() {
     timedatectl set-ntp true
 
     # Partion the drive with a single 512 MB ESP partition, and the rest of the drive as the root partition
-    parted ${HD_DEVICE} -S mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root ext4 512MiB 100% set 1 esp on
+    parted -s ${HD_DEVICE} mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root ext4 512MiB 100% set 1 esp on
 
     # Format the partitions, ESP as fat32, root as ext4
     mkfs.fat -n ESP -F32 ${HD_DEVICE}1
@@ -160,10 +160,11 @@ function check_variables() {
     check_variables_boolean "AMD_GPU" "$AMD_GPU"
     check_variables_boolean "INTEL_GPU" "$INTEL_GPU"
     check_variables_boolean "NVIDIA_GPU" "$NVIDIA_GPU"
-    check_variables_value "WIFI_INTERFACE" "$WIFI_INTERFACE"
-    check_variables_value "WIFI_ESSID" "$WIFI_ESSID"
-    check_variables_value "WIFI_KEY" "$WIFI_KEY"
-    check_variables_value "WIFI_HIDDEN" "$WIFI_HIDDEN"
+
+    if [ -n "$WIFI_INTERFACE" ]; then
+        check_variables_value "WIFI_ESSID" "$WIFI_ESSID"
+    fi
+
     check_variables_value "PING_HOSTNAME" "$PING_HOSTNAME"
     check_variables_value "HOSTNAME" "$HOSTNAME"
     check_variables_value "TIMEZONE" "$TIMEZONE"
