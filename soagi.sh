@@ -48,17 +48,20 @@ ROOT_PASSWORD=""
 USER_NAME=""
 USER_PASSWORD=""
 
-# Start
+# Installation Scripts
 #################################################
 
-check_variables
-check_critical_prereqs
-check_configure_network
+function main() {
+    
+    check_variables
+    check_critical_prereqs
+    check_configure_network
 
-loadkeys ${KEYS}
+    loadkeys ${KEYS}
 
-confirm_install
-install
+    confirm_install
+    install
+}
 
 function install() {
 
@@ -203,23 +206,23 @@ function check_critical_prereqs() {
     fi
 
     if [[ "$VM_CPU" == "false" && "$AMD_CPU" == "false" && "$INTEL_CPU" == "false" ]]; then
-        echo "Error: One of the following variables {VM_CPU|AMD_CPU|INTEL_CPU} must be =""true""."
+        echo "Error: One of the following variables {VM_CPU|AMD_CPU|INTEL_CPU} must be =true."
         exit
     fi
 
     if [[ "$VM_CPU" == "true" ]]; then
         if [[ "$AMD_CPU" == "true" || "$INTEL_CPU" == "true" || "$AMD_GPU" == "true" || "$INTEL_GPU" == "true" || "$NVIDIA_GPU" == "true" ]]; then
-            echo "Error: If VM_CPU=""true"" then AMD_CPU && INTEL_CPU && AMD_GPU && INTEL_GPU && NVIDIA_GPU must =""false""."
+            echo "Error: If VM_CPU=true then AMD_CPU && INTEL_CPU && AMD_GPU && INTEL_GPU && NVIDIA_GPU must =false."
             exit
         fi
         if [[ -n "$WIFI_INTERFACE"]]
-            echo "Error: If VM_CPU=""true"" then WIFI_INTERFACE cannot have a value."
+            echo "Error: If VM_CPU=true then WIFI_INTERFACE cannot have a value."
             exit
         fi
     fi
 
     if [[ "$AMD_CPU" == "true" && "$INTEL_CPU" == "true" ]]; then
-        echo "Error: AMD_CPU and INTEL_CPU are mutually exclusve and can't both =""true""."
+        echo "Error: AMD_CPU and INTEL_CPU are mutually exclusve and can't both =true."
         exit
     fi
 }
@@ -266,3 +269,5 @@ function confirm_install() {
             ;;
     esac
 }
+
+main $@
