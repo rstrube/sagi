@@ -179,7 +179,7 @@ function check_variables_value() {
     NAME=$1
     VALUE=$2
     if [[ -z "$VALUE" ]]; then
-        echo "$NAME variable must have a value."
+        echo "Error: $NAME must have a value."
         exit
     fi
 }
@@ -193,7 +193,7 @@ function check_variables_boolean() {
         false )
             ;;
         * )
-            echo "$NAME variable must be {true|false}."
+            echo "Error: $NAME must be {true|false}."
             exit
             ;;
     esac
@@ -215,7 +215,7 @@ function check_critical_prereqs() {
             echo "Error: If VM_CPU=true then AMD_CPU && INTEL_CPU && AMD_GPU && INTEL_GPU && NVIDIA_GPU must =false."
             exit
         fi
-        if [[ -n "$WIFI_INTERFACE"]]
+        if [[ -n "$WIFI_INTERFACE" ]]; then
             echo "Error: If VM_CPU=true then WIFI_INTERFACE cannot have a value."
             exit
         fi
