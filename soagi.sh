@@ -48,6 +48,12 @@ ROOT_PASSWORD=""
 USER_NAME=""
 USER_PASSWORD=""
 
+# Console Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+LIGHT_BLUE='\033[1;34m'
+NC='\033[0m'
+
 # Installation Scripts
 #################################################
 
