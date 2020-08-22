@@ -122,7 +122,7 @@ function install() {
     arch-chroot /mnt hwclock --systohc
 
     # Configure locale
-    arch-chroot /mnt sed -i "s/#${LOCALE}/${LOCALE}/" /mnt/etc/locale.gen
+    arch-chroot /mnt sed -i "s/#${LOCALE}/${LOCALE}/" /etc/locale.gen
     arch-chroot /mnt locale-gen
     echo -e "LANG=${LANG}" >> /mnt/etc/locale.conf
 
@@ -147,7 +147,7 @@ function install() {
 
     # Install Gnome
     arch-chroot /mnt pacman -Syu --noconfirm --needed gnome gnome-extra
-    arch-chroot /mnt systemctl enable gdm.servic
+    arch-chroot /mnt systemctl enable gdm.service
 }
 
 function check_variables() {
