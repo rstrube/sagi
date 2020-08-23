@@ -152,7 +152,7 @@ function install() {
     arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
     # Install Gnome
-    arch-chroot /mnt pacman -Syu --noconfirm --needed gnome gnome-extra
+    arch-chroot /mnt pacman -Syu --noconfirm --needed gnome
     arch-chroot /mnt systemctl enable gdm.service
 }
 
@@ -259,6 +259,8 @@ function check_configure_network() {
 }
 
 function confirm_install() {
+    clear
+
     echo -e "${LIGHT_BLUE}soagi (Simple Opinionated Arch Gnome Installer)${NC}"
     echo ""
     echo -e "${RED}Warning"'!'"${NC}"
