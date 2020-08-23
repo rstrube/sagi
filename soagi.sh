@@ -159,6 +159,26 @@ function install() {
     # Install Gnome
     arch-chroot /mnt pacman -Syu --noconfirm --needed gnome
     arch-chroot /mnt systemctl enable gdm.service
+
+    # Install GPU Drivers
+    COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader"
+
+    if [[ "$INTEL_GPU" == "true" ]]; then
+
+        # Note: installing newer intel-media-driver (iHD) instead of libva-intel-driver (i965)
+        arch-chroot /mnt pacman -Syu --noconfirm --needed ${COMMON_VULKAN_PACKAGES} vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
+    fi
+
+    if [[ "$AMD_GPU" == "true" ]]; then
+        arch-chroot /mnt pacman -Syu --noconfirm --needed ${COMMON_VULKAN_PACKAGES} vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils
+    fi
+    
+    if [[ "$NVIDIA_GPU" == "true" ]]; then
+        arch-chroot /mnt pacman -Syu --noconfirm --needed ${COMMON_VULKAN_PACKAGES} nvidia nvidia-dkms nvidia-utils lib32-nvidia-utils
+
+        # Configure pacman to rebuild the initramfs each time the nvidia package is updated
+        configure_pacman_nvidia_hook
+    fi
 }
 
 function check_variables() {
@@ -187,11 +207,14 @@ function check_variables() {
     check_variables_value "USER_PASSWORD" "$USER_PASSWORD"
 }
 
+ERROR_VARS_MESSAGE="Error: you must edit soagi.sh (e.g. with vim) and configure variables."
+
 function check_variables_value() {
     NAME=$1
     VALUE=$2
     if [[ -z "$VALUE" ]]; then
-        echo "Error: $NAME must have a value."
+        echo ${ERROR_VARS_MESSAGE}
+        echo "${NAME} must have a value."
         exit
     fi
 }
@@ -205,7 +228,8 @@ function check_variables_boolean() {
         false )
             ;;
         * )
-            echo "Error: $NAME must be {true|false}."
+            echo ${ERROR_VARS_MESSAGE}
+            echo "Error: ${NAME} must be {true|false}."
             exit
             ;;
     esac
@@ -214,21 +238,22 @@ function check_variables_boolean() {
 function check_critical_prereqs() {
     if [[ ! -d /sys/firmware/efi ]]; then
         echo "Error: soagi can only be run on UEFI systems."
+        echo "If running in a VM, make sure the VM is configured to use UEFI instead of BIOS."
         exit
     fi
 
     if [[ "$VM_CPU" == "false" && "$AMD_CPU" == "false" && "$INTEL_CPU" == "false" ]]; then
-        echo "Error: One of the following variables {VM_CPU|AMD_CPU|INTEL_CPU} must be =true."
+        echo "Error: one of the following variables {VM_CPU|AMD_CPU|INTEL_CPU} must be =true."
         exit
     fi
 
     if [[ "$VM_CPU" == "true" ]]; then
         if [[ "$AMD_CPU" == "true" || "$INTEL_CPU" == "true" || "$AMD_GPU" == "true" || "$INTEL_GPU" == "true" || "$NVIDIA_GPU" == "true" ]]; then
-            echo "Error: If VM_CPU=true then AMD_CPU && INTEL_CPU && AMD_GPU && INTEL_GPU && NVIDIA_GPU must =false."
+            echo "Error: if VM_CPU=true then AMD_CPU && INTEL_CPU && AMD_GPU && INTEL_GPU && NVIDIA_GPU must =false."
             exit
         fi
         if [[ -n "$WIFI_INTERFACE" ]]; then
-            echo "Error: If VM_CPU=true then WIFI_INTERFACE cannot have a value."
+            echo "Error: if VM_CPU=true then WIFI_INTERFACE cannot have a value."
             exit
         fi
     fi
@@ -282,6 +307,25 @@ function confirm_install() {
             exit
             ;;
     esac
+}
+
+function configure_pacman_nvidia_hook() {
+
+    cat <<EOT > "/mnt/etc/pacman.d/hooks/nvidia.hook"
+[Trigger]
+Operation=Install
+Operation=Upgrade
+Operation=Remove
+Type=Package
+Target=nvidia
+
+[Action]
+Description=Update Nvidia module in initcpio
+Depends=mkinitcpio
+When=PostTransaction
+Exec=/usr/bin/mkinitcpio -P'
+EOT
+
 }
 
 main $@
