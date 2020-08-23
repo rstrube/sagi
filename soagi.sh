@@ -93,12 +93,17 @@ function install() {
     chmod 600 /mnt/swapfile
     mkswap /mnt/swapfile
 
+    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs neovim networkmanager git"
+
     # Install essential packages via pacstrap
-    if [[ "$VM_CPU" == "true" ]]; then
-        # When installing in VM, do not install linux-firmware
-        pacstrap /mnt base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs neovim networkmanager git
-    else
-        pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs neovim networkmanager git
+    if [[ "$VM_CPU" == "true" ]]; then # When installing in VM, do not install linux-firmware or ucode
+        pacstrap /mnt ${ESSENTIAL_PACKAGES}
+
+    elif [[ "$AMD_CPU" == "true" ]]; then
+        pacstrap /mnt ${ESSENTIAL_PACKAGES} linux-firmware amd-ucode
+
+    elif [[ "$INTEL_CPU" == "true" ]]; then
+        pacstrap /mnt ${ESSENTIAL_PACKAGES} linux-firmware intel-ucode
     fi
     
     # Enable NetworkManager.service
