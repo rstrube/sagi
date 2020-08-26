@@ -75,25 +75,54 @@ function install() {
     timedatectl set-ntp true
 
     # Partion the drive with a single 512 MB ESP partition, and the rest of the drive as the root partition
-    parted -s ${HD_DEVICE} mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root ext4 512MiB 100% set 1 esp on
+    parted -s ${HD_DEVICE} mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root btrfs 512MiB 100% set 1 esp on
 
-    # Format the partitions, ESP as fat32, root as ext4
+    # Format the partitions, ESP (/dev/${HD_DEVICE}1) as fat32, BTRFS-VOL (/dev/${HD_DEVICE}2) as btrfs
     mkfs.fat -n ESP -F32 ${HD_DEVICE}1
-    mkfs.ext4 -L root ${HD_DEVICE}2
+    mkfs.btrfs -L BTRFS-VOL ${HD_DEVICE}2
 
-    # Mount root partition
+    # Mount top level btrfs volume on /mnt
     mount -o defaults,noatime ${HD_DEVICE}2 /mnt
 
-    # Mount the ESP partition
+    # Create btrfs subvolumes
+    btrfs subvolume create /mnt/ROOT
+    btrfs subvolume create /mnt/home
+    btrfs subvolume create /mnt/var
+    btrfs subvolume create /mnt/snapshots
+
+    # Unmount top level btrfs volume
+    umount /mnt
+
+    # Mount btrfs subvolumes at the correct locations (with compression enabled)
+    # Mount ROOT subvolume at /mnt
+    mount -o "subvol=ROOT,defaults,noatime,compress=lzo" ${HD_DEVICE}2 /mnt
+    
+    # Create the additional subdirectories to support mounting additional btrfs subvolumes
+    mkdir /mnt/{home,var,snapshots}
+        
+    # Mount additional btrfs subvolumes
+    mount -o "subvol=home,defaults,noatime,compress=lzo" ${HD_DEVICE}2 /mnt/home
+    mount -o "subvol=var,defaults,noatime,compress=lzo" ${HD_DEVICE}2 /mnt/var
+    mount -o "subvol=snapshots,defaults,noatime,compress=lzo" ${HD_DEVICE}2 /mnt/snapshots
+
+    # Create directory to support mounting ESP
     mkdir /mnt/boot
+
+    # Mount the ESP partition
     mount -o defaults,noatime ${HD_DEVICE}1 /mnt/boot
 
     # Create the swapfile
+    # Make sure CoW and compression are disabled for /swapfile
+    truncate -s 0 /mnt/swapfile
+    chattr +C /mnt/swapfile
+    btrfs property set /mnt/swapfile compression none
+
+    # Allocate space, change permissions, and make the swap
     dd if=/dev/zero of=/mnt/swapfile bs=1M count=${SWAPSIZE} status=progress
     chmod 600 /mnt/swapfile
     mkswap /mnt/swapfile
 
-    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs neovim networkmanager git"
+    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git"
 
     # Install essential packages via pacstrap
     if [[ "$VM_CPU" == "true" ]]; then # When installing in VM, do not install linux-firmware or ucode
@@ -115,10 +144,16 @@ function install() {
     sed -i 's/#TotalDownload/TotalDownload/' /mnt/etc/pacman.conf
 
     # Generate fstab
-    genfstab -U /mnt >> /mnt/etc/fstab
-    echo "# swap" >> /mnt/etc/fstab
-    echo "/swapfile none swap defaults 0 0" >> /mnt/etc/fstab
-    echo "" >> /mnt/etc/fstab
+    genfstab -L /mnt > /mnt/etc/fstab
+    cat <<EOT >> "/mnt/etc/fstab"
+
+# swapfile
+/swapfile none swap defaults 0 0
+
+# top level brtfs volume (for restores/maintenance), not mounted automatically
+LABEL=BTRFS-TOP-LVL /btrfs-top-level subvol=/,defaults,noatime,noauto 0 0
+
+EOT
 
     # Configure swappiness paramater (default=60) to improve system responsiveness
     echo "vm.swappiness=10" > /mnt/etc/sysctl.d/99-sysctl.conf
@@ -237,29 +272,29 @@ function check_variables_boolean() {
 
 function check_critical_prereqs() {
     if [[ ! -d /sys/firmware/efi ]]; then
-        echo "Error: soagi can only be run on UEFI systems."
+        echo -e "${RED}Error: soagi can only be run on UEFI systems.${NC}"
         echo "If running in a VM, make sure the VM is configured to use UEFI instead of BIOS."
         exit
     fi
 
     if [[ "$VM_CPU" == "false" && "$AMD_CPU" == "false" && "$INTEL_CPU" == "false" ]]; then
-        echo "Error: one of the following variables {VM_CPU|AMD_CPU|INTEL_CPU} must be =true."
+        echo -e "${RED}Error: one of the following variables {VM_CPU|AMD_CPU|INTEL_CPU} must be =true.${NC}"
         exit
     fi
 
     if [[ "$VM_CPU" == "true" ]]; then
         if [[ "$AMD_CPU" == "true" || "$INTEL_CPU" == "true" || "$AMD_GPU" == "true" || "$INTEL_GPU" == "true" || "$NVIDIA_GPU" == "true" ]]; then
-            echo "Error: if VM_CPU=true then AMD_CPU && INTEL_CPU && AMD_GPU && INTEL_GPU && NVIDIA_GPU must =false."
+            echo -e "${RED}Error: if VM_CPU=true then AMD_CPU && INTEL_CPU && AMD_GPU && INTEL_GPU && NVIDIA_GPU must =false.${NC}"
             exit
         fi
         if [[ -n "$WIFI_INTERFACE" ]]; then
-            echo "Error: if VM_CPU=true then WIFI_INTERFACE cannot have a value."
+            echo -e "${RED}Error: if VM_CPU=true then WIFI_INTERFACE cannot have a value.${NC}"
             exit
         fi
     fi
 
     if [[ "$AMD_CPU" == "true" && "$INTEL_CPU" == "true" ]]; then
-        echo "Error: AMD_CPU and INTEL_CPU are mutually exclusve and can't both =true."
+        echo -e "${RED}Error: AMD_CPU and INTEL_CPU are mutually exclusve and can't both =true.${NC}"
         exit
     fi
 }
