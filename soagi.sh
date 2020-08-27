@@ -90,7 +90,6 @@ function install() {
     # Create btrfs subvolumes
     btrfs subvolume create /mnt/ROOT
     btrfs subvolume create /mnt/home
-    btrfs subvolume create /mnt/var
     btrfs subvolume create /mnt/snapshots
 
     # Unmount top level btrfs volume
