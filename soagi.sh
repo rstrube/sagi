@@ -123,7 +123,7 @@ function install() {
     chmod 600 /mnt/swapfile
     mkswap /mnt/swapfile
 
-    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git"
+    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim"
 
     # Install essential packages via pacstrap
     if [[ "$VM_CPU" == "true" ]]; then # When installing in VM, do not install linux-firmware or ucode
@@ -253,13 +253,13 @@ function check_variables() {
     check_variables_value "USER_PASSWORD" "$USER_PASSWORD"
 }
 
-ERROR_VARS_MESSAGE="Error: you must edit soagi.sh (e.g. with vim) and configure variables."
+ERROR_VARS_MESSAGE="${RED}Error: you must edit soagi.sh (e.g. with vim) and configure variables.${NC}"
 
 function check_variables_value() {
     NAME=$1
     VALUE=$2
     if [[ -z "$VALUE" ]]; then
-        echo ${ERROR_VARS_MESSAGE}
+        echo -e ${ERROR_VARS_MESSAGE}
         echo "${NAME} must have a value."
         exit
     fi
@@ -274,8 +274,8 @@ function check_variables_boolean() {
         false )
             ;;
         * )
-            echo ${ERROR_VARS_MESSAGE}
-            echo "Error: ${NAME} must be {true|false}."
+            echo -e ${ERROR_VARS_MESSAGE}
+            echo "${NAME} must be {true|false}."
             exit
             ;;
     esac
