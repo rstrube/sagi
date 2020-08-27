@@ -48,6 +48,9 @@ ROOT_PASSWORD=""
 USER_NAME=""
 USER_PASSWORD=""
 
+# Additional Linux Command Line Params
+CMDLINE_LINUX=""
+
 # Console Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -95,15 +98,14 @@ function install() {
 
     # Mount btrfs subvolumes at the correct locations (with compression enabled)
     # Mount ROOT subvolume at /mnt
-    mount -o "subvol=ROOT,defaults,noatime,compress=lzo" ${HD_DEVICE}2 /mnt
+    mount -o "defaults,noatime,compress=lzo,subvol=/ROOT" ${HD_DEVICE}2 /mnt
     
     # Create the additional subdirectories to support mounting additional btrfs subvolumes
-    mkdir /mnt/{home,var,snapshots}
+    mkdir /mnt/{home,snapshots}
         
     # Mount additional btrfs subvolumes
-    mount -o "subvol=home,defaults,noatime,compress=lzo" ${HD_DEVICE}2 /mnt/home
-    mount -o "subvol=var,defaults,noatime,compress=lzo" ${HD_DEVICE}2 /mnt/var
-    mount -o "subvol=snapshots,defaults,noatime,compress=lzo" ${HD_DEVICE}2 /mnt/snapshots
+    mount -o "defaults,noatime,compress=lzo,subvol=/home" ${HD_DEVICE}2 /mnt/home
+    mount -o "defaults,noatime,compress=lzo,subvol=/snapshots" ${HD_DEVICE}2 /mnt/snapshots
 
     # Create directory to support mounting ESP
     mkdir /mnt/boot
@@ -144,14 +146,22 @@ function install() {
     sed -i 's/#TotalDownload/TotalDownload/' /mnt/etc/pacman.conf
 
     # Generate fstab
-    genfstab -L /mnt > /mnt/etc/fstab
     cat <<EOT >> "/mnt/etc/fstab"
 
-# swapfile
-/swapfile none swap defaults 0 0
+# ESP
+LABEL=ESP           /boot       vfat    defaults,noatime,umask=0022                     0 2
 
-# top level brtfs volume (for restores/maintenance), not mounted automatically
-LABEL=BTRFS-TOP-LVL /btrfs-top-level subvol=/,defaults,noatime,noauto 0 0
+# /ROOT subvolume
+LABEL=BTRFS-VOL     /           btrfs   defaults,noatime,compress=lzo,subvol=/ROOT      0 0
+
+# /home subvolume
+LABEL=BTRFS-VOL     /home       btrfs   defaults,noatime,compress=lzo,subvol=/home      0 0
+
+# /snapshots subvolume
+LABEL=BTRFS-VOL     /snapshots  btrfs   defaults,noatime,compress=lzo,subvol=/snapshots 0 0
+
+# swapfile
+/swapfile           none        swap    defaults                                        0 0
 
 EOT
 
@@ -180,6 +190,8 @@ EOT
 
     # Configure root password
     printf "${ROOT_PASSWORD}\n${ROOT_PASSWORD}" | arch-chroot /mnt passwd
+
+    arch-chroot /mnt sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="'"${CMDLINE_LINUX}"'"/' /etc/default/grub
 
     # Install and configure Grub as bootloader on ESP
     arch-chroot /mnt pacman -Syu --noconfirm --needed grub efibootmgr
