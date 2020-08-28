@@ -26,11 +26,17 @@ function install() {
     echo "Enabling Chromium VAAPI support..."
     echo "Generating ~/.config/chromium-flags.conf file..."
 
-    cat <<EOT > "~/.config/chromium-flags.conf"
+    cat <<EOT > "chromium-flags.conf"
 --ignore-gpu-blacklist
 --enable-gpu-rasterization
 --enable-zero-copy
 EOT
+
+    mv chromium-flags.conf ~/.config/.
+
+    echo "===~/.config/chromium-flags.conf==="
+    cat ~/.config/chromium-flags.conf
+    echo "==================================="
 
 }
 
