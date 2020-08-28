@@ -30,7 +30,9 @@ function main() {
 
 function install() {
 
-    yay -S --noconfirm btrbk
+    if [[ ! -e /usr/bin/btrbk ]]; then
+        yay -S --noconfirm btrbk
+    fi
 
     if [ "$CREATE_BACKUP_TO_EXT_HD_BTRBK_CONFIG" != "true" ]; then
         echo "Skipping the creation of a btrbk.conf file..."
