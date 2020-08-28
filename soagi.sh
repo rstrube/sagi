@@ -152,23 +152,23 @@ function install() {
     cat <<EOT >> "/mnt/etc/fstab"
 
 # ESP
-LABEL=ESP           /boot               vfat    defaults,noatime,umask=0022                     0 2
+LABEL=ESP           /boot               vfat    defaults,noatime,umask=0022                         0 2
 
 # /rootfs subvolume
-LABEL=BTRFS-VOL     /                   btrfs   defaults,noatime,compress=lzo,subvol=/rootfs    0 0
+LABEL=BTRFS-VOL     /                   btrfs   defaults,noatime,compress=lzo,subvol=/rootfs        0 0
 
 # /home subvolume
-LABEL=BTRFS-VOL     /home               btrfs   defaults,noatime,compress=lzo,subvol=/home      0 0
+LABEL=BTRFS-VOL     /home               btrfs   defaults,noatime,compress=lzo,subvol=/home          0 0
 
 # /btr-snapshots subvolume
-LABEL=BTRFS-VOL     /btr-snapshots      btrfs   defaults,noatime,compress=lzo,subvol=/snapshots 0 0
+LABEL=BTRFS-VOL     /btr-snapshots      btrfs   defaults,noatime,compress=lzo,subvol=/btr-snapshots 0 0
 
 # top level btrfs volume
 # Note: top level btrfs volumes always have a subvolid=5
-LABEL=BTRFS-VOL     /mnt/btr-volume     btrfs   defaults,noatime,subvolid=5                     0 0
+LABEL=BTRFS-VOL     /mnt/btr-volume     btrfs   defaults,noatime,subvolid=5                         0 0
 
 # swapfile
-/swapfile           none        swap    defaults                                                0 0
+/swapfile           none                swap    defaults                                            0 0
 
 EOT
 
