@@ -275,7 +275,7 @@ function check_variables_value() {
     if [[ -z "$VALUE" ]]; then
         echo -e ${ERROR_VARS_MESSAGE}
         echo "${NAME} must have a value."
-        exit
+        exit 1
     fi
 }
 
@@ -290,7 +290,7 @@ function check_variables_boolean() {
         * )
             echo -e ${ERROR_VARS_MESSAGE}
             echo "${NAME} must be {true|false}."
-            exit
+            exit 1
             ;;
     esac
 }
@@ -299,28 +299,28 @@ function check_critical_prereqs() {
     if [[ ! -d /sys/firmware/efi ]]; then
         echo -e "${RED}Error: soagi can only be run on UEFI systems.${NC}"
         echo "If running in a VM, make sure the VM is configured to use UEFI instead of BIOS."
-        exit
+        exit 1
     fi
 
     if [[ "$VM_CPU" == "false" && "$AMD_CPU" == "false" && "$INTEL_CPU" == "false" ]]; then
         echo -e "${RED}Error: one of the following variables {VM_CPU|AMD_CPU|INTEL_CPU} must be =true.${NC}"
-        exit
+        exit 1
     fi
 
     if [[ "$VM_CPU" == "true" ]]; then
         if [[ "$AMD_CPU" == "true" || "$INTEL_CPU" == "true" || "$AMD_GPU" == "true" || "$INTEL_GPU" == "true" || "$NVIDIA_GPU" == "true" ]]; then
             echo -e "${RED}Error: if VM_CPU=true then AMD_CPU && INTEL_CPU && AMD_GPU && INTEL_GPU && NVIDIA_GPU must =false.${NC}"
-            exit
+            exit 1
         fi
         if [[ -n "$WIFI_INTERFACE" ]]; then
             echo -e "${RED}Error: if VM_CPU=true then WIFI_INTERFACE cannot have a value.${NC}"
-            exit
+            exit 1
         fi
     fi
 
     if [[ "$AMD_CPU" == "true" && "$INTEL_CPU" == "true" ]]; then
         echo -e "${RED}Error: AMD_CPU and INTEL_CPU are mutually exclusve and can't both =true.${NC}"
-        exit
+        exit 1
     fi
 }
 
@@ -332,6 +332,7 @@ function check_configure_network() {
         sed -i 's/^Interface=.*/Interface='"${WIFI_INTERFACE}"'/' /etc/netctl/wireless-wpa
         sed -i 's/^ESSID=.*/ESSID='"${WIFI_ESSID}"'/' /etc/netctl/wireless-wpa
         sed -i 's/^Key=.*/Key=\"'"${WIFI_KEY}"'\"/' /etc/netctl/wireless-wpa
+        
         if [ "$WIFI_HIDDEN" == "true" ]; then
             sed -i 's/^#Hidden=.*/Hidden=yes/' /etc/netctl/wireless-wpa
         fi
@@ -342,9 +343,10 @@ function check_configure_network() {
     fi
 
     ping -c 1 -i 2 -W 5 -w 30 ${PING_HOSTNAME}
+    
     if [ $? -ne 0 ]; then
         echo "Error: Network ping check failed. Cannot continue."
-        exit
+        exit 1
     fi
 }
 

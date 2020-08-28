@@ -15,7 +15,7 @@ function check_variables_value() {
     if [[ -z "$VALUE" ]]; then
         echo -e ${ERROR_VARS_MESSAGE}
         echo "${NAME} must have a value."
-        exit
+        exit 1
     fi
 }
 
@@ -30,7 +30,7 @@ function check_variables_boolean() {
         * )
             echo -e ${ERROR_VARS_MESSAGE}
             echo "${NAME} must be {true|false}."
-            exit
+            exit 1
             ;;
     esac
 }
@@ -40,6 +40,6 @@ function check_yay_prereq() {
     if [[ ! -e /usr/bin/yay ]]; then
         echo -e "${RED}Error: yay must be installed.${NC}"
         echo "You can install yay by running ./core-yay.sh"
-        exit
+        exit 1
     fi
 }

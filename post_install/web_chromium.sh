@@ -4,7 +4,7 @@
 # Enable VAAPI support for Chromium?
 ENABLE_CHROMIUM_VAAPI="true"
 
-source _common-sh-functions.sh
+source _sh-functions.sh
 
 function main() {
     

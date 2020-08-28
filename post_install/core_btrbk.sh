@@ -1,25 +1,25 @@
 #!/bin/bash
 # Core - btrbk
 
-# Do you want the installation to create a btrbk.conf for backups to an external HD?
+# Create a btrbk.conf for backups to an external HD?
 CREATE_BACKUP_TO_EXT_HD_BTRBK_CONFIG="false"
 
-# If you selected true above, define some details for the configuration file
-# This is the path to the source btrfs root volume
+# If you selected true above, define some details for the btrbk.conf file
+# Path to the source btrfs root volume
 BTR_SRC_ROOT_VOL_PATH="/mnt/btr_root_vol"
 
-# This is the name of the btrfs subvolume where local snapshots will be created
+# Name of the btrfs subvolume where local snapshots will be created
 BTR_SNAPSHOT_SUBVOL_NAME="btr_snapshots"
 
-# This is the path to the target btrfs root volume (which will contain backups from source)
+# Target btrfs root volume (which will contain backups from source)
 # This is normally the path to the external HD e.g. /run/media/${USER}/xxx
 # IMPORTANT: filesystem of external HD *must* also be btrfs
 BTR_TARGET_ROOT_VOL_PATH="" 
 
-# This is used to name the snapshots so they can be more easily identified
+# All snapshots are prefixed with this so they can be more easily identified
 HOSTNAME="soagi"
 
-source _common-sh-functions.sh
+source _sh-functions.sh
 
 function main() {
     
