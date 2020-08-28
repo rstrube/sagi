@@ -92,6 +92,9 @@ function install() {
     btrfs subvolume create /mnt/home
     btrfs subvolume create /mnt/btr-snapshots
 
+    # Note we need to create a separate subvolume that will contain the swapfile so we can snapshot rootfs
+    btrfs subvolume create /mnt/swap
+
     # Unmount top level btrfs volume
     umount /mnt
 
@@ -100,11 +103,12 @@ function install() {
     mount -o "defaults,noatime,compress=lzo,subvol=/rootfs" ${HD_DEVICE}2 /mnt
     
     # Create the additional subdirectories to support mounting additional btrfs subvolumes
-    mkdir /mnt/{home,btr-snapshots}
+    mkdir /mnt/{home,btr-snapshots,swap}
         
     # Mount additional btrfs subvolumes
     mount -o "defaults,noatime,compress=lzo,subvol=/home" ${HD_DEVICE}2 /mnt/home
     mount -o "defaults,noatime,compress=lzo,subvol=/btr-snapshots" ${HD_DEVICE}2 /mnt/btr-snapshots
+    mount -o "defaults,noatime,subvol=/swap" ${HD_DEVICE}2 /mnt/swap
 
     # Create directory to support mounting ESP
     mkdir /mnt/boot
@@ -118,14 +122,14 @@ function install() {
 
     # Create the swapfile
     # Make sure CoW and compression are disabled for /swapfile
-    truncate -s 0 /mnt/swapfile
-    chattr +C /mnt/swapfile
-    btrfs property set /mnt/swapfile compression none
-
-    # Allocate space, change permissions, and make the swap
-    dd if=/dev/zero of=/mnt/swapfile bs=1M count=${SWAPSIZE} status=progress
-    chmod 600 /mnt/swapfile
-    mkswap /mnt/swapfile
+    SWAPFILE="/mnt/swap/swapfile"
+    touch ${SWAPFILE}
+    chattr +C ${SWAPFILE}
+    btrfs property set ${SWAPFILE} compression none
+    fallocate --length ${SWAPSIZE}MiB ${SWAPFILE}
+    chown root ${SWAPFILE} 
+    chmod 600 ${SWAPFILE} 
+    mkswap ${SWAPFILE}
 
     ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim"
 
@@ -163,12 +167,15 @@ LABEL=BTRFS-VOL     /home               btrfs   defaults,noatime,compress=lzo,su
 # /btr-snapshots subvolume
 LABEL=BTRFS-VOL     /btr-snapshots      btrfs   defaults,noatime,compress=lzo,subvol=/btr-snapshots 0 0
 
-# top level btrfs volume
-# Note: top level btrfs volumes always have a subvolid=5
-LABEL=BTRFS-VOL     /mnt/btr-volume     btrfs   defaults,noatime,subvolid=5                         0 0
+# /swap subvolume (contains swapfile)
+LABEL=BTRFS-VOL     /swap               btrfs   defaults,noatime,subvol=/swap                       0 0
+
+# btrfs root volume (btrfs root volumes always have a subvolid=5)
+# Note: this can be used to create snapshots of other subvolumes, including subvol=/footfs
+LABEL=BTRFS-VOL     /mnt/btr-root-vol   btrfs   defaults,noatime,subvolid=5                         0 0
 
 # swapfile
-/swapfile           none                swap    defaults                                            0 0
+/swap/swapfile      none                swap    defaults                                            0 0
 
 EOT
 
