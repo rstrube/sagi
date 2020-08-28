@@ -114,7 +114,7 @@ function install() {
 
     # Create mountpoint for the top level btrfs volume itself
     # Note: this location can be used to create/restore snapshots to/from (e.g. of the rootfs, home, etc.)
-    mkdir /mnt/mnt/btr-volume
+    mkdir -p /mnt/mnt/btr-volume
 
     # Create the swapfile
     # Make sure CoW and compression are disabled for /swapfile
