@@ -104,7 +104,7 @@ function install() {
         
     # Mount additional btrfs subvolumes
     mount -o "defaults,noatime,compress=lzo,subvol=/home" ${HD_DEVICE}2 /mnt/home
-    mount -o "defaults,noatime,compress=lzo,subvol=/btr-snapshots" ${HD_DEVICE}2 /mnt/snapshots
+    mount -o "defaults,noatime,compress=lzo,subvol=/btr-snapshots" ${HD_DEVICE}2 /mnt/btr-snapshots
 
     # Create directory to support mounting ESP
     mkdir /mnt/boot
