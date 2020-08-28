@@ -7,6 +7,8 @@ GREEN='\033[0;32m'
 LIGHT_BLUE='\033[1;34m'
 NC='\033[0m'
 
+ERROR_VARS_MESSAGE="${RED}Error: you must edit this script (e.g. with vim) and configure variables.${NC}"
+
 function check_variables_value() {
     NAME=$1
     VALUE=$2
