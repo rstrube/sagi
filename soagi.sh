@@ -103,7 +103,7 @@ function install() {
     mount -o "defaults,noatime,compress=lzo,subvol=/rootfs" ${HD_DEVICE}2 /mnt
     
     # Create the additional subdirectories to support mounting additional btrfs subvolumes
-    mkdir /mnt/{home,btr-snapshots,swap}
+    mkdir /mnt/{home,btr_snapshots,swap}
         
     # Mount additional btrfs subvolumes
     mount -o "defaults,noatime,compress=lzo,subvol=/home" ${HD_DEVICE}2 /mnt/home
