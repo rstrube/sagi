@@ -90,7 +90,7 @@ function install() {
     # Create btrfs subvolumes
     btrfs subvolume create /mnt/rootfs
     btrfs subvolume create /mnt/home
-    btrfs subvolume create /mnt/btr-snapshots
+    btrfs subvolume create /mnt/btr_snapshots
 
     # Note we need to create a separate subvolume that will contain the swapfile so we can snapshot rootfs
     btrfs subvolume create /mnt/swap
@@ -107,7 +107,7 @@ function install() {
         
     # Mount additional btrfs subvolumes
     mount -o "defaults,noatime,compress=lzo,subvol=/home" ${HD_DEVICE}2 /mnt/home
-    mount -o "defaults,noatime,compress=lzo,subvol=/btr-snapshots" ${HD_DEVICE}2 /mnt/btr-snapshots
+    mount -o "defaults,noatime,compress=lzo,subvol=/btr_snapshots" ${HD_DEVICE}2 /mnt/btr_snapshots
     mount -o "defaults,noatime,subvol=/swap" ${HD_DEVICE}2 /mnt/swap
 
     # Create directory to support mounting ESP
@@ -118,7 +118,7 @@ function install() {
 
     # Create mountpoint for the top level btrfs volume itself
     # Note: this location can be used to create/restore snapshots to/from (e.g. of the rootfs, home, etc.)
-    mkdir -p /mnt/mnt/btr-volume
+    mkdir -p /mnt/mnt/btr_root_vol
 
     # Create the swapfile
     # Make sure CoW and compression are disabled for /swapfile
@@ -164,15 +164,15 @@ LABEL=BTRFS-VOL     /                   btrfs   defaults,noatime,compress=lzo,su
 # /home subvolume
 LABEL=BTRFS-VOL     /home               btrfs   defaults,noatime,compress=lzo,subvol=/home          0 0
 
-# /btr-snapshots subvolume
-LABEL=BTRFS-VOL     /btr-snapshots      btrfs   defaults,noatime,compress=lzo,subvol=/btr-snapshots 0 0
+# /btr_snapshots subvolume
+LABEL=BTRFS-VOL     /btr_snapshots      btrfs   defaults,noatime,compress=lzo,subvol=/btr_snapshots 0 0
 
 # /swap subvolume (contains swapfile)
 LABEL=BTRFS-VOL     /swap               btrfs   defaults,noatime,subvol=/swap                       0 0
 
 # btrfs root volume (btrfs root volumes always have a subvolid=5)
-# Note: this can be used to create snapshots of other subvolumes, including subvol=/footfs
-LABEL=BTRFS-VOL     /mnt/btr-root-vol   btrfs   defaults,noatime,subvolid=5                         0 0
+# Note: this can be used to create snapshots of other subvolumes, including subvol=/rootfs
+LABEL=BTRFS-VOL     /mnt/btr_root_vol   btrfs   defaults,noatime,subvolid=5                         0 0
 
 # swapfile
 /swap/swapfile      none                swap    defaults                                            0 0
