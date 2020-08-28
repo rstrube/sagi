@@ -43,7 +43,6 @@ function install() {
     echo "Generating /etc/btrbk/btrbk.conf file..."
 
     cat <<EOT > "btrbk.conf"
-
 snapshot_preserve_min   2d
 snapshot_preserve      14d
 

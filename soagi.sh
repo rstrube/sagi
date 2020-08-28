@@ -154,7 +154,6 @@ function install() {
 
     # Generate fstab
     cat <<EOT >> "/mnt/etc/fstab"
-
 # ESP
 LABEL=ESP           /boot               vfat    defaults,noatime,umask=0022                         0 2
 
