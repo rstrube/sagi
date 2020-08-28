@@ -88,29 +88,33 @@ function install() {
     mount -o defaults,noatime ${HD_DEVICE}2 /mnt
 
     # Create btrfs subvolumes
-    btrfs subvolume create /mnt/ROOT
+    btrfs subvolume create /mnt/rootfs
     btrfs subvolume create /mnt/home
-    btrfs subvolume create /mnt/snapshots
+    btrfs subvolume create /mnt/btr-snapshots
 
     # Unmount top level btrfs volume
     umount /mnt
 
     # Mount btrfs subvolumes at the correct locations (with compression enabled)
     # Mount ROOT subvolume at /mnt
-    mount -o "defaults,noatime,compress=lzo,subvol=/ROOT" ${HD_DEVICE}2 /mnt
+    mount -o "defaults,noatime,compress=lzo,subvol=/rootfs" ${HD_DEVICE}2 /mnt
     
     # Create the additional subdirectories to support mounting additional btrfs subvolumes
-    mkdir /mnt/{home,snapshots}
+    mkdir /mnt/{home,btr-snapshots}
         
     # Mount additional btrfs subvolumes
     mount -o "defaults,noatime,compress=lzo,subvol=/home" ${HD_DEVICE}2 /mnt/home
-    mount -o "defaults,noatime,compress=lzo,subvol=/snapshots" ${HD_DEVICE}2 /mnt/snapshots
+    mount -o "defaults,noatime,compress=lzo,subvol=/btr-snapshots" ${HD_DEVICE}2 /mnt/snapshots
 
     # Create directory to support mounting ESP
     mkdir /mnt/boot
 
     # Mount the ESP partition
     mount -o defaults,noatime ${HD_DEVICE}1 /mnt/boot
+
+    # Create mountpoint for the top level btrfs volume itself
+    # Note: this location can be used to create/restore snapshots to/from (e.g. of the rootfs, home, etc.)
+    mkdir /mnt/mnt/btr-volume
 
     # Create the swapfile
     # Make sure CoW and compression are disabled for /swapfile
@@ -148,19 +152,23 @@ function install() {
     cat <<EOT >> "/mnt/etc/fstab"
 
 # ESP
-LABEL=ESP           /boot       vfat    defaults,noatime,umask=0022                     0 2
+LABEL=ESP           /boot               vfat    defaults,noatime,umask=0022                     0 2
 
-# /ROOT subvolume
-LABEL=BTRFS-VOL     /           btrfs   defaults,noatime,compress=lzo,subvol=/ROOT      0 0
+# /rootfs subvolume
+LABEL=BTRFS-VOL     /                   btrfs   defaults,noatime,compress=lzo,subvol=/rootfs    0 0
 
 # /home subvolume
-LABEL=BTRFS-VOL     /home       btrfs   defaults,noatime,compress=lzo,subvol=/home      0 0
+LABEL=BTRFS-VOL     /home               btrfs   defaults,noatime,compress=lzo,subvol=/home      0 0
 
-# /snapshots subvolume
-LABEL=BTRFS-VOL     /snapshots  btrfs   defaults,noatime,compress=lzo,subvol=/snapshots 0 0
+# /btr-snapshots subvolume
+LABEL=BTRFS-VOL     /btr-snapshots      btrfs   defaults,noatime,compress=lzo,subvol=/snapshots 0 0
+
+# top level btrfs volume
+# Note: top level btrfs volumes always have a subvolid=5
+LABEL=BTRFS-VOL     /mnt/btr-volume     btrfs   defaults,noatime,subvolid=5                     0 0
 
 # swapfile
-/swapfile           none        swap    defaults                                        0 0
+/swapfile           none        swap    defaults                                                0 0
 
 EOT
 
