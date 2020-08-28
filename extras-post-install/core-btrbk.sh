@@ -40,7 +40,7 @@ function install() {
     fi
 
     # Generate btrbk.conf
-    echo "Creating /etc/btrbk/btrbk.conf file..."
+    echo "Generating /etc/btrbk/btrbk.conf file..."
 
     cat <<EOT > "btrbk.conf"
 
@@ -66,7 +66,12 @@ EOT
 
     sudo mv btrbk.conf /etc/btrbk/.
 
-    echo "You can now run 'btrbk dryrun' to test out the generated config."
+    echo "Finished generating /etc/btrbk/btrbk.conf..."
+    echo "===CONFIG==="
+    cat /etc/btrbk/btrbk.conf
+    echo "====END===="
+    echo "You can run 'sudo btrbk dryrun' to test out the generated config."
+    echo "You can run 'sudo btrbk run' to create a local snapshot and back it up to the target location."
 }
 
 function check_variables() {
