@@ -2,23 +2,37 @@
 # Web - Chromium
 
 # Enable VAAPI support for Chromium?
-ENABLE_CHROMIUM_VAAPI="true"
+CHROMIUM_ENABLE_VAAPI="false"
 
 source _sh-functions.sh
 
 function main() {
     
+    check_args $@
+
+    if [[ "$#" -eq 1 ]]; then
+        CHROMIUM_ENABLE_VAAPI="$1"
+    fi
+
     check_variables
+    check_critical_prereqs
     install
 }
 
 function install() {
 
     if [[ ! -e /usr/bin/chromium ]]; then
+        echo "Installing chromium via AUR..."
         yay -S --noconfirm chromium
     fi
 
-    if [ "$ENABLE_CHROMIUM_VAAPI" != "true" ]; then
+    if [[ "$ENABLE_CHROMIUM_VAAPI" != "true" ]]; then
+        echo "Skipping additional steps to enable VAAPI..."
+
+        if [[ -e ~/.config/chromium-flags.conf ]]; then
+            echo -e "${YELLOW}Warning: there is an existing ~/.config/chromium-flags.conf file. You might need to delete this file to disable VAAPI.${NC}"
+        fi
+
         exit
     fi
 
@@ -40,9 +54,21 @@ EOT
 
 }
 
+function check_args() {
+    
+    if [[ "$#" -ne 0 && "$#" -ne 1 ]]; then
+        echo -e "${RED}Error: this script must be with either 0 arguments or 1 argument.${NC}"
+        echo -e "${LIGHT_BLUE}Usage:   "$0" [{true|false} (enable VAAPI? defaults to false)]"
+        echo -e "${BLUE}Example: "$0" true${NC} : installs chromium with VAAPI support."
+        echo -e "${BLUE}Example: "$0" false${NC} : installs chromium without VAAPI support."
+        echo -e "${BLUE}Example: "$0"${NC} : installs chromium without VAAPI support."
+        exit 1
+    fi
+}
+
 function check_variables() {
 
-    check_variables_boolean "ENABLE_CHROMIUM_VAAPI" "$ENABLE_CHROMIUM_VAAPI"
+    check_variables_boolean "CHROMIUM_ENABLE_VAAPI" "$CHROMIUM_ENABLE_VAAPI"
 }
 
 function check_critical_prereqs() {

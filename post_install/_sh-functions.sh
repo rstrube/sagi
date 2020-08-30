@@ -4,10 +4,12 @@
 # Console Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
 LIGHT_BLUE='\033[1;34m'
 NC='\033[0m'
 
-ERROR_VARS_MESSAGE="${RED}Error: you must edit this script (e.g. with vim) and configure variables.${NC}"
+ERROR_VARS_MESSAGE="${RED}Error: invalid argument value passed in.${NC}"
 
 function check_variables_value() {
     NAME=$1
@@ -38,7 +40,7 @@ function check_variables_boolean() {
 function check_yay_prereq() {
 
     if [[ ! -e /usr/bin/yay ]]; then
-        echo -e "${RED}Error: yay must be installed.${NC}"
+        echo -e "${RED}Error: yay must be installed to install packages from AUR.${NC}"
         echo "You can install yay by running ./core-yay.sh"
         exit 1
     fi
