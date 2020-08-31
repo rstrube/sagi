@@ -56,8 +56,9 @@ NC='\033[0m'
 
 function main() {
     
-    check_variables
     check_critical_prereqs
+    check_variables
+    check_conflicts
     check_network
 
     loadkeys $KEYS
@@ -150,6 +151,9 @@ function install() {
     # Enable NetworkManager.service
     # Note: NetworkManager will handle DHCP
     arch-chroot /mnt systemctl enable NetworkManager.service
+
+    # Enable bluetooth.service
+    arch-chroot /mnt systemctl enable bluetooth.service
 
     # Configure color support for pacman
     sed -i 's/#Color/Color/' /mnt/etc/pacman.conf
@@ -248,7 +252,24 @@ EOT
     fi
 }
 
+function check_critical_prereqs() {
+
+    check_variables_value "HD_DEVICE" "$HD_DEVICE"
+    
+    if [[ ! -e "$HD_DEVICE" ]]; then
+        echo -e "${RED}Error: HD_DEVICE="$HD_DEVICE" does not exist.${NC}"
+        exit 1
+    fi
+
+    if [[ ! -d /sys/firmware/efi ]]; then
+        echo -e "${RED}Error: soagi can only be run on UEFI systems.${NC}"
+        echo "If running in a VM, make sure the VM is configured to use UEFI instead of BIOS."
+        exit 1
+    fi
+}
+
 function check_variables() {
+
     check_variables_value "HD_DEVICE" "$HD_DEVICE"
     check_variables_value "SWAPSIZE" "$SWAPSIZE"
     check_variables_boolean "TRIM_SUPPORT" "$TRIM_SUPPORT"
@@ -272,6 +293,7 @@ function check_variables() {
 ERROR_VARS_MESSAGE="${RED}Error: you must edit soagi.sh (e.g. with vim) and configure variables.${NC}"
 
 function check_variables_value() {
+
     NAME=$1
     VALUE=$2
     if [[ -z "$VALUE" ]]; then
@@ -282,6 +304,7 @@ function check_variables_value() {
 }
 
 function check_variables_boolean() {
+
     NAME=$1
     VALUE=$2
     case $VALUE in
@@ -297,12 +320,7 @@ function check_variables_boolean() {
     esac
 }
 
-function check_critical_prereqs() {
-    if [[ ! -d /sys/firmware/efi ]]; then
-        echo -e "${RED}Error: soagi can only be run on UEFI systems.${NC}"
-        echo "If running in a VM, make sure the VM is configured to use UEFI instead of BIOS."
-        exit 1
-    fi
+function check_conflicts() {
 
     if [[ "$VM_CPU" == "false" && "$AMD_CPU" == "false" && "$INTEL_CPU" == "false" ]]; then
         echo -e "${RED}Error: one of the following variables {VM_CPU|AMD_CPU|INTEL_CPU} must be =true.${NC}"
@@ -333,6 +351,7 @@ function check_network() {
 }
 
 function confirm_install() {
+
     clear
 
     echo -e "${LIGHT_BLUE}soagi (Simple Opinionated Arch Gnome Installer)${NC}"
