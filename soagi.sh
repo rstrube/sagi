@@ -232,7 +232,7 @@ EOT
     arch-chroot /mnt systemctl enable gdm.service
 
     # Install GPU Drivers
-    COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader"
+    COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
 
     if [[ "$INTEL_GPU" == "true" ]]; then
 
