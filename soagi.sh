@@ -237,11 +237,11 @@ EOT
     if [[ "$INTEL_GPU" == "true" ]]; then
 
         # Note: installing newer intel-media-driver (iHD) instead of libva-intel-driver (i965)
-        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
+        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
     fi
 
     if [[ "$AMD_GPU" == "true" ]]; then
-        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils
+        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils
     fi
     
     if [[ "$NVIDIA_GPU" == "true" ]]; then
