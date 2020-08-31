@@ -85,7 +85,7 @@ function install() {
 
     # Format the partitions, ESP (/dev/${HD_DEVICE}1) as fat32, BTRFS-VOL (/dev/${HD_DEVICE}2) as btrfs
     mkfs.fat -n ESP -F32 $BOOT_PARTITION
-    mkfs.btrfs -L BTRFS-VOL $ROOTFS_PARTITION
+    mkfs.btrfs -f -L BTRFS-VOL $ROOTFS_PARTITION
 
     # Mount top level btrfs volume on /mnt
     mount -o defaults,noatime $ROOTFS_PARTITION /mnt
