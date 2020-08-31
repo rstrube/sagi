@@ -24,13 +24,7 @@ AMD_GPU="false"
 INTEL_GPU="false"
 NVIDIA_GPU="false"
 
-# Network Configuration
-# Use "ip link show" to view all network interfaces.
-# Wireless interfaces typically begin with "wl" e.g. "wlp0s20f3".
-WIFI_INTERFACE="" # leave blank if using ethernet or if VM_CPU="true"
-WIFI_ESSID=""
-WIFI_KEY=""
-WIFI_HIDDEN=""
+# Hostname to ping to check network connection
 PING_HOSTNAME="www.google.com"
 
 # Hostname Configuration
@@ -64,9 +58,9 @@ function main() {
     
     check_variables
     check_critical_prereqs
-    check_configure_network
+    check_network
 
-    loadkeys ${KEYS}
+    loadkeys $KEYS
 
     confirm_install
     install
@@ -78,14 +72,23 @@ function install() {
     timedatectl set-ntp true
 
     # Partion the drive with a single 512 MB ESP partition, and the rest of the drive as the root partition
-    parted -s ${HD_DEVICE} mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root btrfs 512MiB 100% set 1 esp on
+    parted -s $HD_DEVICE mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root btrfs 512MiB 100% set 1 esp on
+
+    # Is the the hard drive an NVME SSD?
+    if [ -n "$(echo $HD_DEVICE | grep "^/dev/nvme")" ]; then
+        BOOT_PARTITION="${HD_DEVICE}p1"
+        ROOTFS_PARTITION="${HD_DEVICE}p2"
+    else
+        BOOT_PARTITION="${HD_DEVICE}1"
+        ROOTFS_PARTITION="${HD_DEVICE}2"
+    fi
 
     # Format the partitions, ESP (/dev/${HD_DEVICE}1) as fat32, BTRFS-VOL (/dev/${HD_DEVICE}2) as btrfs
-    mkfs.fat -n ESP -F32 ${HD_DEVICE}1
-    mkfs.btrfs -L BTRFS-VOL ${HD_DEVICE}2
+    mkfs.fat -n ESP -F32 $BOOT_PARTITION
+    mkfs.btrfs -L BTRFS-VOL $ROOTFS_PARTITION
 
     # Mount top level btrfs volume on /mnt
-    mount -o defaults,noatime ${HD_DEVICE}2 /mnt
+    mount -o defaults,noatime $ROOTFS_PARTITION /mnt
 
     # Create btrfs subvolumes
     btrfs subvolume create /mnt/rootfs
@@ -100,21 +103,21 @@ function install() {
 
     # Mount btrfs subvolumes at the correct locations (with compression enabled)
     # Mount ROOT subvolume at /mnt
-    mount -o "defaults,noatime,compress=lzo,subvol=/rootfs" ${HD_DEVICE}2 /mnt
+    mount -o "defaults,noatime,compress=lzo,subvol=/rootfs" $ROOTFS_PARTITION /mnt
     
     # Create the additional subdirectories to support mounting additional btrfs subvolumes
     mkdir /mnt/{home,btr_snapshots,swap}
         
     # Mount additional btrfs subvolumes
-    mount -o "defaults,noatime,compress=lzo,subvol=/home" ${HD_DEVICE}2 /mnt/home
-    mount -o "defaults,noatime,compress=lzo,subvol=/btr_snapshots" ${HD_DEVICE}2 /mnt/btr_snapshots
-    mount -o "defaults,noatime,subvol=/swap" ${HD_DEVICE}2 /mnt/swap
+    mount -o "defaults,noatime,compress=lzo,subvol=/home" $ROOTFS_PARTITION /mnt/home
+    mount -o "defaults,noatime,compress=lzo,subvol=/btr_snapshots" $ROOTFS_PARTITION /mnt/btr_snapshots
+    mount -o "defaults,noatime,subvol=/swap" $ROOTFS_PARTITION /mnt/swap
 
     # Create directory to support mounting ESP
     mkdir /mnt/boot
 
     # Mount the ESP partition
-    mount -o defaults,noatime ${HD_DEVICE}1 /mnt/boot
+    mount -o defaults,noatime $BOOT_PARTITION /mnt/boot
 
     # Create mountpoint for the top level btrfs volume itself
     # Note: this location can be used to create/restore snapshots to/from (e.g. of the rootfs, home, etc.)
@@ -123,25 +126,25 @@ function install() {
     # Create the swapfile
     # Make sure CoW and compression are disabled for /swapfile
     SWAPFILE="/mnt/swap/swapfile"
-    touch ${SWAPFILE}
-    chattr +C ${SWAPFILE}
-    btrfs property set ${SWAPFILE} compression none
-    fallocate --length ${SWAPSIZE}MiB ${SWAPFILE}
-    chown root ${SWAPFILE} 
-    chmod 600 ${SWAPFILE} 
-    mkswap ${SWAPFILE}
+    touch $SWAPFILE
+    chattr +C $SWAPFILE
+    btrfs property set $SWAPFILE compression none
+    fallocate --length ${SWAPSIZE}MiB $SWAPFILE
+    chown root $SWAPFILE
+    chmod 600 $SWAPFILE
+    mkswap $SWAPFILE
 
     ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim"
 
     # Install essential packages via pacstrap
     if [[ "$VM_CPU" == "true" ]]; then # When installing in VM, do not install linux-firmware or ucode
-        pacstrap /mnt ${ESSENTIAL_PACKAGES}
+        pacstrap /mnt $ESSENTIAL_PACKAGES
 
     elif [[ "$AMD_CPU" == "true" ]]; then
-        pacstrap /mnt ${ESSENTIAL_PACKAGES} linux-firmware amd-ucode
+        pacstrap /mnt $ESSENTIAL_PACKAGES linux-firmware amd-ucode
 
     elif [[ "$INTEL_CPU" == "true" ]]; then
-        pacstrap /mnt ${ESSENTIAL_PACKAGES} linux-firmware intel-ucode
+        pacstrap /mnt $ESSENTIAL_PACKAGES linux-firmware intel-ucode
     fi
     
     # Enable NetworkManager.service
@@ -187,24 +190,24 @@ EOT
     fi
 
     # Configure timezone and system clock
-    arch-chroot /mnt ln -s -f ${TIMEZONE} /etc/localtime
+    arch-chroot /mnt ln -s -f $TIMEZONE /etc/localtime
     arch-chroot /mnt hwclock --systohc
 
     # Configure locale
-    arch-chroot /mnt sed -i "s/#${LOCALE}/${LOCALE}/" /etc/locale.gen
+    arch-chroot /mnt sed -i "s/#$LOCALE/$LOCALE/" /etc/locale.gen
     arch-chroot /mnt locale-gen
-    echo -e "LANG=${LANG}" >> /mnt/etc/locale.conf
+    echo -e "LANG=$LANG" >> /mnt/etc/locale.conf
 
     # Configure hostname and hosts files
-    echo ${HOSTNAME} > /mnt/etc/hostname
+    echo $HOSTNAME > /mnt/etc/hostname
     echo "127.0.0.1	localhost" >> /mnt/etc/hosts
     echo "::1 localhost" >> /mnt/etc/hosts
-    echo "127.0.0.1	${HOSTMAME}.localdomain ${HOSTNAME}" >> /mnt/etc/hosts
+    echo "127.0.0.1	${HOSTMAME}.localdomain $HOSTNAME" >> /mnt/etc/hosts
 
     # Configure root password
-    printf "${ROOT_PASSWORD}\n${ROOT_PASSWORD}" | arch-chroot /mnt passwd
+    printf "$ROOT_PASSWORD\n$ROOT_PASSWORD" | arch-chroot /mnt passwd
 
-    arch-chroot /mnt sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="'"${CMDLINE_LINUX}"'"/' /etc/default/grub
+    arch-chroot /mnt sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="'"$CMDLINE_LINUX"'"/' /etc/default/grub
 
     # Install and configure Grub as bootloader on ESP
     arch-chroot /mnt pacman -Syu --noconfirm --needed grub efibootmgr
@@ -212,8 +215,8 @@ EOT
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
     # Setup user and allow user to use "sudo"
-    arch-chroot /mnt useradd -m -G wheel,storage,optical -s /bin/bash ${USER_NAME}
-    printf "${USER_PASSWORD}\n${USER_PASSWORD}" | arch-chroot /mnt passwd ${USER_NAME}
+    arch-chroot /mnt useradd -m -G wheel,storage,optical -s /bin/bash $USER_NAME
+    printf "$USER_PASSWORD\n$USER_PASSWORD" | arch-chroot /mnt passwd $USER_NAME
     arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
     # Install Gnome
@@ -226,15 +229,15 @@ EOT
     if [[ "$INTEL_GPU" == "true" ]]; then
 
         # Note: installing newer intel-media-driver (iHD) instead of libva-intel-driver (i965)
-        arch-chroot /mnt pacman -Syu --noconfirm --needed ${COMMON_VULKAN_PACKAGES} vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
+        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
     fi
 
     if [[ "$AMD_GPU" == "true" ]]; then
-        arch-chroot /mnt pacman -Syu --noconfirm --needed ${COMMON_VULKAN_PACKAGES} vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils
+        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils
     fi
     
     if [[ "$NVIDIA_GPU" == "true" ]]; then
-        arch-chroot /mnt pacman -Syu --noconfirm --needed ${COMMON_VULKAN_PACKAGES} nvidia nvidia-dkms nvidia-utils lib32-nvidia-utils
+        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES nvidia nvidia-dkms nvidia-utils lib32-nvidia-utils
 
         # Configure pacman to rebuild the initramfs each time the nvidia package is updated
         configure_pacman_nvidia_hook
@@ -251,11 +254,6 @@ function check_variables() {
     check_variables_boolean "AMD_GPU" "$AMD_GPU"
     check_variables_boolean "INTEL_GPU" "$INTEL_GPU"
     check_variables_boolean "NVIDIA_GPU" "$NVIDIA_GPU"
-
-    if [ -n "$WIFI_INTERFACE" ]; then
-        check_variables_value "WIFI_ESSID" "$WIFI_ESSID"
-    fi
-
     check_variables_value "PING_HOSTNAME" "$PING_HOSTNAME"
     check_variables_value "HOSTNAME" "$HOSTNAME"
     check_variables_value "TIMEZONE" "$TIMEZONE"
@@ -273,8 +271,8 @@ function check_variables_value() {
     NAME=$1
     VALUE=$2
     if [[ -z "$VALUE" ]]; then
-        echo -e ${ERROR_VARS_MESSAGE}
-        echo "${NAME} must have a value."
+        echo -e $ERROR_VARS_MESSAGE
+        echo "$NAME must have a value."
         exit 1
     fi
 }
@@ -288,8 +286,8 @@ function check_variables_boolean() {
         false )
             ;;
         * )
-            echo -e ${ERROR_VARS_MESSAGE}
-            echo "${NAME} must be {true|false}."
+            echo -e $ERROR_VARS_MESSAGE
+            echo "$NAME must be {true|false}."
             exit 1
             ;;
     esac
@@ -312,10 +310,6 @@ function check_critical_prereqs() {
             echo -e "${RED}Error: if VM_CPU=true then AMD_CPU && INTEL_CPU && AMD_GPU && INTEL_GPU && NVIDIA_GPU must =false.${NC}"
             exit 1
         fi
-        if [[ -n "$WIFI_INTERFACE" ]]; then
-            echo -e "${RED}Error: if VM_CPU=true then WIFI_INTERFACE cannot have a value.${NC}"
-            exit 1
-        fi
     fi
 
     if [[ "$AMD_CPU" == "true" && "$INTEL_CPU" == "true" ]]; then
@@ -324,25 +318,9 @@ function check_critical_prereqs() {
     fi
 }
 
-function check_configure_network() {
-    if [ -n "$WIFI_INTERFACE" ]; then
-        cp /etc/netctl/examples/wireless-wpa /etc/netctl
-        chmod 600 /etc/netctl/wireless-wpa
+function check_network() {
 
-        sed -i 's/^Interface=.*/Interface='"${WIFI_INTERFACE}"'/' /etc/netctl/wireless-wpa
-        sed -i 's/^ESSID=.*/ESSID='"${WIFI_ESSID}"'/' /etc/netctl/wireless-wpa
-        sed -i 's/^Key=.*/Key=\"'"${WIFI_KEY}"'\"/' /etc/netctl/wireless-wpa
-        
-        if [ "$WIFI_HIDDEN" == "true" ]; then
-            sed -i 's/^#Hidden=.*/Hidden=yes/' /etc/netctl/wireless-wpa
-        fi
-
-        netctl stop-all
-        netctl start wireless-wpa
-        sleep 10
-    fi
-
-    ping -c 1 -i 2 -W 5 -w 30 ${PING_HOSTNAME}
+    ping -c 1 -i 2 -W 5 -w 30 $PING_HOSTNAME
     
     if [ $? -ne 0 ]; then
         echo "Error: Network ping check failed. Cannot continue."
