@@ -155,6 +155,10 @@ function install() {
     sed -i 's/#Color/Color/' /mnt/etc/pacman.conf
     sed -i 's/#TotalDownload/TotalDownload/' /mnt/etc/pacman.conf
 
+    # Enable multilib
+    sed -i "/\[multilib\]/,/Include/"'s/^#//' /mnt/etc/pacman.con
+    arch-chroot /mnt pacman -Syyu
+
     # Generate fstab
     cat <<EOT >> "/mnt/etc/fstab"
 # ESP
@@ -350,6 +354,8 @@ function confirm_install() {
 }
 
 function configure_pacman_nvidia_hook() {
+
+    mdkir -p /mnt/etc/pacman.d/hooks
 
     cat <<EOT > "/mnt/etc/pacman.d/hooks/nvidia.hook"
 [Trigger]
