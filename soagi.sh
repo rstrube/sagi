@@ -228,7 +228,7 @@ EOT
     arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
     # Install Gnome
-    arch-chroot /mnt pacman -Syu --noconfirm --needed gnome
+    arch-chroot /mnt pacman -Syu --noconfirm --needed gnome gnome-tweaks
     arch-chroot /mnt systemctl enable gdm.service
 
     # Install GPU Drivers
