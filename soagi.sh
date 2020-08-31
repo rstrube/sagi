@@ -241,7 +241,7 @@ EOT
     fi
     
     if [[ "$NVIDIA_GPU" == "true" ]]; then
-        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES nvidia nvidia-dkms nvidia-utils lib32-nvidia-utils
+        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings
 
         # Configure pacman to rebuild the initramfs each time the nvidia package is updated
         configure_pacman_nvidia_hook
