@@ -40,3 +40,7 @@ sudo virsh net-start default
 sudo virsh net-autostart --network default
 
 rm default.xml
+
+echo "===/etc/libvirt/qemu/networks/default.xml==="
+cat /etc/libvirt/qemu/networks/default.xml
+echo "============================================"
