@@ -21,8 +21,8 @@ function main() {
 function install() {
 
     if [[ ! -e /usr/bin/chromium ]]; then
-        echo "Installing chromium via AUR..."
-        yay -S --noconfirm chromium
+        echo "Installing chromium..."
+        pacman -Syu chromium
     fi
 
     if [[ "$CHROMIUM_ENABLE_VAAPI" != "true" ]]; then
