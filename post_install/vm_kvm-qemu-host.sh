@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # VM - KVM/Qemu Host
 
 # Installs all the neccessary packages to support running / managing KVM virtual machines
