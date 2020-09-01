@@ -15,7 +15,6 @@ function main() {
     fi
 
     check_variables
-    check_critical_prereqs
     install
 }
 
@@ -26,7 +25,7 @@ function install() {
         yay -S --noconfirm chromium
     fi
 
-    if [[ "$ENABLE_CHROMIUM_VAAPI" != "true" ]]; then
+    if [[ "$CHROMIUM_ENABLE_VAAPI" != "true" ]]; then
         echo "Skipping additional steps to enable VAAPI..."
 
         if [[ -e ~/.config/chromium-flags.conf ]]; then
@@ -69,10 +68,6 @@ function check_args() {
 function check_variables() {
 
     check_variables_boolean "CHROMIUM_ENABLE_VAAPI" "$CHROMIUM_ENABLE_VAAPI"
-}
-
-function check_critical_prereqs() {
-    check_yay_prereq
 }
 
 main $@
