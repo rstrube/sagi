@@ -15,6 +15,9 @@
 ./dev_git.sh --install-git-credential-manager
 ./dev_vscode.sh
 
+# Media
+./media_codecs-player.sh
+
 # Icons / Fonts / Themes
 ./gnome_icons.sh
 ./gnome_fonts --configure-vscode-fonts
