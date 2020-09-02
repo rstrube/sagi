@@ -23,7 +23,7 @@ source _sh-functions.sh
 
 function main() {
     
-    check_args $@
+    check_args "$@"
 
     if [[ "$#" -eq 4 ]]; then
         BTRBK_CREATE_EXT_HD_CONFIG="true"
@@ -40,10 +40,7 @@ function main() {
 
 function install() {
 
-    if [[ ! -e /usr/bin/btrbk ]]; then
-        echo "Installing btrbk via AUR..."
-        yay -S --noconfirm btrbk
-    fi
+    yay -Syu --noconfirm --needed btrbk
 
     if [[ "$BTRBK_CREATE_EXT_HD_CONFIG" != "true" ]]; then
         echo "Skipping the creation of a btrbk.conf file..."
@@ -117,4 +114,4 @@ function check_critical_prereqs() {
     check_yay_prereq
 }
 
-main $@
+main "$@"

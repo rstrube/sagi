@@ -8,7 +8,7 @@ source _sh-functions.sh
 
 function main() {
     
-    check_args $@
+    check_args "$@"
 
     if [[ "$#" -eq 1 ]]; then
         CHROMIUM_ENABLE_VAAPI="$1"
@@ -20,10 +20,7 @@ function main() {
 
 function install() {
 
-    if [[ ! -e /usr/bin/chromium ]]; then
-        echo "Installing chromium..."
-        pacman -Syu chromium
-    fi
+    sudo pacman -Syu --noconfirm --needed chromium
 
     if [[ "$CHROMIUM_ENABLE_VAAPI" != "true" ]]; then
         echo "Skipping additional steps to enable VAAPI..."
@@ -56,7 +53,7 @@ EOT
 function check_args() {
     
     if [[ "$#" -ne 0 && "$#" -ne 1 ]]; then
-        echo -e "${RED}Error: this script must be with either 0 arguments or 1 argument.${NC}"
+        echo -e "${RED}Error: this script must be run with 0 or 1 arguments.${NC}"
         echo -e "${LIGHT_BLUE}Usage:   "$0" [{true|false} (enable VAAPI? defaults to false)]"
         echo -e "${BLUE}Example: "$0" true${NC} : installs chromium with VAAPI support."
         echo -e "${BLUE}Example: "$0" false${NC} : installs chromium without VAAPI support."
@@ -70,4 +67,4 @@ function check_variables() {
     check_variables_boolean "CHROMIUM_ENABLE_VAAPI" "$CHROMIUM_ENABLE_VAAPI"
 }
 
-main $@
+main "$@"
