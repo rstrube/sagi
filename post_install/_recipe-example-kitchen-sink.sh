@@ -2,12 +2,12 @@
 # Soagi Post-Install Recipe (Kitchen Sink)
 
 # Core applications / utilities
-./core-yay.sh
-./core-zsh.sh
-./core-btrbk.sh /mnt/btr_root_vol btr_snapshots /run/media/robert/MyBackupHD myLaptop
+./core_yay.sh
+./core_zsh.sh
+./core_btrbk.sh /mnt/btr_root_vol btr_snapshots /run/media/robert/MyBackupHD myLaptop
 
 # Web applications / utilities
-./web-chromium.sh --enable-vaapi
+./web_chromium.sh --enable-vaapi
 ./web_slack
 ./web_teams
 
