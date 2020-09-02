@@ -24,6 +24,9 @@ AMD_GPU="false"
 INTEL_GPU="false"
 NVIDIA_GPU="false"
 
+# Install Xorg and configure Gnome to use it by default?
+XORG_INSTALL="true"
+
 # Hostname to ping to check network connection
 PING_HOSTNAME="www.google.com"
 
@@ -44,12 +47,6 @@ USER_PASSWORD=""
 
 # Additional Linux Command Line Params
 CMDLINE_LINUX=""
-
-# Console Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-LIGHT_BLUE='\033[1;34m'
-NC='\033[0m'
 
 # Installation Scripts
 #################################################
@@ -135,7 +132,7 @@ function install() {
     chmod 600 $SWAPFILE
     mkswap $SWAPFILE
 
-    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim"
+    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git neovim"
 
     # Install essential packages via pacstrap
     if [[ "$VM_CPU" == "true" ]]; then # When installing in VM, do not install linux-firmware or ucode
@@ -156,11 +153,11 @@ function install() {
     arch-chroot /mnt systemctl enable bluetooth.service
 
     # Configure color support for pacman
-    sed -i 's/#Color/Color/' /mnt/etc/pacman.conf
-    sed -i 's/#TotalDownload/TotalDownload/' /mnt/etc/pacman.conf
+    arch-chroot /mnt sed -i 's/#Color/Color/' /etc/pacman.conf
+    arch-chroot /mnt sed -i 's/#TotalDownload/TotalDownload/' /etc/pacman.conf
 
     # Enable multilib
-    sed -i "/\[multilib\]/,/Include/"'s/^#//' /mnt/etc/pacman.conf
+    arch-chroot /mnt sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
     arch-chroot /mnt pacman -Syyu
 
     # Generate fstab
@@ -228,6 +225,15 @@ EOT
     arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
     # Install Gnome
+    COMMON_GNOME_PACKAGES="gnome gnome-tweaks"
+
+    if [[ "$XORG_INSTALL" == "true" ]]
+        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_GNOME_PACKAGES xorg-server
+        arch-chroot /mnt sed -i "s/#WaylandEnable=false/WaylandEnable=false/" /etc/gdm/custom.conf
+    else
+        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_GNOME_PACKAGES
+    fi
+
     arch-chroot /mnt pacman -Syu --noconfirm --needed gnome gnome-tweaks
     arch-chroot /mnt systemctl enable gdm.service
 
@@ -279,6 +285,7 @@ function check_variables() {
     check_variables_boolean "AMD_GPU" "$AMD_GPU"
     check_variables_boolean "INTEL_GPU" "$INTEL_GPU"
     check_variables_boolean "NVIDIA_GPU" "$NVIDIA_GPU"
+    check_variables_boolean "XORG_INSTALL" "$XORG_INSTALL"
     check_variables_value "PING_HOSTNAME" "$PING_HOSTNAME"
     check_variables_value "HOSTNAME" "$HOSTNAME"
     check_variables_value "TIMEZONE" "$TIMEZONE"
@@ -290,7 +297,7 @@ function check_variables() {
     check_variables_value "USER_PASSWORD" "$USER_PASSWORD"
 }
 
-ERROR_VARS_MESSAGE="${RED}Error: you must edit soagi.sh (e.g. with vim) and configure variables.${NC}"
+ERROR_VARS_MESSAGE="${RED}Error: you must edit soagi.sh (e.g. with vim) and configure the required variables.${NC}"
 
 function check_variables_value() {
 
@@ -392,5 +399,11 @@ Exec=/usr/bin/mkinitcpio -P
 EOT
 
 }
+
+# Console Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+LIGHT_BLUE='\033[1;34m'
+NC='\033[0m'
 
 main "$@"
