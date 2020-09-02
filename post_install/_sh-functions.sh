@@ -45,3 +45,11 @@ function check_yay_prereq() {
         exit 1
     fi
 }
+
+function check_flatpak_prereq() {
+
+    if [[ ! -e /usr/bin/flatpak ]]; then
+        echo -e "${RED}Error: flatpak must be installed.${NC}"
+        exit 1
+    fi
+}
