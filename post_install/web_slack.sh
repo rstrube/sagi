@@ -1,7 +1,7 @@
 #!/bin/bash
 # Web - Slack
 
-source _sh-functions.sh
+source _common-functions.sh
 
 function main() {
     check_critical_prereqs

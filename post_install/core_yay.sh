@@ -1,6 +1,8 @@
 #!/bin/bash
 # Core - Yay
 
+source _common-functions.sh
+
 CWD=$(pwd)
 
 git clone https://aur.archlinux.org/yay.git /tmp/yay

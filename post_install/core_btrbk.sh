@@ -1,6 +1,8 @@
 #!/bin/bash
 # Core - btrbk
 
+source _common-functions.sh
+
 # Create a btrbk.conf for backups to an external HD?
 BTRBK_CREATE_EXT_HD_CONFIG="false"
 
@@ -18,8 +20,6 @@ BTRBK_TARGET_ROOT_VOL_PATH=""
 
 # All snapshots are prefixed with this so they can be more easily identified (often times the hostname)
 BTRBK_BACKUP_LABEL="" # soagi
-
-source _sh-functions.sh
 
 function main() {
     

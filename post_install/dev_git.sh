@@ -1,11 +1,11 @@
 #!/bin/bash
 # Dev - git
 
+source _common-functions.sh
+
 GIT_USERNAME=""
 GIT_EMAIL=""
 GIT_INSTALL_CREDENTIAL_MANAGER="false"
-
-source _sh-functions.sh
 
 function main() {
     
