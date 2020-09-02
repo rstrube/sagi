@@ -3,10 +3,20 @@
 
 source _common-functions.sh
 
+CONFIGURE_VSCODE_FONTS="false"
+ARG_CONFIGURE_VSCODE_FONTS="--configure-vscode-fonts"
+
 function main() {
+
+    check_args "$@"
+
+    if [[ "$1" == "$ARG_CONFIGURE_VSCODE_FONTS" ]]; then
+        CONFIGURE_VSCODE_FONTS="true"
+    fi
+
+    check_variables
     check_critical_prereqs
     install
-    configure_vscode_fonts
 }
 
 function install() {
@@ -24,6 +34,10 @@ function install() {
     gsettings set org.gnome.desktop.interface document-font-name "Roboto Slab 11"
     gsettings set org.gnome.desktop.interface monospace-font-name "JetBrains Mono 11"
     gsettings set org.gnome.desktop.wm.preferences titlebar-font "Roboto Medium 10"
+
+    if [[ "$CONFIGURE_VSCODE_FONTS" == "true" ]]; then
+        configure_vscode_fonts
+    fi
 }
 
 function configure_vscode_fonts {
@@ -32,6 +46,21 @@ function configure_vscode_fonts {
 
     sed -i '$i\    "editor.fontFamily": "JetBrains Mono",' "$VSCODE_SETTINGS_FILE_PATH"
     sed -i '$i\    "editor.fontLigatures": true,' "$VSCODE_SETTINGS_FILE_PATH"
+}
+
+function check_args() {
+    
+    if [[ "$#" -gt 1 ]]; then
+        echo -e "${RED}Error: this script can be run with a maximum of one argument.${NC}"
+        echo -e "${LIGHT_BLUE}Usage:   "$0" [${ARG_CONFIGURE_VSCODE_FONTS}]${NC}"
+        echo -e "${BLUE}${ARG_CONFIGURE_VSCODE_FONTS}${NC} : [optional] configures fonts for VSCode."
+        exit 1
+    fi
+}
+
+function check_variables() {
+
+    check_variables_boolean "CONFIGURE_VSCODE_FONTS" "$CONFIGURE_VSCODE_FONTS"
 }
 
 function check_critical_prereqs() {

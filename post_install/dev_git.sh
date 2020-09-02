@@ -6,18 +6,19 @@ source _common-functions.sh
 GIT_USERNAME=""
 GIT_EMAIL=""
 GIT_INSTALL_CREDENTIAL_MANAGER="false"
+ARG_GIT_INSTALL_CREDENTIAL_MANAGER="--install-git-credential-manager"
 
 function main() {
     
     check_args "$@"
 
-    if [[ "$#" -eq 2 || "$#" -eq 3 ]]; then
+    if [[ "$#" -ge 2 ]]; then
         GIT_USERNAME="$1"
         GIT_EMAIL="$2"
+    fi
 
-        if [[ "$#" -eq 3 ]]; then
-            GIT_INSTALL_CREDENTIAL_MANAGER="$3"
-        fi
+    if [[ "$3" == "$ARG_GIT_INSTALL_CREDENTIAL_MANAGER" ]]; then
+        GIT_INSTALL_CREDENTIAL_MANAGER="$3"
     fi
 
     check_variables
@@ -42,11 +43,10 @@ function install() {
 function check_args() {
     
     if [[ "$#" -ne 2 && "$#" -ne 3 ]]; then
-        echo -e "${RED}Error: this script must be run with 2 or 3 arguments.${NC}"
+        echo -e "${RED}Error: this script can only be run with two or three arguments.${NC}"
         echo ""
-        echo -e "${LIGHT_BLUE}Usage:   "$0" {Full Name} {Email} [Install Git Crendential Manager? {true|false}]${NC}"
-        echo -e "${BLUE}Example: "$0" \"Robert Strube\" robert@mydomain.com${NC} : installs git and configures git global username and email."
-        echo -e "${BLUE}Example: "$0" \"Robert Strube\" robert@mydomain.com true${NC} : installs git, configures git global username and email, and installs git-credential-manager."
+        echo -e "${LIGHT_BLUE}Usage:   "$0" {\"full name\"} {email} [${ARG_GIT_INSTALL_CREDENTIAL_MANAGER}]${NC}"
+        echo -e "${BLUE}${ARG_GIT_INSTALL_CREDENTIAL_MANAGER}${NC}: [optional] installs git-credential-manager to better handle connecting to Azure DevOps."
         exit 1
     fi
 }
