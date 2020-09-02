@@ -227,7 +227,7 @@ EOT
     # Install Gnome
     COMMON_GNOME_PACKAGES="gnome gnome-tweaks"
 
-    if [[ "$XORG_INSTALL" == "true" ]]
+    if [[ "$XORG_INSTALL" == "true" ]]; then
         arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_GNOME_PACKAGES xorg-server
         arch-chroot /mnt sed -i "s/#WaylandEnable=false/WaylandEnable=false/" /etc/gdm/custom.conf
     else
