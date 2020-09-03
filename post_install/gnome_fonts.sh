@@ -1,7 +1,7 @@
 #!/bin/bash
 # Gnome - Fonts
 
-source _common-functions.sh
+source helper/_common-functions.sh
 
 CONFIGURE_VSCODE_FONTS="false"
 ARG_CONFIGURE_VSCODE_FONTS="--configure-vscode-fonts"

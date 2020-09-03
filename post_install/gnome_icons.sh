@@ -1,7 +1,7 @@
 #!/bin/bash
 # Gnome - Icons
 
-source _common-functions.sh
+source helper/_common-functions.sh
 
 sudo pacman -Syu --noconfirm --needed papirus-icon-theme
 

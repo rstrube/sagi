@@ -1,7 +1,7 @@
 #!/bin/bash
 # Web - Teams
 
-source _common-functions.sh
+source helper/_common-functions.sh
 
 function main() {
     check_critical_prereqs

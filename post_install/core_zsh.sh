@@ -1,7 +1,7 @@
 #!/bin/bash
 # Core - Zsh
 
-source _common-functions.sh
+source helper/_common-functions.sh
 
 # Oh-My-Zsh requires powerline symbols and therefore powerline patched fonts
 yay -Syu --noconfirm --needed zsh powerline-fonts-git

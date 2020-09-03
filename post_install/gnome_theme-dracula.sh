@@ -1,7 +1,7 @@
 #!/bin/bash
 # Gnome - Theme (Dracula)
 
-source _common-functions.sh
+source helper/_common-functions.sh
 
 CONFIGURE_VSCODE_THEME="false"
 ARG_CONFIGURE_VSCODE_THEME="--configure-vscode-theme"

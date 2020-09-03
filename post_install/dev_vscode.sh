@@ -1,7 +1,7 @@
 #!/bin/bash
 # Dev - vscode
 
-source _common-functions.sh
+source helper/_common-functions.sh
 
 sudo pacman -Syu --noconfirm --needed code
 

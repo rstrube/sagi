@@ -1,7 +1,7 @@
 #!/bin/bash
 # Core - Yay
 
-source _common-functions.sh
+source helper/_common-functions.sh
 
 CWD=$(pwd)
 

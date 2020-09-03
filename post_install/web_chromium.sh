@@ -1,7 +1,7 @@
 #!/bin/bash
 # Web - Chromium
 
-source _common-functions.sh
+source helper/_common-functions.sh
 
 # Enable VAAPI support for Chromium?
 CHROMIUM_ENABLE_VAAPI="false"
