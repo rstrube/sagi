@@ -13,13 +13,11 @@ TRIM_SUPPORT="true" # typically set to true if HD is an SSD, see notes above
 SWAPSIZE="2048" # 4096 8912
 
 # CPU Configuration
-# One (and only one) of the following variables must ="true"
-VM_CPU="false" # true if installing in VM guest
+# Note: if installing in a VM leave both set to 'false'
 AMD_CPU="false"
 INTEL_CPU="false"
 
 # GPU Configuration
-# If VM_CPU="true" AMD_GPU && INTEL_GPU && NIVIDIA_GPU variables must ="false"
 AMD_GPU="false"
 INTEL_GPU="false"
 NVIDIA_GPU="false"
@@ -135,14 +133,14 @@ function install() {
     ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git neovim"
 
     # Install essential packages via pacstrap
-    if [[ "$VM_CPU" == "true" ]]; then # When installing in VM, do not install linux-firmware or ucode
-        pacstrap /mnt $ESSENTIAL_PACKAGES
-
-    elif [[ "$AMD_CPU" == "true" ]]; then
+    if [[ "$AMD_CPU" == "true" ]]; then
         pacstrap /mnt $ESSENTIAL_PACKAGES linux-firmware amd-ucode
 
     elif [[ "$INTEL_CPU" == "true" ]]; then
         pacstrap /mnt $ESSENTIAL_PACKAGES linux-firmware intel-ucode
+
+    else
+        pacstrap /mnt $ESSENTIAL_PACKAGES # When installing in VM, do not install linux-firmware or ucode
     fi
     
     # Enable NetworkManager.service
@@ -279,7 +277,6 @@ function check_variables() {
     check_variables_value "HD_DEVICE" "$HD_DEVICE"
     check_variables_value "SWAPSIZE" "$SWAPSIZE"
     check_variables_boolean "TRIM_SUPPORT" "$TRIM_SUPPORT"
-    check_variables_boolean "VM_CPU" "$VM_CPU"
     check_variables_boolean "AMD_CPU" "$AMD_CPU"
     check_variables_boolean "INTEL_CPU" "$INTEL_CPU"
     check_variables_boolean "AMD_GPU" "$AMD_GPU"
@@ -328,18 +325,6 @@ function check_variables_boolean() {
 }
 
 function check_conflicts() {
-
-    if [[ "$VM_CPU" == "false" && "$AMD_CPU" == "false" && "$INTEL_CPU" == "false" ]]; then
-        echo -e "${RED}Error: one of the following variables {VM_CPU|AMD_CPU|INTEL_CPU} must be =true.${NC}"
-        exit 1
-    fi
-
-    if [[ "$VM_CPU" == "true" ]]; then
-        if [[ "$AMD_CPU" == "true" || "$INTEL_CPU" == "true" || "$AMD_GPU" == "true" || "$INTEL_GPU" == "true" || "$NVIDIA_GPU" == "true" ]]; then
-            echo -e "${RED}Error: if VM_CPU=true then AMD_CPU && INTEL_CPU && AMD_GPU && INTEL_GPU && NVIDIA_GPU must =false.${NC}"
-            exit 1
-        fi
-    fi
 
     if [[ "$AMD_CPU" == "true" && "$INTEL_CPU" == "true" ]]; then
         echo -e "${RED}Error: AMD_CPU and INTEL_CPU are mutually exclusve and can't both =true.${NC}"
