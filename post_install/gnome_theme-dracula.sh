@@ -21,6 +21,7 @@ function main() {
     fi
 
     check_variables
+    check_critical_prereqs
     install
 }
 
@@ -44,6 +45,9 @@ function install() {
     gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
     gsettings set org.gnome.desktop.wm.preferences theme "Dracula"
 
+    configure_gnome_terminal_theme
+    configure_gedit_theme
+
     if [[ "$CONFIGURE_VSCODE_THEME" == "true" ]]; then
         configure_vscode_theme
     fi
@@ -51,6 +55,35 @@ function install() {
     if [[ "$CONFIGURE_FLATPAK_THEME" == "true" ]]; then
         configure_flatpak_theme
     fi
+}
+
+function configure_gnome_terminal_theme {
+
+    echo "Installing Dracula theme for gnome-terminal..."
+    
+    export TERMINAL=gnome-terminal
+
+    curl -O https://raw.githubusercontent.com/Mayccoll/Gogh/master/themes/dracula.sh
+    chmod +x dracula.sh
+    ./dracula.sh
+    rm dracula.sh
+}
+
+function configure_gedit_theme {
+
+    echo "Installing Dracula theme for gedit..."
+
+    curl -O https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
+
+    GEDIT_STYLE_PATH=$HOME/.local/share/gedit/styles
+
+    if [[ ! -d $GEDIT_STYLE_PATH ]]; then
+        mkdir -p $GEDIT_STYLE_PATH
+    fi
+
+    mv dracula.xml $GEDIT_STYLE_PATH
+
+    # TODO figure out how to automatically select theme in Gedit preferences
 }
 
 function configure_vscode_theme {
@@ -92,6 +125,12 @@ function check_variables() {
 
     check_variables_boolean "CONFIGURE_VSCODE_THEME" "$CONFIGURE_VSCODE_THEME"
     check_variables_boolean "CONFIGURE_FLATPAK_THEME" "$CONFIGURE_FLATPAK_THEME"
+}
+
+function check_critical_prereqs() {
+
+    # note: the Gogh dracula.sh script uses wget
+    check_wget_prereq
 }
 
 main "$@"

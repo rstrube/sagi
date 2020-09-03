@@ -54,6 +54,22 @@ function check_flatpak_prereq() {
     fi
 }
 
+function check_git_prereq() {
+
+    if [[ ! -e /usr/bin/git ]]; then
+        echo -e "${RED}Error: git must be installed.${NC}"
+        exit 1
+    fi
+}
+
+function check_wget_prereq() {
+
+    if [[ ! -e /usr/bin/wget ]]; then
+        echo -e "${RED}Error: wget must be installed.${NC}"
+        exit 1
+    fi
+}
+
 VSCODE_SETTINGS_DIR_PATH="${HOME}/.config/Code - OSS/User"
 VSCODE_SETTINGS_FILE_PATH="${VSCODE_SETTINGS_DIR_PATH}/settings.json"
 
