@@ -20,5 +20,5 @@
 
 # Icons / Fonts / Themes
 ./gnome_icons.sh
-./gnome_fonts --configure-vscode-fonts
-./gnome_theme-dracula --configure-vscode-theme --configure-flatpak-theme
+./gnome_fonts.sh --configure-vscode-fonts
+./gnome_theme-dracula.sh --configure-vscode-theme --configure-flatpak-theme

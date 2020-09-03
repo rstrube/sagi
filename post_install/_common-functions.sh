@@ -54,9 +54,14 @@ function check_flatpak_prereq() {
     fi
 }
 
-VSCODE_SETTINGS_FILE_PATH="${HOME}/.config/Code - OSS/User/settings.json"
+VSCODE_SETTINGS_DIR_PATH="${HOME}/.config/Code - OSS/User"
+VSCODE_SETTINGS_FILE_PATH="${VSCODE_SETTINGS_DIR_PATH}/settings.json"
 
 function create_empty_vscode_settings_if_neccessary {
+
+    if [[ ! -d "$VSCODE_SETTINGS_DIR_PATH" ]]; then
+        mkdir -p "$VSCODE_SETTINGS_DIR_PATH"
+    fi
 
     if [[ ! -e "$VSCODE_SETTINGS_FILE_PATH" ]]; then
         echo "Creating an empty settings.json file..."
