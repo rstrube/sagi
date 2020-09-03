@@ -81,9 +81,9 @@ function install() {
         ROOTFS_PARTITION="${HD_DEVICE}2"
     fi
 
-    # Format the partitions, ESP (/dev/${HD_DEVICE}1) as fat32, BTRFS-VOL (/dev/${HD_DEVICE}2) as btrfs
+    # Format the partitions, ESP (/dev/${HD_DEVICE}1) as fat32, BTR_MAIN_VOL (/dev/${HD_DEVICE}2) as btrfs
     mkfs.fat -n ESP -F32 $BOOT_PARTITION
-    mkfs.btrfs -f -L BTRFS-VOL $ROOTFS_PARTITION
+    mkfs.btrfs -f -L BTR_MAIN_VOL $ROOTFS_PARTITION
 
     # Mount top level btrfs volume on /mnt
     mount -o defaults,noatime $ROOTFS_PARTITION /mnt
@@ -163,23 +163,23 @@ function install() {
     # Generate fstab
     cat <<EOT >> "/mnt/etc/fstab"
 # ESP
-LABEL=ESP           /boot               vfat    defaults,noatime,umask=0022                         0 2
+LABEL=ESP              /boot               vfat    defaults,noatime,umask=0022                         0 2
 
 # /rootfs subvolume
-LABEL=BTRFS-VOL     /                   btrfs   defaults,noatime,compress=lzo,subvol=/rootfs        0 0
+LABEL=BTR_MAIN_VOL     /                   btrfs   defaults,noatime,compress=lzo,subvol=/rootfs        0 0
 
 # /home subvolume
-LABEL=BTRFS-VOL     /home               btrfs   defaults,noatime,compress=lzo,subvol=/home          0 0
+LABEL=BTR_MAIN_VOL     /home               btrfs   defaults,noatime,compress=lzo,subvol=/home          0 0
 
 # /btr_snapshots subvolume
-LABEL=BTRFS-VOL     /btr_snapshots      btrfs   defaults,noatime,compress=lzo,subvol=/btr_snapshots 0 0
+LABEL=BTR_MAIN_VOL     /btr_snapshots      btrfs   defaults,noatime,compress=lzo,subvol=/btr_snapshots 0 0
 
 # /swap subvolume (contains swapfile)
-LABEL=BTRFS-VOL     /swap               btrfs   defaults,noatime,subvol=/swap                       0 0
+LABEL=BTR_MAIN_VOL     /swap               btrfs   defaults,noatime,subvol=/swap                       0 0
 
 # btrfs root volume (btrfs root volumes always have a subvolid=5)
 # Note: this can be used to create snapshots of other subvolumes, including subvol=/rootfs
-LABEL=BTRFS-VOL     /mnt/btr_root_vol   btrfs   defaults,noatime,subvolid=5                         0 0
+LABEL=BTR_MAIN_VOL     /mnt/btr_root_vol   btrfs   defaults,noatime,subvolid=5                         0 0
 
 # swapfile
 /swap/swapfile      none                swap    defaults                                            0 0
