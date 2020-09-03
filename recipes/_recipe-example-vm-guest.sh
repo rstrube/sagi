@@ -1,16 +1,16 @@
 #!/bin/bash
-# Example soagi post-install recipe for System76 laptop (work machine)
+# Example soagi post-install recipe KVM/Qemu guest VM
+# (also used to test post_install scripts...)
 
 cd ../post_install
+
+# KVM/QEMU guest utilities
+./vm_kvm-qemu-guest.sh
 
 # Core applications / utilities
 ./core_yay.sh
 ./core_utils.sh
 ./core_zsh.sh
-./core_btrbk.sh /mnt/btr_root_vol btr_snapshots /mnt/btr_ext_ssd sys76
-
-# CPU specific utilities
-./cpu_intel-undervolt-support.sh
 
 # Web applications / utilities
 ./web_chromium.sh --enable-vaapi
