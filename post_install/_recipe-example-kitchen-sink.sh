@@ -3,8 +3,9 @@
 
 BTRBK_SRC_ROOT_VOL_PATH="/mnt/btr_root_vol" 
 BTRBK_SNAPSHOT_SUBVOL_NAME="btr_snapshots"
-BTRBK_TARGET_ROOT_VOL_PATH="/run/media/robert/MyBackupHD" 
-BTRBK_BACKUP_LABEL="myLaptop"
+BTRBK_TARGET_ROOT_VOL_PATH="/mnt/btr_ext_ssd" # e.g. something like: "/run/media/robert/my_backup_hd" (auto mount)
+                                              # e.g. something like: "/mnt/btr_ext_hd" (explicit mount)
+BTRBK_BACKUP_LABEL="sys76" # e.g. "my-system", "system-1234", "my-laptop", etc.
 
 # Core applications / utilities
 ./core_yay.sh
