@@ -8,8 +8,8 @@
 
 # Web applications / utilities
 ./web_chromium.sh --enable-vaapi
-./web_slack
-./web_teams
+./web_slack.sh
+./web_teams.sh
 
 # Development applications / utilities
 ./dev_git.sh --install-git-credential-manager
