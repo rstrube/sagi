@@ -234,7 +234,7 @@ EOT
         arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_GNOME_PACKAGES
     fi
 
-    arch-chroot /mnt pacman -Syu --noconfirm --needed gnome gnome-tweaks
+    arch-chroot /mnt pacman -Syu --noconfirm --needed gnome gnome-tweaks noto-fonts-emoji
     arch-chroot /mnt systemctl enable gdm.service
 
     # Install GPU Drivers

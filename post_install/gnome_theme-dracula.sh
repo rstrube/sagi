@@ -47,6 +47,7 @@ function install() {
 
     configure_gnome_terminal_theme
     configure_gedit_theme
+    configure_papirus_folder_color
 
     if [[ "$CONFIGURE_VSCODE_THEME" == "true" ]]; then
         configure_vscode_theme
@@ -82,8 +83,21 @@ function configure_gedit_theme {
     fi
 
     mv dracula.xml $GEDIT_STYLE_PATH
+    
+    gsettings set org.gnome.gedit.preferences.editor scheme 'dracula'
+}
 
-    # TODO figure out how to automatically select theme in Gedit preferences
+function configure_papirus_folder_color {
+
+    GNOME_CURRENT_ICON_THEME=$(gsettings get org.gnome.desktop.interface icon-theme)
+
+    if [[ "$GNOME_CURRENT_ICON_THEME" == "'Papirus-Dark'" ]]; then
+
+        echo "Setting papirus icons folder color to 'grey' via 'papirus-folders'..."
+
+        yay -Syu --noconfirm --needed papirus-folders
+        papirus-folders -C grey --theme Papirus-Dark
+    fi
 }
 
 function configure_vscode_theme {
