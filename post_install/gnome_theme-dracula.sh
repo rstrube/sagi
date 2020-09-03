@@ -56,8 +56,12 @@ function install() {
 function configure_vscode_theme {
 
     create_empty_vscode_settings_if_neccessary
+    
+    echo "Installing Dracula theme VSCode extension..."
 
     code --install-extension dracula-theme.theme-dracula
+
+    echo "Updating VSCode settings.json file with theme configuration..."
 
     sed -i '$i\    "workbench.colorTheme": "Dracula",' "$VSCODE_SETTINGS_FILE_PATH"
 }
@@ -66,6 +70,9 @@ function configure_flatpak_theme {
 
     curl -O https://raw.githubusercontent.com/refi64/pakitheme/master/pakitheme
     chmod +x ./pakitheme
+
+    echo "Creating local flatpak GTK theme based on Dracula GTK theme..."
+
     ./pakitheme install-user
     rm pakitheme
 }

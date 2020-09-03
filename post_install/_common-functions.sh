@@ -64,7 +64,7 @@ function create_empty_vscode_settings_if_neccessary {
     fi
 
     if [[ ! -e "$VSCODE_SETTINGS_FILE_PATH" ]]; then
-        echo "Creating an empty settings.json file..."
+        echo "Creating an empty VSCode settings.json file..."
 
         echo "{" > "$VSCODE_SETTINGS_FILE_PATH"
         echo "}" >> "$VSCODE_SETTINGS_FILE_PATH"
