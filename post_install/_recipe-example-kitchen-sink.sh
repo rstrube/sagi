@@ -8,6 +8,7 @@ BTRBK_BACKUP_LABEL="myLaptop"
 
 # Core applications / utilities
 ./core_yay.sh
+./core_utils.sh
 ./core_zsh.sh
 ./core_btrbk.sh $BTRBK_SRC_ROOT_VOL_PATH $BTRBK_SNAPSHOT_SUBVOL_NAME $BTRBK_TARGET_ROOT_VOL_PATH $BTRBK_BACKUP_LABEL
 
