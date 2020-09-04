@@ -1,7 +1,8 @@
 #!/bin/bash
 # Core - Yay
 
-source helper/_common-functions.sh
+DIR=$(dirname "$0")
+source $DIR/helper/_common-functions.sh
 
 CWD=$(pwd)
 

@@ -20,7 +20,7 @@ cd ../post_install
 # Icons / Fonts / Themes
 ./gnome_icons.sh
 ./gnome_fonts.sh --configure-vscode-fonts
-./gnome_theme-dracula.sh --configure-vscode-theme --configure-flatpak-theme
+./gnome_theme-dracula.sh --configure-papirus-folder-theme --configure-vscode-theme --configure-flatpak-theme
 
 # Gaming
 ./gaming_steam.sh

@@ -1,23 +1,30 @@
 #!/bin/bash
 # Gnome - Theme (Dracula)
 
-source helper/_common-functions.sh
+DIR=$(dirname "$0")
+source $DIR/helper/_common-functions.sh
 
 CONFIGURE_VSCODE_THEME="false"
 ARG_CONFIGURE_VSCODE_THEME="--configure-vscode-theme"
 CONFIGURE_FLATPAK_THEME="false"
 ARG_CONFIGURE_FLATPAK_THEME="--configure-flatpak-theme"
+CONFIGURE_PAPIRUS_FOLDER_THEME="false"
+ARG_CONFIGURE_PAPIRUS_FOLDER_THEME="--configure-papirus-folder-theme"
 
 function main() {
 
     check_args "$@"
 
-    if [[ "$1" == "$ARG_CONFIGURE_VSCODE_THEME" || "$2" == "$ARG_CONFIGURE_VSCODE_THEME" ]]; then
+    if [[ "$1" == "$ARG_CONFIGURE_VSCODE_THEME" || "$2" == "$ARG_CONFIGURE_VSCODE_THEME" || "$3" == "$ARG_CONFIGURE_VSCODE_THEME" ]]; then
         CONFIGURE_VSCODE_THEME="true"
     fi
 
-    if [[ "$1" == "$ARG_CONFIGURE_FLATPAK_THEME" || "$2" == "$ARG_CONFIGURE_FLATPAK_THEME" ]]; then
+    if [[ "$1" == "$ARG_CONFIGURE_FLATPAK_THEME" || "$2" == "$ARG_CONFIGURE_FLATPAK_THEME" || "$3" == "$ARG_CONFIGURE_FLATPAK_THEME" ]]; then
         CONFIGURE_FLATPAK_THEME="true"
+    fi
+
+    if [[ "$1" == "$ARG_CONFIGURE_PAPIRUS_FOLDER_THEME" || "$2" == "$ARG_CONFIGURE_PAPIRUS_FOLDER_THEME" || "$3" == "$ARG_CONFIGURE_PAPIRUS_FOLDER_THEME" ]]; then
+        CONFIGURE_PAPIRUS_FOLDER_THEME="true"
     fi
 
     check_variables
@@ -26,6 +33,27 @@ function main() {
 }
 
 function install() {
+
+    configure_gtk_theme
+    configure_gnome_terminal_theme
+    configure_gedit_theme
+
+    if [[ "$CONFIGURE_VSCODE_THEME" == "true" ]]; then
+        configure_papirus_folder_color
+    fi
+
+    if [[ "$CONFIGURE_PAPIRUS_FOLDER_THEME" == "true" ]]; then
+        configure_vscode_theme
+    fi
+
+    if [[ "$CONFIGURE_FLATPAK_THEME" == "true" ]]; then
+        configure_flatpak_theme
+    fi
+}
+
+function configure_gtk_theme {
+
+    echo "Installing Dracula GTK theme..."
 
     curl -O -L https://github.com/dracula/gtk/archive/master.zip
 
@@ -44,30 +72,35 @@ function install() {
     # Get GTK theme to Dracula (which was locally installed in ~/.local/share/themes)
     gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
     gsettings set org.gnome.desktop.wm.preferences theme "Dracula"
-
-    configure_gnome_terminal_theme
-    configure_gedit_theme
-    configure_papirus_folder_color
-
-    if [[ "$CONFIGURE_VSCODE_THEME" == "true" ]]; then
-        configure_vscode_theme
-    fi
-
-    if [[ "$CONFIGURE_FLATPAK_THEME" == "true" ]]; then
-        configure_flatpak_theme
-    fi
 }
 
 function configure_gnome_terminal_theme {
 
     echo "Installing Dracula theme for gnome-terminal..."
-    
-    export TERMINAL=gnome-terminal
 
-    curl -O https://raw.githubusercontent.com/Mayccoll/Gogh/master/themes/dracula.sh
-    chmod +x dracula.sh
-    ./dracula.sh
-    rm dracula.sh
+    # Reset gnome-terminal
+    dconf reset -f /org/gnome/terminal/
+
+    GT_DCONF_DIR=/org/gnome/terminal/legacy/profiles:
+    GT_PROFILE_ID="$(uuidgen)"
+    GT_DCONF_PROFILE_DIR="${GT_DCONF_DIR}/:$GT_PROFILE_ID"
+
+    GT_PROFILE_NAME="'Dracula'"
+    GT_PROFILE_BACKGROUND_COLOR="'#282A36'"
+    GT_PROFILE_BOLD_COLOR="'#6E46A4'"
+    GT_PROFILE_FOREGROUND_COLOR="'#F8F8F2'"
+    GT_PROFILE_PALLETE="['#262626', '#E356A7', '#42E66C', '#E4F34A', '#9B6BDF', '#E64747', '#75D7EC', '#EFA554', '#7A7A7A', '#FF79C6', '#50FA7B', '#F1FA8C', '#BD93F9', '#FF5555', '#8BE9FD', '#FFB86C']"
+
+    dconf write ${GT_DCONF_DIR}/default "'$GT_PROFILE_ID'"
+    dconf write ${GT_DCONF_DIR}/list "['$GT_PROFILE_ID']"
+
+    dconf write ${GT_DCONF_PROFILE_DIR}/background-color $GT_PROFILE_BACKGROUND_COLOR
+    dconf write ${GT_DCONF_PROFILE_DIR}/bold-color $GT_PROFILE_BOLD_COLOR
+    dconf write ${GT_DCONF_PROFILE_DIR}/bold-color-same-as-fg "false"
+    dconf write ${GT_DCONF_PROFILE_DIR}/foreground-color $GT_PROFILE_FOREGROUND_COLOR
+    dconf write ${GT_DCONF_PROFILE_DIR}/palette "$GT_PROFILE_PALLETE"
+    dconf write ${GT_DCONF_PROFILE_DIR}/use-theme-colors "false"
+    dconf write ${GT_DCONF_PROFILE_DIR}/visible-name $GT_PROFILE_NAME
 }
 
 function configure_gedit_theme {
@@ -128,7 +161,8 @@ function check_args() {
     
     if [[ "$#" -gt 2 ]]; then
         echo -e "${RED}Error: this script can be run with a maximum of two arguments.${NC}"
-        echo -e "${LIGHT_BLUE}Usage: "$0" [${ARG_CONFIGURE_VSCODE_THEME}] [${ARG_CONFIGURE_FLATPAK_THEME}]${NC}"
+        echo -e "${LIGHT_BLUE}Usage: "$0" [${ARG_CONFIGURE_PAPIRUS_FOLDER_THEME}] [${ARG_CONFIGURE_VSCODE_THEME}] [${ARG_CONFIGURE_FLATPAK_THEME}]${NC}"
+        echo -e "${BLUE}${ARG_CONFIGURE_PAPIRUS_FOLDER_THEME}${NC}  : [optional] configure Papirus folder color to match Dracula theme."
         echo -e "${BLUE}${ARG_CONFIGURE_VSCODE_THEME}${NC}  : [optional] configures Dracula theme for VSCode."
         echo -e "${BLUE}${ARG_CONFIGURE_FLATPAK_THEME}${NC} : [optional] installs Dracula theme locally for flatpak applications."
         exit 1
@@ -143,8 +177,7 @@ function check_variables() {
 
 function check_critical_prereqs() {
 
-    # note: the Gogh dracula.sh script uses wget
-    check_wget_prereq
+    check_git_prereq
 }
 
 main "$@"

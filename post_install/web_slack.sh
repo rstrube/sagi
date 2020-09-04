@@ -1,7 +1,8 @@
 #!/bin/bash
 # Web - Slack
 
-source helper/_common-functions.sh
+DIR=$(dirname "$0")
+source $DIR/helper/_common-functions.sh
 
 function main() {
     check_critical_prereqs

@@ -1,7 +1,8 @@
 #!/bin/bash
 # VM - KVM/Qemu Host
 
-source helper/_common-functions.sh
+DIR=$(dirname "$0")
+source $DIR/helper/_common-functions.sh
 
 # Installs all the neccessary packages to support running / managing KVM virtual machines
 # Note edk2-ovmf supports VMs with UEFI instead of traditional BIOS

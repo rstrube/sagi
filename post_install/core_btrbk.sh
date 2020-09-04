@@ -1,7 +1,8 @@
 #!/bin/bash
 # Core - btrbk
 
-source helper/_common-functions.sh
+DIR=$(dirname "$0")
+source $DIR/helper/_common-functions.sh
 
 # Create a btrbk.conf for backups to an external HD?
 BTRBK_CREATE_EXT_HD_CONFIG="false"
