@@ -172,7 +172,7 @@ function install() {
 
     # Create a dedicated entry for swapfile
     echo "# swapfile" >> /mnt/etc/fstab
-    echo "$SWAPFILE  none  swap  defaults  0 0" >> /mnt/etc/fstab
+    echo "/swap/swapfile  none  swap  defaults  0 0" >> /mnt/etc/fstab
     echo "" >> /mnt/etc/fstab
 
     # Configure swappiness paramater (default=60) to improve system responsiveness
