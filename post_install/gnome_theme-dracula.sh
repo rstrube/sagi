@@ -28,7 +28,6 @@ function main() {
     fi
 
     check_variables
-    check_critical_prereqs
     install
 }
 
@@ -159,8 +158,8 @@ function configure_flatpak_theme {
 
 function check_args() {
     
-    if [[ "$#" -gt 2 ]]; then
-        echo -e "${RED}Error: this script can be run with a maximum of two arguments.${NC}"
+    if [[ "$#" -gt 3 ]]; then
+        echo -e "${RED}Error: this script can be run with a maximum of three arguments.${NC}"
         echo -e "${LIGHT_BLUE}Usage: "$0" [${ARG_CONFIGURE_PAPIRUS_FOLDER_THEME}] [${ARG_CONFIGURE_VSCODE_THEME}] [${ARG_CONFIGURE_FLATPAK_THEME}]${NC}"
         echo -e "${BLUE}${ARG_CONFIGURE_PAPIRUS_FOLDER_THEME}${NC}  : [optional] configure Papirus folder color to match Dracula theme."
         echo -e "${BLUE}${ARG_CONFIGURE_VSCODE_THEME}${NC}  : [optional] configures Dracula theme for VSCode."
@@ -173,11 +172,6 @@ function check_variables() {
 
     check_variables_boolean "CONFIGURE_VSCODE_THEME" "$CONFIGURE_VSCODE_THEME"
     check_variables_boolean "CONFIGURE_FLATPAK_THEME" "$CONFIGURE_FLATPAK_THEME"
-}
-
-function check_critical_prereqs() {
-
-    check_git_prereq
 }
 
 main "$@"
