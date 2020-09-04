@@ -254,6 +254,8 @@ EOT
         # Configure pacman to rebuild the initramfs each time the nvidia package is updated
         configure_pacman_nvidia_hook
     fi
+
+    echo -e "${LIGHT_BLUE}Installation has completed! Run 'reboot' to reboot your machine.${NC}"
 }
 
 function check_critical_prereqs() {
