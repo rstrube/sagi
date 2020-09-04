@@ -158,31 +158,22 @@ function install() {
     arch-chroot /mnt sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
     arch-chroot /mnt pacman -Syyu
 
-    # Generate fstab
-    cat <<EOT >> "/mnt/etc/fstab"
-# ESP
-LABEL=ESP              /boot               vfat    defaults,noatime,umask=0022                         0 2
+    # Generate initial fstab using UUIDs
+    genfstab -U /mnt > /mnt/etc/fstab
 
-# /rootfs subvolume
-LABEL=BTR_MAIN_VOL     /                   btrfs   defaults,noatime,compress=lzo,subvol=/rootfs        0 0
+    # Grab the UUID for the rootfs partition
+    UUID_ROOTFS_PARTITION=$(blkid -o value -s UUID "$ROOTFS_PARTITION")
 
-# /home subvolume
-LABEL=BTR_MAIN_VOL     /home               btrfs   defaults,noatime,compress=lzo,subvol=/home          0 0
+    # Create a dedicated entry so you can mount the btrfs root volume (for snapshots)
+    echo "# root volume (btrfs root volumes always have a subvolid=5)" >> /mnt/etc/fstab
+    echo "# Note: this provides an excellent mount point for creating snapshots" >> /mnt/etc/fstab
+    echo "UUID=$UUID_ROOTFS_PARTITION    /mnt/btr_root_vol    btrfs    defaults,noatime,subvolid=5    0 0"
+    echo "" >> /mnt/etc/fstab
 
-# /btr_snapshots subvolume
-LABEL=BTR_MAIN_VOL     /btr_snapshots      btrfs   defaults,noatime,compress=lzo,subvol=/btr_snapshots 0 0
-
-# /swap subvolume (contains swapfile)
-LABEL=BTR_MAIN_VOL     /swap               btrfs   defaults,noatime,subvol=/swap                       0 0
-
-# btrfs root volume (btrfs root volumes always have a subvolid=5)
-# Note: this can be used to create snapshots of other subvolumes, including subvol=/rootfs
-LABEL=BTR_MAIN_VOL     /mnt/btr_root_vol   btrfs   defaults,noatime,subvolid=5                         0 0
-
-# swapfile
-/swap/swapfile      none                swap    defaults                                            0 0
-
-EOT
+    # Create a dedicated entry for swapfile
+    echo "# swapfile" >> /mnt/etc/fstab
+    echo "$SWAPFILE    none    swap    defaults    0 0" >> /mnt/etc/fstab
+    echo "" >> /mnt/etc/fstab
 
     # Configure swappiness paramater (default=60) to improve system responsiveness
     echo "vm.swappiness=10" > /mnt/etc/sysctl.d/99-sysctl.conf
