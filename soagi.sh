@@ -226,7 +226,7 @@ function install() {
     arch-chroot /mnt systemctl enable gdm.service
 
     # Hack to work around GDM startup race condition (bug). Add small delay when starting up GDM
-    acrh-chroot /mnt sed -i '/^[Service].*/a ExecStartPre=/bin/sleep 2' /usr/lib/systemd/system/gdm.service
+    acrh-chroot /mnt sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
 
     # Install GPU Drivers
     COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
