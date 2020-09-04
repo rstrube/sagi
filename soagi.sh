@@ -167,12 +167,12 @@ function install() {
     # Create a dedicated entry so you can mount the btrfs root volume (for snapshots)
     echo "# root volume (btrfs root volumes always have a subvolid=5)" >> /mnt/etc/fstab
     echo "# Note: this provides an excellent mount point for creating snapshots" >> /mnt/etc/fstab
-    echo "UUID=$UUID_ROOTFS_PARTITION    /mnt/btr_root_vol    btrfs    defaults,noatime,subvolid=5    0 0"
+    echo "UUID=$UUID_ROOTFS_PARTITION  /mnt/btr_root_vol  btrfs  defaults,noatime,subvolid=5  0 0" >> /mnt/etc/fstab
     echo "" >> /mnt/etc/fstab
 
     # Create a dedicated entry for swapfile
     echo "# swapfile" >> /mnt/etc/fstab
-    echo "$SWAPFILE    none    swap    defaults    0 0" >> /mnt/etc/fstab
+    echo "$SWAPFILE  none  swap  defaults  0 0" >> /mnt/etc/fstab
     echo "" >> /mnt/etc/fstab
 
     # Configure swappiness paramater (default=60) to improve system responsiveness
