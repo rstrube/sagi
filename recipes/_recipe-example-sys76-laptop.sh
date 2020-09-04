@@ -1,5 +1,5 @@
 #!/bin/bash
-# Example soagi post-install recipe for System76 laptop (work machine)
+# Example soagi post-install recipe for System76 laptop (Intel CPU and iGPU)
 
 cd ../post_install
 

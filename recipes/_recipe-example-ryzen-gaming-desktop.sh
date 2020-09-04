@@ -1,5 +1,5 @@
 #!/bin/bash
-# Example soagi post-install recipe for Ryzen gaming desktop
+# Example soagi post-install recipe for gaming desktop (AMD Ryzen CPU + Nvidia GPU)
 
 cd ../post_install
 
@@ -9,10 +9,11 @@ cd ../post_install
 ./core_zsh.sh
 
 # Web applications / utilities
-./web_chromium.sh --enable-vaapi
+# Note: because this system has a Nvidia GPU, don't enable VAAPI for Chromium
+./web_chromium.sh
 
 # Development applications / utilities
-./dev_git.sh "Robert Strube" robert@mydomain.com --install-git-credential-manager
+./dev_git.sh "Robert Strube" robert@mydomain.com
 
 # Media
 ./media_codecs-player.sh

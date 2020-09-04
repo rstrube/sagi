@@ -1,6 +1,5 @@
 #!/bin/bash
 # Example soagi post-install recipe KVM/Qemu guest VM
-# (also used to test post_install scripts...)
 
 cd ../post_install
 
@@ -13,7 +12,8 @@ cd ../post_install
 ./core_zsh.sh
 
 # Web applications / utilities
-./web_chromium.sh --enable-vaapi
+# Note: because system is VM, don't enable VAAPI for Chromium
+./web_chromium.sh
 ./web_slack.sh
 ./web_teams.sh
 
