@@ -23,6 +23,7 @@ cd ../post_install
 
 # Media
 ./media_codecs-player.sh
+./media_tauon-music-player.sh
 
 # Icons / Fonts / Themes
 ./gnome_icons.sh

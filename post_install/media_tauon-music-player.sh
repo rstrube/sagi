@@ -1,5 +1,5 @@
 #!/bin/bash
-# Web - Slack (flatpak)
+# Media - Tauon Music Box (flatpak)
 
 DIR=$(dirname "$0")
 source $DIR/helper/_common-functions.sh
@@ -10,7 +10,7 @@ function main() {
 }
 
 function install() {
-    flatpak install -y flathub com.slack.Slack
+    flatpak install -y flathub com.github.taiko2k.tauonmb
 }
 
 function check_critical_prereqs() {
