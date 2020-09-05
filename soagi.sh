@@ -99,15 +99,15 @@ function install() {
 
     # Mount btrfs subvolumes at the correct locations (with compression enabled)
     # Mount ROOT subvolume at /mnt
-    mount -o "defaults,noatime,compress=lzo,subvol=/rootfs" $ROOTFS_PARTITION /mnt
+    mount -o "defaults,noatime,compress=lzo,space_cache=v2,subvol=/rootfs" $ROOTFS_PARTITION /mnt
     
     # Create the additional subdirectories to support mounting additional btrfs subvolumes
     mkdir /mnt/{home,btr_snapshots,swap}
         
     # Mount additional btrfs subvolumes
-    mount -o "defaults,noatime,compress=lzo,subvol=/home" $ROOTFS_PARTITION /mnt/home
-    mount -o "defaults,noatime,compress=lzo,subvol=/btr_snapshots" $ROOTFS_PARTITION /mnt/btr_snapshots
-    mount -o "defaults,noatime,subvol=/swap" $ROOTFS_PARTITION /mnt/swap
+    mount -o "defaults,noatime,compress=lzo,space_cache=v2,subvol=/home" $ROOTFS_PARTITION /mnt/home
+    mount -o "defaults,noatime,compress=lzo,space_cache=v2,subvol=/btr_snapshots" $ROOTFS_PARTITION /mnt/btr_snapshots
+    mount -o "defaults,noatime,space_cache=v2,subvol=/swap" $ROOTFS_PARTITION /mnt/swap
 
     # Create directory to support mounting ESP
     mkdir /mnt/boot
@@ -167,13 +167,21 @@ function install() {
     # Create a dedicated entry so you can mount the btrfs root volume (for snapshots)
     echo "# root volume (btrfs root volumes always have a subvolid=5)" >> /mnt/etc/fstab
     echo "# Note: this provides an excellent mount point for creating snapshots" >> /mnt/etc/fstab
-    echo "UUID=$UUID_ROOTFS_PARTITION  /mnt/btr_root_vol  btrfs  defaults,noatime,subvolid=5  0 0" >> /mnt/etc/fstab
+    echo "UUID=$UUID_ROOTFS_PARTITION /mnt/btr_root_vol btrfs defaults,noatime,compress=lzo,space_cache=v2,subvolid=5 0 0" >> /mnt/etc/fstab
     echo "" >> /mnt/etc/fstab
 
     # Create a dedicated entry for swapfile
     echo "# swapfile" >> /mnt/etc/fstab
-    echo "/swap/swapfile  none  swap  defaults  0 0" >> /mnt/etc/fstab
+    echo "/swap/swapfile none swap defaults 0 0" >> /mnt/etc/fstab
     echo "" >> /mnt/etc/fstab
+
+    # Create udisks2 mount_options.conf for externally mounted btrfs drives
+    # This sets some sane default options (noatime,space_cache=v2,compress=lzo)
+    cat <<EOT > "/mnt/etc/udisks2/mount_options.conf"
+[defaults]
+btrfs_defaults=noatime,space_cache=v2,compress=lzo
+btrfs_allow=noatime,space_cache,compress,compress-force,datacow,nodatacow,datasum,nodatasum,degraded,device,discard,nodiscard,subvol,subvolid
+EOT
 
     # Configure swappiness paramater (default=60) to improve system responsiveness
     echo "vm.swappiness=10" > /mnt/etc/sysctl.d/99-sysctl.conf
