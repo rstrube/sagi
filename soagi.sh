@@ -79,9 +79,9 @@ function install() {
         ROOTFS_PARTITION="${HD_DEVICE}2"
     fi
 
-    # Format the partitions, ESP (/dev/${HD_DEVICE}1) as fat32, BTR_MAIN_VOL (/dev/${HD_DEVICE}2) as btrfs
+    # Format the partitions, ESP (/dev/${HD_DEVICE}1) as fat32, BTRFS-PART (/dev/${HD_DEVICE}2) as btrfs
     mkfs.fat -n ESP -F32 $BOOT_PARTITION
-    mkfs.btrfs -f -L BTR_MAIN_VOL $ROOTFS_PARTITION
+    mkfs.btrfs -f -L BTRFS-PART $ROOTFS_PARTITION
 
     # Mount top level btrfs volume on /mnt
     mount -o defaults,noatime $ROOTFS_PARTITION /mnt
@@ -98,7 +98,7 @@ function install() {
     umount /mnt
 
     # Mount btrfs subvolumes at the correct locations (with compression enabled)
-    # Mount ROOT subvolume at /mnt
+    # Mount rootfs subvolume at /mnt
     mount -o "defaults,noatime,compress=lzo,space_cache=v2,subvol=/rootfs" $ROOTFS_PARTITION /mnt
     
     # Create the additional subdirectories to support mounting additional btrfs subvolumes
