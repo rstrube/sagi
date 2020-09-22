@@ -1,5 +1,5 @@
 #!/bin/bash
-# Web - Slack (flatpak)
+# Productivity - Getting things Gnome
 
 DIR=$(dirname "$0")
 source $DIR/helper/_common-functions.sh

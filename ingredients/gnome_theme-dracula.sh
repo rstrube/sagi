@@ -147,6 +147,9 @@ function configure_vscode_theme {
 
 function configure_flatpak_theme {
 
+    # remove existing flatpak theme (created with pakitheme previously)
+    flapack remove -y org.gtk.Gtk3theme.Dracula
+
     curl -O https://raw.githubusercontent.com/refi64/pakitheme/master/pakitheme
     chmod +x ./pakitheme
 

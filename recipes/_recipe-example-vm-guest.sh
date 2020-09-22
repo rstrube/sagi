@@ -14,6 +14,7 @@ cd ../ingredients
 # Web applications / utilities
 # Note: because system is VM, don't enable VAAPI for Chromium
 ./web_chromium.sh
+./web_firefox.sh
 ./web_slack.sh
 ./web_teams.sh
 

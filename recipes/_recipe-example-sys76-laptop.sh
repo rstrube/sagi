@@ -14,6 +14,7 @@ cd ../ingredients
 
 # Web applications / utilities
 ./web_chromium.sh --enable-vaapi
+./web_firefox.sh
 ./web_slack.sh
 ./web_teams.sh
 
@@ -24,6 +25,10 @@ cd ../ingredients
 # Media
 ./media_codecs-player.sh
 ./media_tauon-music-player.sh
+
+# Productivity
+./productivity_gtg.sh
+./productivity_flameshot.sh
 
 # Icons / Fonts / Themes
 ./gnome_icons.sh
