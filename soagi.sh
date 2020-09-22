@@ -130,7 +130,7 @@ function install() {
     chmod 600 $SWAPFILE
     mkswap $SWAPFILE
 
-    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git neovim"
+    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git neovim"
 
     # Install essential packages via pacstrap
     if [[ "$AMD_CPU" == "true" ]]; then
