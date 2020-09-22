@@ -1,7 +1,7 @@
 #!/bin/bash
 # Example soagi post-install recipe KVM/Qemu guest VM
 
-cd ../post_install
+cd ../ingredients
 
 # KVM/QEMU guest utilities
 ./vm_kvm-qemu-guest.sh

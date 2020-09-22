@@ -1,7 +1,7 @@
 #!/bin/bash
 # Example soagi post-install recipe for gaming desktop (AMD Ryzen CPU + Nvidia GPU)
 
-cd ../post_install
+cd ../ingredients
 
 # Core applications / utilities
 ./core_yay.sh

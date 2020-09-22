@@ -1,7 +1,7 @@
 #!/bin/bash
 # Example soagi post-install recipe for System76 laptop (Intel CPU and iGPU)
 
-cd ../post_install
+cd ../ingredients
 
 # Core applications / utilities
 ./core_yay.sh
