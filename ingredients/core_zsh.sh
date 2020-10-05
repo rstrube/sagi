@@ -17,11 +17,13 @@ cp ~/.zshrc .
 # Set some very useful aliases
 cat <<EOT >> ".zshrc"
 alias sudo="sudo "
-alias vim="nvim"
+alias vim='nvim'
 alias ls='ls --color=auto'
 alias ll='ls -la --color=auto'
 alias l.='ls -d .* --color=auto'
 alias grep='grep --color'
+alias refresh_pacman_mirrors='reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist'
+alias omni_update='sudo pacman -Syu; yay -Syu; flatpak update'
 EOT
 
 cp .zshrc ~/.zshrc
