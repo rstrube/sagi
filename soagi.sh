@@ -71,7 +71,7 @@ function install() {
     parted -s $HD_DEVICE mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root btrfs 512MiB 100% set 1 esp on
 
     # Is the the hard drive an NVME SSD?
-    if [ -n "$(echo $HD_DEVICE | grep "^/dev/nvme")" ]; then
+    if [[ -n "$(echo $HD_DEVICE | grep "^/dev/nvme")" ]]; then
         BOOT_PARTITION="${HD_DEVICE}p1"
         ROOTFS_PARTITION="${HD_DEVICE}p2"
     else
