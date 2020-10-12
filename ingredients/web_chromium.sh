@@ -45,12 +45,20 @@ EOT
 
 function check_args() {
     
+    print_help_if_neccessary "$@"
+
     if [[ "$#" -gt 1 ]]; then
         echo -e "${RED}Error: this script can be run with a maximum of one argument.${NC}"
-        echo -e "${LIGHT_BLUE}Usage:   "$0" ${ARG_CHROMIUM_ENABLE_VAAPI}${NC}"
-        echo -e "${BLUE}${ARG_CHROMIUM_ENABLE_VAAPI}${NC}: [optional] enable VAAPI support"
+        echo ""
+        print_help
         exit 1
     fi
+}
+
+function print_help() {
+
+    echo -e "${LIGHT_BLUE}Usage: "$0" ${ARG_CHROMIUM_ENABLE_VAAPI}${NC}"
+    echo -e "${BLUE}${ARG_CHROMIUM_ENABLE_VAAPI}${NC}: [optional] enable VAAPI support"
 }
 
 function check_variables() {

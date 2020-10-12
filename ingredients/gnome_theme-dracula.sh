@@ -160,15 +160,23 @@ function configure_flatpak_theme {
 }
 
 function check_args() {
-    
+
+    print_help_if_neccessary "$@"
+
     if [[ "$#" -gt 3 ]]; then
         echo -e "${RED}Error: this script can be run with a maximum of three arguments.${NC}"
-        echo -e "${LIGHT_BLUE}Usage: "$0" [${ARG_CONFIGURE_PAPIRUS_FOLDER_THEME}] [${ARG_CONFIGURE_VSCODE_THEME}] [${ARG_CONFIGURE_FLATPAK_THEME}]${NC}"
-        echo -e "${BLUE}${ARG_CONFIGURE_PAPIRUS_FOLDER_THEME}${NC}  : [optional] configure Papirus folder color to match Dracula theme."
-        echo -e "${BLUE}${ARG_CONFIGURE_VSCODE_THEME}${NC}  : [optional] configures Dracula theme for VSCode."
-        echo -e "${BLUE}${ARG_CONFIGURE_FLATPAK_THEME}${NC} : [optional] installs Dracula theme locally for flatpak applications."
+        echo ""
+        print_help
         exit 1
     fi
+}
+
+function print_help() {
+
+    echo -e "${LIGHT_BLUE}Usage: "$0" [${ARG_CONFIGURE_PAPIRUS_FOLDER_THEME}] [${ARG_CONFIGURE_VSCODE_THEME}] [${ARG_CONFIGURE_FLATPAK_THEME}]${NC}"
+    echo -e "${BLUE}${ARG_CONFIGURE_PAPIRUS_FOLDER_THEME}${NC}: [optional] configure Papirus folder color to match Dracula theme."
+    echo -e "${BLUE}${ARG_CONFIGURE_VSCODE_THEME}${NC}: [optional] configures Dracula theme for VSCode."
+    echo -e "${BLUE}${ARG_CONFIGURE_FLATPAK_THEME}${NC}: [optional] installs Dracula theme locally for flatpak applications."
 }
 
 function check_variables() {

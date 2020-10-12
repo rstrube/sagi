@@ -86,3 +86,11 @@ function create_empty_vscode_settings_if_neccessary {
         echo "}" >> "$VSCODE_SETTINGS_FILE_PATH"
     fi
 }
+
+function print_help_if_neccessary() {
+
+    if [[ "$1" == "--help" ]]; then
+        print_help
+        exit 0
+    fi
+}

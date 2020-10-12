@@ -89,14 +89,21 @@ EOT
 
 function check_args() {
     
+    print_help_if_neccessary "$@"
+    
     if [[ "$#" -ne 0 && "$#" -ne 4 ]]; then
         echo -e "${RED}Error: this script must be run with either 0 arguments (install btrbk only), or with 4 arguments (install btrbk and create btrbk.conf file).${NC}"
         echo ""
-        echo -e "${LIGHT_BLUE}Usage:   "$0" {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}${NC}"
-        echo -e "${BLUE}Example: "$0"${NC} : installs btrbk without generating a btrbk.conf file."
-        echo -e "${BLUE}Example: "$0" /mnt/btr_root_vol btr_snapshots /run/media/robert/MyBackupHD myLaptop${NC} : installs btrbk and generates a btrbk.conf file to support backps to an external HD."
+        print_help
         exit 1
     fi
+}
+
+function print_help() {
+
+    echo -e "${LIGHT_BLUE}  Usage: "$0" {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}${NC}"
+    echo -e "${BLUE}Example: "$0"${NC} : installs btrbk without generating a btrbk.conf file."
+    echo -e "${BLUE}Example: "$0" /mnt/btr_root_vol btr_snapshots /run/media/robert/MyBackupHD myLaptop${NC} : installs btrbk and generates a btrbk.conf file to support backps to an external HD."
 }
 
 function check_variables() {

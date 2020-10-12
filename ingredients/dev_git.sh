@@ -43,13 +43,20 @@ function install() {
 
 function check_args() {
     
+    print_help_if_neccessary "$@"
+
     if [[ "$#" -ne 2 && "$#" -ne 3 ]]; then
         echo -e "${RED}Error: this script can only be run with two or three arguments.${NC}"
         echo ""
-        echo -e "${LIGHT_BLUE}Usage:   "$0" {\"full name\"} {email} [${ARG_GIT_INSTALL_CREDENTIAL_MANAGER}]${NC}"
-        echo -e "${BLUE}${ARG_GIT_INSTALL_CREDENTIAL_MANAGER}${NC}: [optional] installs git-credential-manager to better handle connecting to Azure DevOps."
+        print_help
         exit 1
     fi
+}
+
+function print_help() {
+
+    echo -e "${LIGHT_BLUE}Usage: "$0" {\"full name\"} {email} [${ARG_GIT_INSTALL_CREDENTIAL_MANAGER}]${NC}"
+    echo -e "${BLUE}${ARG_GIT_INSTALL_CREDENTIAL_MANAGER}${NC}: [optional] installs git-credential-manager to better handle connecting to Azure DevOps."
 }
 
 function check_variables() {
