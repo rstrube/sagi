@@ -213,7 +213,10 @@ EOT
 
     # Install and configure Grub as bootloader on ESP
     arch-chroot /mnt pacman -Syu --noconfirm --needed grub efibootmgr
-    arch-chroot /mnt grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot --recheck
+
+    # Note the '--removable' switch will also setup grub on /boot/EFI/BOOT/BOOTX64.EFI (which is the Windows default location)
+    # This is neccessary because many BIOSes don't honor efivars correctly
+    arch-chroot /mnt grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot --recheck --removable
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
     # Setup user and allow user to use "sudo"
