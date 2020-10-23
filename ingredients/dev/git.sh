@@ -2,7 +2,7 @@
 # Dev - git
 
 DIR=$(dirname "$0")
-source $DIR/helper/_common-functions.sh
+source $DIR/../_helper/_common-functions.sh
 
 GIT_USERNAME=""
 GIT_EMAIL=""

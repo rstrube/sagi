@@ -2,7 +2,7 @@
 # Gnome - Theme (Dracula)
 
 DIR=$(dirname "$0")
-source $DIR/helper/_common-functions.sh
+source $DIR/../_helper/_common-functions.sh
 
 CONFIGURE_VSCODE_THEME="false"
 ARG_CONFIGURE_VSCODE_THEME="--configure-vscode-theme"

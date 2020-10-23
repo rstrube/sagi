@@ -2,7 +2,7 @@
 # Gnome - Fonts
 
 DIR=$(dirname "$0")
-source $DIR/helper/_common-functions.sh
+source $DIR/../_helper/_common-functions.sh
 
 CONFIGURE_VSCODE_FONTS="false"
 ARG_CONFIGURE_VSCODE_FONTS="--configure-vscode-fonts"

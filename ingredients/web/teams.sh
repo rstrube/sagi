@@ -2,7 +2,7 @@
 # Web - Teams
 
 DIR=$(dirname "$0")
-source $DIR/helper/_common-functions.sh
+source $DIR/../_helper/_common-functions.sh
 
 function main() {
     check_critical_prereqs

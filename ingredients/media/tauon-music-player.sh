@@ -1,8 +1,8 @@
 #!/bin/bash
-# Productivity - Standard Notes
+# Media - Tauon Music Box (flatpak)
 
 DIR=$(dirname "$0")
-source $DIR/helper/_common-functions.sh
+source $DIR/../_helper/_common-functions.sh
 
 function main() {
     check_critical_prereqs
@@ -10,11 +10,11 @@ function main() {
 }
 
 function install() {
-    yay -Syu --noconfirm --needed standardnotes-destkop
+    flatpak install -y flathub com.github.taiko2k.tauonmb
 }
 
 function check_critical_prereqs() {
-    check_yay_prereq
+    check_flatpak_prereq
 }
 
 main "$@"

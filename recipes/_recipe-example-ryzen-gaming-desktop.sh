@@ -4,24 +4,28 @@
 cd ../ingredients
 
 # Core applications / utilities
-./core_yay.sh
-./core_utils.sh
-./core_zsh.sh
+./core/yay.sh
+./core/utils.sh
+./core/reflector.sh
+./core/zsh.sh
 
 # Web applications / utilities
 # Note: because this system has a Nvidia GPU, don't enable VAAPI for Chromium
-./web_chromium.sh
+./web/chromium.sh
 
 # Development applications / utilities
-./dev_git.sh "Robert Strube" robert@mydomain.com
+./dev/git.sh "Robert Strube" robert@mydomain.com
 
 # Media
-./media_codecs-player.sh
+./media/codecs-player.sh
+
+# Gnome
+./gnome/gdm-startup-fix.sh
 
 # Icons / Fonts / Themes
-./gnome_icons.sh
-./gnome_fonts.sh --configure-vscode-fonts
-./gnome_theme-dracula.sh --configure-papirus-folder-theme --configure-vscode-theme --configure-flatpak-theme
+./gnome/icons.sh
+./gnome/fonts.sh
+./gnome/theme-dracula.sh --configure-papirus-folder-theme --configure-vscode-theme --configure-flatpak-theme
 
 # Gaming
-./gaming_steam.sh
+./gaming/steam.sh

@@ -1,8 +1,8 @@
 #!/bin/bash
-# Web - Slack (flatpak)
+# Productivity - Getting things Gnome
 
 DIR=$(dirname "$0")
-source $DIR/helper/_common-functions.sh
+source $DIR/../_helper/_common-functions.sh
 
 function main() {
     check_critical_prereqs
@@ -10,7 +10,7 @@ function main() {
 }
 
 function install() {
-    flatpak install -y flathub com.slack.Slack
+    flatpak install -y flathub org.gnome.GTG
 }
 
 function check_critical_prereqs() {

@@ -2,7 +2,7 @@
 # Core - Yay
 
 DIR=$(dirname "$0")
-source $DIR/helper/_common-functions.sh
+source $DIR/../_helper/_common-functions.sh
 
 CWD=$(pwd)
 

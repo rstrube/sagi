@@ -2,7 +2,7 @@
 # Core - Zsh
 
 DIR=$(dirname "$0")
-source $DIR/helper/_common-functions.sh
+source $DIR/../_helper/_common-functions.sh
 
 # Oh-My-Zsh requires powerline symbols and therefore powerline patched fonts
 yay -Syu --noconfirm --needed zsh powerline-fonts-git

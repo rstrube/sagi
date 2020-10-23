@@ -2,7 +2,7 @@
 # VM - KVM/Qemu Guest
 
 DIR=$(dirname "$0")
-source $DIR/helper/_common-functions.sh
+source $DIR/../_helper/_common-functions.sh
 
 # Install Qemu guest agent and Spice tools
 sudo pacman -Syu --noconfirm --needed qemu-guest-agent spice-vdagent
