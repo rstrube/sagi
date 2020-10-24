@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe-starter.sh
+# recipe.sh
 # NOTE: Please edit this recipe file before running!
 
 # Core

@@ -130,7 +130,7 @@ function install() {
     chmod 600 $SWAPFILE
     mkswap $SWAPFILE
 
-    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git neovim"
+    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim"
 
     # Install essential packages via pacstrap
     if [[ "$AMD_CPU" == "true" ]]; then
@@ -261,6 +261,7 @@ EOT
 
     # Clone soagi git repo so that user can run post-install recipe
     arch-chroot /mnt git clone https://github.com/rstrube/soagi /home/${USER_NAME}/soagi
+    arch-chroot /mnt chown -R ${USER_NAME}:${USER_NAME} /home/${USER_NAME}/soagi
     
     echo -e "${LIGHT_BLUE}Installation has completed! Run 'reboot' to reboot your machine.${NC}"
 }
