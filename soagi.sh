@@ -259,6 +259,9 @@ EOT
         configure_pacman_nvidia_hook
     fi
 
+    # Clone soagi git repo so that user can run post-install recipe
+    arch-chroot /mnt git clone https://github.com/rstrube/soagi /home/${USER_NAME}/soagi
+    
     echo -e "${LIGHT_BLUE}Installation has completed! Run 'reboot' to reboot your machine.${NC}"
 }
 
