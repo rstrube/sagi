@@ -34,6 +34,8 @@ function generate-recipe() {
     generate-recipe-section "# Backup" "../ingredients/backup"
     generate-recipe-section "# Hardware Specific CPU" "../ingredients/cpu"
     generate-recipe-section "# VM" "../ingredients/vm"
+
+    chmod +x $GENERATED_RECIPE_TEMPLATE_FILE
 }
 
 function generate-recipe-section() {
