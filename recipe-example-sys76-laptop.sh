@@ -70,7 +70,7 @@
 
 # Hardware Specific CPU
 # -------------------------
-./ingredients/intel-undervolt-support.sh # Utilities neccessary to undervolt Intel CPUs
+./ingredients/cpu/intel-undervolt-support.sh # Utilities neccessary to undervolt Intel CPUs
 
 # VM
 # -------------------------

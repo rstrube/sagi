@@ -39,7 +39,7 @@
 # Chromium
 # Usage: chromium.sh [--enable-vaapi]
 # Note: VAAPI only works with Intel/AMD GPUs
-#./ingredients/web/chromium.sh --enable-vaapi
+#./ingredients/web/chromium.sh #--enable-vaapi
 # ------------------------
 #./ingredients/web/firefox.sh # Firefox
 #./ingredients/web/slack.sh # Slack
@@ -70,7 +70,7 @@
 
 # Hardware Specific CPU
 # -------------------------
-#./ingredients/intel-undervolt-support.sh # Utilities neccessary to undervolt Intel CPUs
+#./ingredients/cpu/intel-undervolt-support.sh # Utilities neccessary to undervolt Intel CPUs
 
 # VM
 # -------------------------
