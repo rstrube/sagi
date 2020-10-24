@@ -1,6 +1,8 @@
 #!/bin/bash
 # VM - KVM/Qemu Guest
 
+#|#./ingredients/vm/kvm-qemu-guest.sh # KVM/Qemu tools for guest VMs (only install if this system is a guest VM!)
+
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 

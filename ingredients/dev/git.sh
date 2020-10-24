@@ -1,6 +1,12 @@
 #!/bin/bash
 # Dev - git
 
+#|# Git
+#|# Usage: git.sh "Full Name" {email} [--git-credential-manager]
+#|# Note: Git credential manager provides support for Microsoft Azure DevOps authentication
+#|#./ingredients/dev/git.sh "First Last" robert@mydomain.com #--git-credential-manager
+#|# ------------------------
+
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 

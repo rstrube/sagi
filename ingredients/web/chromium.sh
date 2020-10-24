@@ -1,6 +1,12 @@
 #!/bin/bash
 # Web - Chromium
 
+#|# Chromium
+#|# Usage: chromium.sh [--enable-vaapi]
+#|# Note: VAAPI only works with Intel/AMD GPUs
+#|#./ingredients/web/chromium.sh --enable-vaapi
+#|# ------------------------
+
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 

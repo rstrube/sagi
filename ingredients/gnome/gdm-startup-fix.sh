@@ -1,6 +1,10 @@
 #!/bin/bash
 # Gnome - GDM Startup Fix
 
+#|# Gnome GDM Fix
+#|./ingredients/gnome/gdm-startup-fix.sh # Fixes a race condition with GDM preventing it from being displayed on fast systems
+#|# ------------------------
+
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 

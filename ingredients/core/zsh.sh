@@ -1,6 +1,8 @@
 #!/bin/bash
 # Core - Zsh
 
+#|./ingredients/core/zsh.sh # Zsh + Oh-my-Zsh: fanstatic shell with built in support for git repos
+
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 

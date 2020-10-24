@@ -1,6 +1,11 @@
 #!/bin/bash
 # Gnome - Fonts
 
+#|# Gnome Font Configuration
+#|# Usage: fonts.sh [--configure-vscode-fonts]
+#|#./ingredients/gnome/fonts.sh #--configure-vscode-fonts
+#|# ------------------------
+
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 

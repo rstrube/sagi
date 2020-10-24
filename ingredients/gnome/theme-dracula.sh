@@ -1,6 +1,11 @@
 #!/bin/bash
 # Gnome - Theme (Dracula)
 
+#|# Gnome Dracula Theme
+#|# Usage: theme-dracula.sh [--configure-vscode-theme] [--configure-flatpak-theme] [--configure-papirus-folder-theme]
+#|#./ingredients/gnome/theme-dracula.sh --configure-vscode-theme --configure-flatpak-theme --configure-papirus-folder-theme
+#|# ------------------------
+
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 

@@ -1,6 +1,8 @@
 #!/bin/bash
 # Productivity - Getting things Gnome
 
+#|#./ingredients/productivity/gtg.sh # Getting things Gnome
+
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 

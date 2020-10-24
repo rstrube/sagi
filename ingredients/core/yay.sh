@@ -1,6 +1,8 @@
 #!/bin/bash
 # Core - Yay
 
+#|./ingredients/core/yay.sh # Yay: let's you easily install packages for AUR
+
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 
