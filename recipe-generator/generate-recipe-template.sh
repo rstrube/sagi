@@ -1,12 +1,11 @@
 #!/bin/bash
 # Generate Recipe Template
 
-GENERATED_RECIPE_TEMPLATE_NAME_PREFIX="recipe-"
-DATE=$(date +%d%m%Y-%H%M%S)
-GENERATED_RECIPE_TEMPLATE_NAME="${GENERATED_RECIPE_TEMPLATE_NAME_PREFIX}${DATE}.sh"
+DATE=$(date +%d-%m-%Y-%H:%M:%S)
+GENERATED_RECIPE_TEMPLATE_NAME="recipe.sh"
 GENERATED_RECIPE_TEMPLATE_FILE="../$GENERATED_RECIPE_TEMPLATE_NAME"
 INGREDIENT_HEADER_REGEX="(?<=#\|).+"
-HR="# -------------------------"
+HR="# ------------------------------------------------------------------------"
 
 function main() {
     
@@ -21,19 +20,20 @@ function main() {
 function generate-recipe() {
 
     echo "#!/bin/bash" > $GENERATED_RECIPE_TEMPLATE_FILE
-    echo "# $GENERATED_RECIPE_TEMPLATE_NAME" >> $GENERATED_RECIPE_TEMPLATE_FILE
-    echo "# NOTE: Please edit this recipe file before running!" >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "# $GENERATED_RECIPE_TEMPLATE_NAME : $DATE" >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "# NOTE: Please uncomment the ingredients you wish to install before running!" >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo $HR >> $GENERATED_RECIPE_TEMPLATE_FILE
 
-    generate-recipe-section "# Core" "../ingredients/core"
-    generate-recipe-section "# Development" "../ingredients/dev"
-    generate-recipe-section "# Gnome" "../ingredients/gnome"
-    generate-recipe-section "# Web" "../ingredients/web"
-    generate-recipe-section "# Productivity" "../ingredients/productivity"
-    generate-recipe-section "# Media" "../ingredients/media"
-    generate-recipe-section "# Gaming" "../ingredients/gaming"
-    generate-recipe-section "# Backup" "../ingredients/backup"
-    generate-recipe-section "# Hardware Specific CPU" "../ingredients/cpu"
-    generate-recipe-section "# VM" "../ingredients/vm"
+    generate-recipe-section "# 1. Core" "../ingredients/core"
+    generate-recipe-section "# 2. Gnome" "../ingredients/gnome"
+    generate-recipe-section "# 3. Development" "../ingredients/dev"
+    generate-recipe-section "# 4. Web" "../ingredients/web"
+    generate-recipe-section "# 5. Productivity" "../ingredients/productivity"
+    generate-recipe-section "# 6. Media" "../ingredients/media"
+    generate-recipe-section "# 7. Gaming" "../ingredients/gaming"
+    generate-recipe-section "# 8. Backup" "../ingredients/backup"
+    generate-recipe-section "# 9. Hardware Specific CPU" "../ingredients/cpu"
+    generate-recipe-section "# 10. VM" "../ingredients/vm"
 
     chmod +x $GENERATED_RECIPE_TEMPLATE_FILE
 }
@@ -46,9 +46,11 @@ function generate-recipe-section() {
     echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo $SECTION_LABEL >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo $HR >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
 
     for i in ${INGREDIENT_DIR}/*.sh; do
         cat $i | grep -P -o $INGREDIENT_HEADER_REGEX >> $GENERATED_RECIPE_TEMPLATE_FILE
+        echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
     done
 }
 

@@ -1,9 +1,7 @@
 #!/bin/bash
-# Gnome - Icons
 
-#|# Gnome Icon Configuration
+#|# Gnome icons
 #|#./ingredients/gnome/icons.sh
-#|# ------------------------
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

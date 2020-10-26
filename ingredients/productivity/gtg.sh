@@ -1,6 +1,6 @@
 #!/bin/bash
-# Productivity - Getting things Gnome
 
+#|# Getting this Gnome (TTD application)
 #|#./ingredients/productivity/gtg.sh # Getting things Gnome
 
 DIR=$(dirname "$0")

@@ -1,78 +1,128 @@
 #!/bin/bash
-# recipe.sh
-# NOTE: Please edit this recipe file before running!
+# recipe.sh : 26-10-2020-17:24:20
+# NOTE: Please uncomment the ingredients you wish to install before running!
+# ------------------------------------------------------------------------
 
-# Core
-# -------------------------
-./ingredients/core/utils.sh # Core utilities
-./ingredients/core/yay.sh # Yay: let's you easily install packages for AUR
-./ingredients/core/zsh.sh # Zsh + Oh-my-Zsh: fanstatic shell with built in support for git repos
+# 1. Core
+# ------------------------------------------------------------------------
 
-# Development
-# -------------------------
-# Git
-# Usage: git.sh "Full Name" {email} [--git-credential-manager]
-# Note: Git credential manager provides support for Microsoft Azure DevOps authentication
-#./ingredients/dev/git.sh "First Last" robert@mydomain.com #--git-credential-manager
-# ------------------------
-#./ingredients/dev/vscode.sh # Visual Studio Code (OSS Version): Incredible open source IDE
+# Mandatory programs & utilities
+./ingredients/core/utils.sh
 
-# Gnome
-# -------------------------
-# Gnome Font Configuration
-# Usage: fonts.sh [--configure-vscode-fonts]
-#./ingredients/gnome/fonts.sh #--configure-vscode-fonts
-# ------------------------
-# Gnome GDM Fix
-./ingredients/gnome/gdm-startup-fix.sh # Fixes a race condition with GDM preventing it from being displayed on fast systems
-# ------------------------
-# Gnome Icon Configuration
+# Zsh + Oh-my-Zsh (recommended)
+./ingredients/core/zsh.sh
+
+
+# 2. Gnome
+# ------------------------------------------------------------------------
+
+# Gnome fonts
+#./ingredients/gnome/fonts.sh
+
+# GDM startup fix (fixes race condition where GDM doesn't initialize correctly on fast systems)
+./ingredients/gnome/gdm-startup-fix.sh
+
+# Gnome icons
 #./ingredients/gnome/icons.sh
-# ------------------------
-# Gnome Dracula Theme
-# Usage: theme-dracula.sh [--configure-vscode-theme] [--configure-flatpak-theme] [--configure-papirus-folder-theme]
-#./ingredients/gnome/theme-dracula.sh --configure-vscode-theme --configure-flatpak-theme --configure-papirus-folder-theme
-# ------------------------
 
-# Web
-# -------------------------
+# Gnome Dracula theme
+#./ingredients/gnome/theme-dracula-1.sh
+
+# Gnome Dracula theme icons (requires Gnome icons ingredient to be installed)
+#./ingredients/gnome/theme-dracula-2-icons.sh
+
+# Gnome Dracula theme Flatpak support
+#./ingredients/gnome/theme-dracula-3-flatpak.sh
+
+
+# 3. Development
+# ------------------------------------------------------------------------
+
+# Git (installation and configuration)
+# Usage: git-1.sh "{full name}" {email}
+#./ingredients/dev/git-1.sh "First Last" robert@mydomain.com
+
+# Git Credential Manager (supports Git repos on Azure DevOps)
+#./ingredients/dev/git-2-credential-manager.sh
+
+# VSCode (OSS Edition)
+#./ingredients/dev/vscode-1.sh
+
+# VSCode font configuration (Note: requires Gnome fonts ingredient)
+#./ingredients/dev/vscode-2-fonts.sh
+
+# VSCode Dracula theme
+#./ingredients/dev/vscode-3-dracula-theme.sh
+
+
+# 4. Web
+# ------------------------------------------------------------------------
+
 # Chromium
-# Usage: chromium.sh [--enable-vaapi]
-# Note: VAAPI only works with Intel/AMD GPUs
-#./ingredients/web/chromium.sh #--enable-vaapi
-# ------------------------
-#./ingredients/web/firefox.sh # Firefox
-#./ingredients/web/slack.sh # Slack
-#./ingredients/web/teams.sh # Microsoft Teams
+#./ingredients/web/chromium-1.sh
 
-# Productivity
-# -------------------------
-#./ingredients/productivity/flameshot.sh # Flameshot: Incredible screenshot application
+# Chromium enable VAAPI support (requires Chromium ingredient)
+#./ingredients/web/chromium-2-enable-vaapi.sh
+
+# Firefox
+#./ingredients/web/firefox.sh
+
+# Slack
+#./ingredients/web/slack.sh
+
+# Microsoft Teams
+#./ingredients/web/teams.sh
+
+
+# 5. Productivity
+# ------------------------------------------------------------------------
+
+# Flameshot (screenshot application)
+#./ingredients/productivity/flameshot.sh
+
+# Getting this Gnome (TTD application)
 #./ingredients/productivity/gtg.sh # Getting things Gnome
-#./ingredients/productivity/standardnotes.sh # StandardNotes
 
-# Media
-# -------------------------
-#./ingredients/media/codecs-player.sh # VLC video player and important codecs
-#./ingredients/media/tauon-music-player.sh # Tauon Music Player: fantastic music library browser and player
 
-# Gaming
-# -------------------------
-#./ingredients/gaming/steam.sh # Steam: Digital distribution platform for PC games
+# 6. Media
+# ------------------------------------------------------------------------
 
-# Backup
-# -------------------------
+# Tauon Music Player
+#./ingredients/media/tauon-music-player.sh
+
+# VLC media player and codecs
+#./ingredients/media/vlc-codecs.sh
+
+
+# 7. Gaming
+# ------------------------------------------------------------------------
+
+# Steam gaming platform
+#./ingredients/gaming/steam.sh
+
+
+# 8. Backup
+# ------------------------------------------------------------------------
+
 # Btrbk: Command line btrfs backup utility
 # Usage: brtbk.sh {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}
 # Example: btrbk.sh /mnt/btr_root_vol btr_snapshots /run/media/robert/MyBackupHD MyLaptop
 #./ingredients/backup/brtbk.sh {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}
-# ------------------------
 
-# Hardware Specific CPU
-# -------------------------
-#./ingredients/cpu/intel-undervolt-support.sh # Utilities neccessary to undervolt Intel CPUs
 
-# VM
-# -------------------------
-#./ingredients/vm/kvm-qemu-guest.sh # KVM/Qemu tools for guest VMs (only install if this system is a guest VM!)
-#./ingredients/vm/kvm-qemu-host.sh # KVM/Qemu: Support for running VMs
+# 9. Hardware Specific CPU
+# ------------------------------------------------------------------------
+
+# # Utilities neccessary to undervolt Intel CPUs
+#./ingredients/cpu/intel-undervolt-support.sh 
+
+
+# 10. VM
+# ------------------------------------------------------------------------
+
+# KVM/Quem guest utilities (only install if running as VM)
+#./ingredients/vm/kvm-qemu-guest.sh
+
+# KVM/Quemu host installation and configuration
+#./ingredients/vm/kvm-qemu-host.sh
+

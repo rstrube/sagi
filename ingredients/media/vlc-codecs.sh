@@ -1,7 +1,7 @@
 #!/bin/bash
-# Media - Codecs and Player
 
-#|#./ingredients/media/codecs-player.sh # VLC video player and important codecs
+#|# VLC media player and codecs
+#|#./ingredients/media/vlc-codecs.sh
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

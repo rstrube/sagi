@@ -1,7 +1,7 @@
 #!/bin/bash
-# Media - Tauon Music Box (flatpak)
 
-#|#./ingredients/media/tauon-music-player.sh # Tauon Music Player: fantastic music library browser and player
+#|# Tauon Music Player
+#|#./ingredients/media/tauon-music-player.sh
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

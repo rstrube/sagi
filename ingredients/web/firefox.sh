@@ -1,7 +1,7 @@
 #!/bin/bash
-# Web - Firefox
 
-#|#./ingredients/web/firefox.sh # Firefox
+#|# Firefox
+#|#./ingredients/web/firefox.sh
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

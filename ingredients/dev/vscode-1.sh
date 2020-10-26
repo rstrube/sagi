@@ -1,7 +1,7 @@
 #!/bin/bash
-# Dev - vscode
 
-#|#./ingredients/dev/vscode.sh # Visual Studio Code (OSS Version): Incredible open source IDE
+#|# VSCode (OSS Edition)
+#|#./ingredients/dev/vscode-1.sh
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

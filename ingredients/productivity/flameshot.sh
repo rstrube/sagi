@@ -1,7 +1,7 @@
 #!/bin/bash
-# Productivity - Flameshot
 
-#|#./ingredients/productivity/flameshot.sh # Flameshot: Incredible screenshot application
+#|# Flameshot (screenshot application)
+#|#./ingredients/productivity/flameshot.sh
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

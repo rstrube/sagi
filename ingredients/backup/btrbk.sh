@@ -1,11 +1,9 @@
 #!/bin/bash
-# Backup - btrbk
 
 #|# Btrbk: Command line btrfs backup utility
 #|# Usage: brtbk.sh {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}
 #|# Example: btrbk.sh /mnt/btr_root_vol btr_snapshots /run/media/robert/MyBackupHD MyLaptop
 #|#./ingredients/backup/brtbk.sh {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}
-#|# ------------------------
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

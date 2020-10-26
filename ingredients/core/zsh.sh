@@ -1,7 +1,7 @@
 #!/bin/bash
-# Core - Zsh
 
-#|./ingredients/core/zsh.sh # Zsh + Oh-my-Zsh: fanstatic shell with built in support for git repos
+#|# Zsh + Oh-my-Zsh (recommended)
+#|./ingredients/core/zsh.sh
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
@@ -18,14 +18,18 @@ cp ~/.zshrc .
 
 # Set some very useful aliases
 cat <<EOT >> ".zshrc"
+
+# Core aliases
 alias sudo="sudo "
-alias vim='nvim'
 alias ls='ls --color=auto'
 alias ll='ls -la --color=auto'
 alias l.='ls -d .* --color=auto'
 alias grep='grep --color'
+
+# Pacman aliases
 alias refresh_pacman_mirrors='reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist'
-alias omni_update='sudo pacman -Syu; yay -Syu; flatpak update'
+alias omni_update='yay -Syu; flatpak update'
+
 EOT
 
 cp .zshrc ~/.zshrc

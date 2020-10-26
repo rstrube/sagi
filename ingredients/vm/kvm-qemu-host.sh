@@ -1,7 +1,7 @@
 #!/bin/bash
-# VM - KVM/Qemu Host
 
-#|#./ingredients/vm/kvm-qemu-host.sh # KVM/Qemu: Support for running VMs
+#|# KVM/Quemu host installation and configuration
+#|#./ingredients/vm/kvm-qemu-host.sh
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

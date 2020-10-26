@@ -1,7 +1,7 @@
 #!/bin/bash
-# Gaming - Steam
 
-#|#./ingredients/gaming/steam.sh # Steam: Digital distribution platform for PC games
+#|# Steam gaming platform
+#|#./ingredients/gaming/steam.sh
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
