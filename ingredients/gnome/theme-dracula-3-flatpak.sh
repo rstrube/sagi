@@ -14,7 +14,7 @@ function main() {
 function install() {
 
     # remove existing flatpak theme (created with pakitheme previously)
-    flapack remove -y org.gtk.Gtk3theme.Dracula
+    flatpak remove -y org.gtk.Gtk3theme.Dracula
 
     curl -O https://raw.githubusercontent.com/refi64/pakitheme/master/pakitheme
     chmod +x ./pakitheme
