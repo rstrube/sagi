@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#|# Gnome Dracula theme icons (requires Gnome icons ingredient to be installed)
+#|# Gnome Dracula theme icons (requires Gnome icons)
 #|#./ingredients/gnome/theme-dracula-2-icons.sh
 
 DIR=$(dirname "$0")

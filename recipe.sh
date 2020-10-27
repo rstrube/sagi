@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 26-10-2020-17:24:20
+# recipe.sh : 27-10-2020-13:50:05
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # ------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@
 # Gnome Dracula theme
 #./ingredients/gnome/theme-dracula-1.sh
 
-# Gnome Dracula theme icons (requires Gnome icons ingredient to be installed)
+# Gnome Dracula theme icons (requires Gnome icons)
 #./ingredients/gnome/theme-dracula-2-icons.sh
 
 # Gnome Dracula theme Flatpak support
@@ -48,7 +48,7 @@
 # VSCode (OSS Edition)
 #./ingredients/dev/vscode-1.sh
 
-# VSCode font configuration (Note: requires Gnome fonts ingredient)
+# VSCode font configuration (requires Gnome fonts)
 #./ingredients/dev/vscode-2-fonts.sh
 
 # VSCode Dracula theme
@@ -61,7 +61,7 @@
 # Chromium
 #./ingredients/web/chromium-1.sh
 
-# Chromium enable VAAPI support (requires Chromium ingredient)
+# Chromium enable VAAPI support (requires Chromium)
 #./ingredients/web/chromium-2-enable-vaapi.sh
 
 # Firefox

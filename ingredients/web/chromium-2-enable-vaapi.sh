@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#|# Chromium enable VAAPI support (requires Chromium ingredient)
+#|# Chromium enable VAAPI support (requires Chromium)
 #|#./ingredients/web/chromium-2-enable-vaapi.sh
 
 DIR=$(dirname "$0")
