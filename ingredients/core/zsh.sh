@@ -28,7 +28,7 @@ alias grep='grep --color'
 
 # Pacman aliases
 alias pacman_refresh_mirrors='reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist'
-alias pacman_remove_orphans='sudo pacman -Qtdq | sudo pacman -Rns -; yay -Yc'
+alias pacman_remove_orphans='pacman -Rns $(pacman -Qdtq); yay -Yc'
 alias pacman_omni_update='yay -Syu; flatpak update'
 
 EOT
