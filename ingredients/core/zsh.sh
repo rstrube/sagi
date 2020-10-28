@@ -20,7 +20,8 @@ cp ~/.zshrc .
 cat <<EOT >> ".zshrc"
 
 # Core aliases
-alias sudo="sudo "
+alias sudo='sudo '
+alias vim='nvim'
 alias ls='ls --color=auto'
 alias ll='ls -la --color=auto'
 alias l.='ls -d .* --color=auto'
