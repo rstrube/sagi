@@ -229,15 +229,17 @@ EOT
 
     if [[ "$XORG_INSTALL" == "true" ]]; then
         arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_GNOME_PACKAGES xorg-server
-        arch-chroot /mnt sed -i "s/#WaylandEnable=false/WaylandEnable=false/" /etc/gdm/custom.conf
+        # No longer neccessary to force GDM to run in Xorg mode
+        # arch-chroot /mnt sed -i "s/#WaylandEnable=false/WaylandEnable=false/" /etc/gdm/custom.conf
     else
         arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_GNOME_PACKAGES
     fi
 
     arch-chroot /mnt systemctl enable gdm.service
 
+    # No longer neccessary because GDM runs fine in Wayland mode
     # Hack to work around GDM startup race condition (bug). Add small delay when starting up GDM
-    arch-chroot /mnt sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
+    # arch-chroot /mnt sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
 
     # Install GPU Drivers
     COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
