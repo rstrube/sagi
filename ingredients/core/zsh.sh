@@ -28,8 +28,8 @@ alias l.='ls -d .* --color=auto'
 alias grep='grep --color'
 
 # Pacman aliases
-alias pacman_refresh_mirrors='reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist'
-alias pacman_remove_orphans='pacman -Rns $(pacman -Qdtq); yay -Yc'
+alias pacman_refresh_mirrors='sudo reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist'
+alias pacman_remove_orphans='sudo pacman -Rns $(pacman -Qdtq); yay -Yc'
 alias pacman_omni_update='yay -Syu; flatpak update'
 
 EOT
