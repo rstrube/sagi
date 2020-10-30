@@ -130,7 +130,7 @@ function install() {
     chmod 600 $SWAPFILE
     mkswap $SWAPFILE
 
-    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim"
+    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers rng-tools fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim"
 
     # Install essential packages via pacstrap
     if [[ "$AMD_CPU" == "true" ]]; then
@@ -143,6 +143,10 @@ function install() {
         pacstrap /mnt $ESSENTIAL_PACKAGES # When installing in VM, do not install linux-firmware or ucode
     fi
     
+    # Enable rngd.service (installed with rng-tools)
+    # Note: this is neccessary to provide enough random entropy at boot time to start GDM properly
+    arch-chroot /mnt systemctl enable rngd.service
+
     # Enable NetworkManager.service
     # Note: NetworkManager will handle DHCP
     arch-chroot /mnt systemctl enable NetworkManager.service
@@ -229,8 +233,7 @@ EOT
 
     if [[ "$XORG_INSTALL" == "true" ]]; then
         arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_GNOME_PACKAGES xorg-server
-        # No longer neccessary to force GDM to run in Xorg mode
-        # arch-chroot /mnt sed -i "s/#WaylandEnable=false/WaylandEnable=false/" /etc/gdm/custom.conf
+        arch-chroot /mnt sed -i "s/#WaylandEnable=false/WaylandEnable=false/" /etc/gdm/custom.conf
     else
         arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_GNOME_PACKAGES
     fi

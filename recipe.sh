@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 27-10-2020-13:50:05
+# recipe.sh : 30-10-2020-09:43:54
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # ------------------------------------------------------------------------
 
@@ -18,9 +18,6 @@
 
 # Gnome fonts
 #./ingredients/gnome/fonts.sh
-
-# GDM startup fix (fixes race condition where GDM doesn't initialize correctly on fast systems)
-./ingredients/gnome/gdm-startup-fix.sh
 
 # Gnome icons
 #./ingredients/gnome/icons.sh
