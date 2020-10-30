@@ -130,7 +130,7 @@ function install() {
     chmod 600 $SWAPFILE
     mkswap $SWAPFILE
 
-    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers rng-tools fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim"
+    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim"
 
     # Install essential packages via pacstrap
     if [[ "$AMD_CPU" == "true" ]]; then
@@ -143,10 +143,6 @@ function install() {
         pacstrap /mnt $ESSENTIAL_PACKAGES # When installing in VM, do not install linux-firmware or ucode
     fi
     
-    # Enable rngd.service (installed with rng-tools)
-    # Note: this is neccessary to provide enough random entropy at boot time to start GDM properly
-    arch-chroot /mnt systemctl enable rngd.service
-
     # Enable NetworkManager.service
     # Note: NetworkManager will handle DHCP
     arch-chroot /mnt systemctl enable NetworkManager.service
@@ -240,9 +236,12 @@ EOT
 
     arch-chroot /mnt systemctl enable gdm.service
 
-    # No longer neccessary because GDM runs fine in Wayland mode
     # Hack to work around GDM startup race condition (bug). Add small delay when starting up GDM
-    # arch-chroot /mnt sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
+    # https://bugs.archlinux.org/task/63763
+    arch-chroot /mnt sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
+
+    # Also configure a pacman hook for GDM to reapply the fix if gdm package is ever updated
+    configure_pacman_gdm_hook
 
     # Install GPU Drivers
     COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
@@ -379,9 +378,33 @@ function confirm_install() {
     esac
 }
 
+function configure_pacman_gdm_hook() {
+
+    if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then
+        mkdir -p /mnt/etc/pacman.d/hooks
+    fi
+
+    cat <<EOT > "/mnt/etc/pacman.d/hooks/gdm.hook"
+[Trigger]                            
+Operation=Install
+Operation=Upgrade
+Type=Package
+Target=gdm
+
+[Action]
+Description=Adds a small delay to /usr/lib/systemd/system/gdm.service to work around bug
+Depends=coreutils
+When=PostTransaction
+Exec=/usr/bin/sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
+EOT
+
+}
+
 function configure_pacman_nvidia_hook() {
 
-    mkdir -p /mnt/etc/pacman.d/hooks
+    if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then
+        mkdir -p /mnt/etc/pacman.d/hooks
+    fi
 
     cat <<EOT > "/mnt/etc/pacman.d/hooks/nvidia.hook"
 [Trigger]
