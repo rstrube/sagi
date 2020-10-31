@@ -1,7 +1,7 @@
 # soagi (Simple Opinionated Arch Gnome Installer)
 Soagi is a concise, easy to follow installation script for Arch linux which results in a minimal Arch "vanilla" Gnome installation.
 
-![Base Soagi Installation Result](https://github.com/rstrube/soagi/doc/img/base_install.png)
+![Base Soagi Installation Result](https://github.com/rstrube/soagi/blob/master/doc/img/base-install.png)
 
 ## Inspiration
 Soagi was heavily inspired by [alis (Arch Linx Install Script)](https://github.com/picodotdev/alis).  alis is extremely customizable and offers a wide variety of installation options, filesystems, partitioning schemes, packages, DEs' etc. but for many people that just want to get up and running on Arch quickly it can provide *too many* options.
@@ -192,4 +192,4 @@ You should expect approximately 730-750 total packages to be installed (varies d
 
 Here is a screenshot from a recent KVM/Qemu guest VM Soagi installation:
 
-![Base Soagi Installation Result](https://github.com/rstrube/soagi/doc/img/base_install.png)
+![Base Soagi Installation Result](https://github.com/rstrube/soagi/blob/master/doc/img/base-install.png)
