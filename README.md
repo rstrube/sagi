@@ -1,6 +1,8 @@
 # soagi (Simple Opinionated Arch Gnome Installer)
 Soagi is a concise, easy to follow installation script for Arch linux which results in a minimal Arch "vanilla" Gnome installation.
 
+![Base Soagi Installation Result](https://github.com/rstrube/soagi/doc/img/base_install.png)
+
 ## Inspiration
 Soagi was heavily inspired by [alis (Arch Linx Install Script)](https://github.com/picodotdev/alis).  alis is extremely customizable and offers a wide variety of installation options, filesystems, partitioning schemes, packages, DEs' etc. but for many people that just want to get up and running on Arch quickly it can provide *too many* options.
 
@@ -19,7 +21,7 @@ The main [soagi.sh](https://github.com/rstrube/soagi/blob/master/soagi.sh) insta
 Each and every action in the installation script *directly* correlates to actions that are described in the [Arch Wiki Installation Guide](https://wiki.archlinux.org/index.php/Installation_guide).  The goal here is to provide a learning opportunity for new Arch users, and to not do anything out of the ordinary.
 
 ### Miminal Configuration Options
-The configuration options can be defined in seconds.  Define some details regarding your hardware (hard drive, CPU, GPU(s)), you locale info, your user information and password, and you're done.
+The configuration options can be defined in seconds.  Define some hardware details (HD, CPU, GPU(s)), locale info, user information and password, etc. and you're done!
 
 Here is the configuration section from the installation script:
 
@@ -83,7 +85,9 @@ The list below represents (at a high level) the base system Soagi creates for yo
 * Gnome
 * NetworkManager
 
-Below is a more detailed list of the exact packages that are installed:
+Below is a more detailed list of the exact packages/virtual packages that are installed:
+
+*Note: some of the packages (e.g. `base, base-devel` etc.) are virtual packages that bundle together many individual packages.  In total you can expect **~730-750** total packages to be installed as part of the base installation.*
 
 **Always Installed:**
 ```
@@ -129,13 +133,13 @@ mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils
 ```
 nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings
 ```
-That's it!
+That's it! :)
 
 ### Post-Installation Capabilities
 *Still need some time to document these.*
 
-## Installation
-The installation process is quite simple
+## Base Installation Procedure
+The base installation process is quite simple:
 
 1. Boot off of the [Arch installation ISO](https://www.archlinux.org/download/)
 1. Run `iwctl` to connect to WiFi (see below).
@@ -181,3 +185,11 @@ After booting up enter the following commands:
 1. `iwctl station {DEVICE} connect {SSID}` should prompt you to enter in your password to connect to specified network.
 
 Note: Soagi does **not** install `iwctl`, instead NetworkManager is installed, including `nmcli` for command line operations. `iwctl` should *only* be used for installation and is recommended because it comes by default with the Arch Linux Installation ISO.
+
+### Base Installation Result
+
+You should expect approximately 730-750 total packages to be installed (varies depending on drivers).
+
+Here is a screenshot from a recent KVM/Qemu guest VM Soagi installation:
+
+![Base Soagi Installation Result](https://github.com/rstrube/soagi/doc/img/base_install.png)
