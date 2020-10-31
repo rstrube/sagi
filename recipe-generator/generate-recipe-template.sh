@@ -23,6 +23,8 @@ function generate-recipe() {
     echo "# $GENERATED_RECIPE_TEMPLATE_NAME : $DATE" >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo "# NOTE: Please uncomment the ingredients you wish to install before running!" >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo $HR >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "function main() {" >> $GENERATED_RECIPE_TEMPLATE_FILE
 
     generate-recipe-section "# 1. Core" "../ingredients/core"
     generate-recipe-section "# 2. Gnome" "../ingredients/gnome"
@@ -35,8 +37,12 @@ function generate-recipe() {
     generate-recipe-section "# 9. Hardware Specific CPU" "../ingredients/cpu"
     generate-recipe-section "# 10. VM" "../ingredients/vm"
 
+    echo "}" >> $GENERATED_RECIPE_TEMPLATE_FILE
+
     cat yay-install-func.sh >> $GENERATED_RECIPE_TEMPLATE_FILE
-    
+
+    echo 'main "$@"' >> $GENERATED_RECIPE_TEMPLATE_FILE
+
     chmod +x $GENERATED_RECIPE_TEMPLATE_FILE
 }
 

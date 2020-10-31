@@ -1,7 +1,9 @@
 #!/bin/bash
-# recipe.sh : 30-10-2020-19:41:22
+# recipe.sh : 30-10-2020-20:00:34
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # ------------------------------------------------------------------------
+
+function main() {
 
 # 1. Core
 # ------------------------------------------------------------------------
@@ -124,8 +126,11 @@
 # KVM/Quemu host installation and configuration
 #./ingredients/vm/kvm-qemu-host.sh
 
+}
 
 function install() {
 
     yay -Syu --noconfirm --needed "$@"
 }
+
+main "$@"
