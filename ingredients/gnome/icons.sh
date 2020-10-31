@@ -3,9 +3,6 @@
 #|# Gnome icons
 #|#./ingredients/gnome/icons.sh
 
-DIR=$(dirname "$0")
-source $DIR/../_helper/_common-functions.sh
-
 sudo pacman -Syu --noconfirm --needed papirus-icon-theme
 
 # Configure Gnome to use the Papirus-Dark icon theme

@@ -3,9 +3,6 @@
 #|# KVM/Quemu host installation and configuration
 #|#./ingredients/vm/kvm-qemu-host.sh
 
-DIR=$(dirname "$0")
-source $DIR/../_helper/_common-functions.sh
-
 # Installs all the neccessary packages to support running / managing KVM virtual machines
 # Note edk2-ovmf supports VMs with UEFI instead of traditional BIOS
 sudo pacman -Syu --noconfirm --needed qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables edk2-ovmf dmidecode

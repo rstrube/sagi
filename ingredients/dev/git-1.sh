@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #|# Git (installation and configuration)
-#|# Usage: git-1.sh "{full name}" {email}
-#|#./ingredients/dev/git-1.sh "First Last" robert@mydomain.com
+#|#install git
+#|#git config --global user.name "First Last"
+#|#git config --global user.email "myname@mydomain.com"
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
@@ -20,7 +21,6 @@ function main() {
     fi
 
     check_variables
-    check_critical_prereqs
     install
 }
 
@@ -54,13 +54,6 @@ function check_variables() {
 
     check_variables_value "GIT_USERNAME" "$GIT_USERNAME"
     check_variables_value "GIT_EMAIL" "$GIT_EMAIL"
-}
-
-function check_critical_prereqs() {
-
-    if [[ "$GIT_INSTALL_CREDENTIAL_MANAGER" == "true" ]]; then
-        check_yay_prereq
-    fi
 }
 
 main "$@"

@@ -37,35 +37,10 @@ function check_variables_boolean() {
     esac
 }
 
-function check_yay_prereq() {
-
-    if [[ ! -e /usr/bin/yay ]]; then
-        echo -e "${RED}Error: yay must be installed to install packages from AUR.${NC}"
-        echo "You can install yay by running ./core-yay.sh"
-        exit 1
-    fi
-}
-
 function check_flatpak_prereq() {
 
     if [[ ! -e /usr/bin/flatpak ]]; then
         echo -e "${RED}Error: flatpak must be installed.${NC}"
-        exit 1
-    fi
-}
-
-function check_git_prereq() {
-
-    if [[ ! -e /usr/bin/git ]]; then
-        echo -e "${RED}Error: git must be installed.${NC}"
-        exit 1
-    fi
-}
-
-function check_wget_prereq() {
-
-    if [[ ! -e /usr/bin/wget ]]; then
-        echo -e "${RED}Error: wget must be installed.${NC}"
         exit 1
     fi
 }

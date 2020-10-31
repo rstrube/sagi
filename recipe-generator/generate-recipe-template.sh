@@ -35,6 +35,8 @@ function generate-recipe() {
     generate-recipe-section "# 9. Hardware Specific CPU" "../ingredients/cpu"
     generate-recipe-section "# 10. VM" "../ingredients/vm"
 
+    cat yay-install-func.sh >> $GENERATED_RECIPE_TEMPLATE_FILE
+    
     chmod +x $GENERATED_RECIPE_TEMPLATE_FILE
 }
 

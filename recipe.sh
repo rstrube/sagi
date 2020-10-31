@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 30-10-2020-09:43:54
+# recipe.sh : 30-10-2020-19:41:22
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # ------------------------------------------------------------------------
 
@@ -36,14 +36,15 @@
 # ------------------------------------------------------------------------
 
 # Git (installation and configuration)
-# Usage: git-1.sh "{full name}" {email}
-#./ingredients/dev/git-1.sh "First Last" robert@mydomain.com
+#install git
+#git config --global user.name "First Last"
+#git config --global user.email "myname@mydomain.com"
 
 # Git Credential Manager (supports Git repos on Azure DevOps)
-#./ingredients/dev/git-2-credential-manager.sh
+#install git-credential-manager-bin
 
 # VSCode (OSS Edition)
-#./ingredients/dev/vscode-1.sh
+#install code
 
 # VSCode font configuration (requires Gnome fonts)
 #./ingredients/dev/vscode-2-fonts.sh
@@ -56,46 +57,46 @@
 # ------------------------------------------------------------------------
 
 # Chromium
-#./ingredients/web/chromium-1.sh
+#install chromium
 
 # Chromium enable VAAPI support (requires Chromium)
 #./ingredients/web/chromium-2-enable-vaapi.sh
 
 # Firefox
-#./ingredients/web/firefox.sh
+#install firefox
 
 # Slack
-#./ingredients/web/slack.sh
+#flatpak install -y flathub com.slack.Slack
 
 # Microsoft Teams
-#./ingredients/web/teams.sh
+#install teams
 
 
 # 5. Productivity
 # ------------------------------------------------------------------------
 
 # Flameshot (screenshot application)
-#./ingredients/productivity/flameshot.sh
+#install flameshot
 
 # Getting this Gnome (TTD application)
-#./ingredients/productivity/gtg.sh # Getting things Gnome
+#flatpak install -y flathub org.gnome.GTG
 
 
 # 6. Media
 # ------------------------------------------------------------------------
 
 # Tauon Music Player
-#./ingredients/media/tauon-music-player.sh
+#flatpak install -y flathub com.github.taiko2k.tauonmb
 
 # VLC media player and codecs
-#./ingredients/media/vlc-codecs.sh
+#install a52dec aribb24 faac faad2 flac jasper lame libdca libdv libdvbpsi libmad libmatroska libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore libdvdcss vlc
 
 
 # 7. Gaming
 # ------------------------------------------------------------------------
 
 # Steam gaming platform
-#./ingredients/gaming/steam.sh
+#install steam
 
 
 # 8. Backup
@@ -111,7 +112,7 @@
 # ------------------------------------------------------------------------
 
 # # Utilities neccessary to undervolt Intel CPUs
-#./ingredients/cpu/intel-undervolt-support.sh 
+#install msr-tools bc
 
 
 # 10. VM
@@ -123,3 +124,8 @@
 # KVM/Quemu host installation and configuration
 #./ingredients/vm/kvm-qemu-host.sh
 
+
+function install() {
+
+    yay -Syu --noconfirm --needed "$@"
+}

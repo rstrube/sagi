@@ -1,9 +1,6 @@
 #!/bin/bash
 
 #|# Flameshot (screenshot application)
-#|#./ingredients/productivity/flameshot.sh
-
-DIR=$(dirname "$0")
-source $DIR/../_helper/_common-functions.sh
+#|#install flameshot
 
 sudo pacman -Syu --noconfirm --needed flameshot
