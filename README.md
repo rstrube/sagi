@@ -139,7 +139,7 @@ The installation process is quite simple
 
 1. Boot off of the [Arch installation ISO](https://www.archlinux.org/download/)
 2. Configure networking
-    1. User `iwctl` for WiFi
+    1. Use `iwctl` for WiFi (see below)
     1. Ethernet should already be setup
 3. Download the main sogai installation script
 ```
@@ -159,3 +159,15 @@ chmod +x soagi.sh
 ./soagi.sh
 ```
 On most modern systems the installation takes between 5-7 minutes.
+
+### Using iwctl to Connect to WiFi for Installation
+The Arch Linux Installation ISO comes with `iwctl` which can be used to easily connect to WiFi networks.
+
+After booting up enter the following commands:
+
+1. `iwctl device list` to identify your WiFi device (e.g. `wlp0s20f3`).  Use in place of `{DEVICE}` for the following commands:
+1. `iwctl station {DEVICE} scan`
+1. `iwctl station {DEVICE} get-networks` should get you a list of SSIDs.  Use your SSID in place of `{SSID}` for the following command:
+1. `iwctl station {DEVICE} connect {SSID}` should prompt you to enter in your password to connect to specified network.
+
+Note: Soagi does **not** install `iwctl`, instead NetworkManager is installed, including `nmcli` for command line operations. `iwctl` should *only* be used for installation and is recommended because it comes by default with the Arch Linux Installation ISO.
