@@ -138,23 +138,33 @@ That's it!
 The installation process is quite simple
 
 1. Boot off of the [Arch installation ISO](https://www.archlinux.org/download/)
-2. Configure networking
-    1. Use `iwctl` for WiFi (see below)
-    1. Ethernet should already be setup
-3. Download the main sogai installation script
+1. Run `iwctl` to connect to WiFi (see below).
+
+*Note: ethernet connections should be setup automatically*
+
+3. Run `lsblk` and note your HD device name
+
+
+*Note: common HD device names are:*
+* SATA HDs are usually something like: `/dev/sdx` (e.g. `/dev/sda`)
+* NVME HDs are usually something like: `/dev/nvme0n1`
+* KVM/Qemu VM HDs are usually: `/dev/vda`
+
+
+4. Download the main sogai installation script
 ```
 curl -O https://raw.githubusercontent.com/rstrube/soagi/master/soagi.sh
 ```
-4. Edit the installation script and setup configuration options
+5. Edit the installation script and setup configuration options
 
 ```
 vim sogai.sh
 ```
-5. Change permissions on script to make it executable
+6. Change permissions on script to make it executable
 ```
 chmod +x soagi.sh
 ```
-6. Execute script
+7. Execute script
 ```
 ./soagi.sh
 ```
