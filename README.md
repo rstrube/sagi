@@ -185,11 +185,3 @@ After booting up enter the following commands:
 1. `iwctl station {DEVICE} connect {SSID}` should prompt you to enter in your password to connect to specified network.
 
 Note: Soagi does **not** install `iwctl`, instead NetworkManager is installed, including `nmcli` for command line operations. `iwctl` should *only* be used for installation and is recommended because it comes by default with the Arch Linux Installation ISO.
-
-### Base Installation Result
-
-You should expect approximately 730-750 total packages to be installed (varies depending on drivers).
-
-Here is a screenshot from a recent KVM/Qemu guest VM Soagi installation:
-
-![Base Soagi Installation Result](https://github.com/rstrube/soagi/blob/master/doc/img/base-install.png)
