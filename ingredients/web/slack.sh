@@ -1,6 +1,6 @@
 #!/bin/bash
 
 #|# Slack
-#|#flatpak install -y flathub com.slack.Slack
+#|#install-fp com.slack.Slack
 
 flatpak install -y flathub com.slack.Slack

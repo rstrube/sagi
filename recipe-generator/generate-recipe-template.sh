@@ -1,11 +1,11 @@
 #!/bin/bash
 # Generate Recipe Template
 
-DATE=$(date +%d-%m-%Y-%H:%M:%S)
+DATE=$(date +%Y-%m-%d-%H:%M:%S)
 GENERATED_RECIPE_TEMPLATE_NAME="recipe.sh"
 GENERATED_RECIPE_TEMPLATE_FILE="../$GENERATED_RECIPE_TEMPLATE_NAME"
 INGREDIENT_HEADER_REGEX="(?<=#\|).+"
-HR="# ------------------------------------------------------------------------"
+HR="# --------------------------------------------------------------------------"
 
 function main() {
     
@@ -37,9 +37,21 @@ function generate-recipe() {
     generate-recipe-section "# 9. Hardware Specific CPU" "../ingredients/cpu"
     generate-recipe-section "# 10. VM" "../ingredients/vm"
 
+    echo "# 11. Additional Packages" >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo $HR >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "#install-pkg add-pkg1 add-pkg2 ..." >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
+
+    echo "# 12. Additional Flatpaks" >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo $HR >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "#install-fp add-fp1 add-fp2 ..." >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
+
     echo "}" >> $GENERATED_RECIPE_TEMPLATE_FILE
 
-    cat yay-install-func.sh >> $GENERATED_RECIPE_TEMPLATE_FILE
+    cat install-pkg-func.sh >> $GENERATED_RECIPE_TEMPLATE_FILE
+    cat install-fp-func.sh >> $GENERATED_RECIPE_TEMPLATE_FILE
 
     echo 'main "$@"' >> $GENERATED_RECIPE_TEMPLATE_FILE
 

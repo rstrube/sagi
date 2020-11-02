@@ -1,6 +1,6 @@
 #!/bin/bash
 
 #|# Firefox
-#|#install firefox
+#|#install-pkg firefox
 
 sudo pacman -Syu --noconfirm --needed firefox

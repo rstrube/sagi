@@ -1,12 +1,12 @@
 #!/bin/bash
-# recipe.sh : 30-10-2020-20:00:34
+# recipe.sh : 2020-11-02-13:23:35
 # NOTE: Please uncomment the ingredients you wish to install before running!
-# ------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 function main() {
 
 # 1. Core
-# ------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 # Mandatory programs & utilities
 ./ingredients/core/utils.sh
@@ -16,7 +16,7 @@ function main() {
 
 
 # 2. Gnome
-# ------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 # Gnome fonts
 #./ingredients/gnome/fonts.sh
@@ -35,18 +35,18 @@ function main() {
 
 
 # 3. Development
-# ------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 # Git (installation and configuration)
-#install git
+#install-pkg git
 #git config --global user.name "First Last"
 #git config --global user.email "myname@mydomain.com"
 
 # Git Credential Manager (supports Git repos on Azure DevOps)
-#install git-credential-manager-bin
+#install-pkg git-credential-manager-bin
 
 # VSCode (OSS Edition)
-#install code
+#install-pkg code
 
 # VSCode font configuration (requires Gnome fonts)
 #./ingredients/dev/vscode-2-fonts.sh
@@ -56,53 +56,53 @@ function main() {
 
 
 # 4. Web
-# ------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 # Chromium
-#install chromium
+#install-pkg chromium
 
 # Chromium enable VAAPI support (requires Chromium)
 #./ingredients/web/chromium-2-enable-vaapi.sh
 
 # Firefox
-#install firefox
+#install-pkg firefox
 
 # Slack
-#flatpak install -y flathub com.slack.Slack
+#install-fp com.slack.Slack
 
 # Microsoft Teams
-#install teams
+#install-pkg teams
 
 
 # 5. Productivity
-# ------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 # Flameshot (screenshot application)
-#install flameshot
+#install-pkg flameshot
 
 # Getting this Gnome (TTD application)
-#flatpak install -y flathub org.gnome.GTG
+#install-fp org.gnome.GTG
 
 
 # 6. Media
-# ------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 # Tauon Music Player
-#flatpak install -y flathub com.github.taiko2k.tauonmb
+#install-fp com.github.taiko2k.tauonmb
 
 # VLC media player and codecs
-#install a52dec aribb24 faac faad2 flac jasper lame libdca libdv libdvbpsi libmad libmatroska libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore libdvdcss vlc
+#install-pkg a52dec aribb24 faac faad2 flac jasper lame libdca libdv libdvbpsi libmad libmatroska libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore libdvdcss vlc
 
 
 # 7. Gaming
-# ------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 # Steam gaming platform
-#install steam
+#install-pkg steam
 
 
 # 8. Backup
-# ------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 # Btrbk: Command line btrfs backup utility
 # Usage: brtbk.sh {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}
@@ -111,14 +111,14 @@ function main() {
 
 
 # 9. Hardware Specific CPU
-# ------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 # # Utilities neccessary to undervolt Intel CPUs
-#install msr-tools bc
+#install-pkg msr-tools bc
 
 
 # 10. VM
-# ------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 # KVM/Quem guest utilities (only install if running as VM)
 #./ingredients/vm/kvm-qemu-guest.sh
@@ -126,11 +126,26 @@ function main() {
 # KVM/Quemu host installation and configuration
 #./ingredients/vm/kvm-qemu-host.sh
 
+# 11. Additional Packages
+# --------------------------------------------------------------------------
+#install-pkg add-pkg1 add-pkg2 ...
+
+
+# 12. Additional Flatpaks
+# --------------------------------------------------------------------------
+#install-fp add-fp1 add-fp2 ...
+
 }
 
-function install() {
+function install-pkg() {
 
     yay -Syu --noconfirm --needed "$@"
+}
+
+
+function install-fp() {
+
+    flatpak install -y flathub "$@"
 }
 
 main "$@"

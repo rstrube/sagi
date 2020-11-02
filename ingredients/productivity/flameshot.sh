@@ -1,6 +1,6 @@
 #!/bin/bash
 
 #|# Flameshot (screenshot application)
-#|#install flameshot
+#|#install-pkg flameshot
 
 sudo pacman -Syu --noconfirm --needed flameshot

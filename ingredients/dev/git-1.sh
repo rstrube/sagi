@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #|# Git (installation and configuration)
-#|#install git
+#|#install-pkg git
 #|#git config --global user.name "First Last"
 #|#git config --global user.email "myname@mydomain.com"
 
