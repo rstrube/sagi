@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2020-11-02-13:23:35
+# recipe.sh : 2020-11-08-13:07:09
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -44,6 +44,9 @@ function main() {
 
 # Git Credential Manager (supports Git repos on Azure DevOps)
 #install-pkg git-credential-manager-bin
+
+# .NET Core runitem and SDK
+#install-pkg dotnet-runtime dotnet-sdk
 
 # VSCode (OSS Edition)
 #install-pkg code
