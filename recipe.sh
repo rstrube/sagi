@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2020-11-08-13:07:09
+# recipe.sh : 2020-11-11-16:26:37
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -89,6 +89,9 @@ function main() {
 
 # 6. Media
 # --------------------------------------------------------------------------
+
+# PulseEffects + "Perfect EQ"
+#./ingredients/media/pulseeffects.sh
 
 # Tauon Music Player
 #install-fp com.github.taiko2k.tauonmb
