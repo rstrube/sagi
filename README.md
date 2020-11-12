@@ -111,7 +111,7 @@ xorg-server
 
 **Gnome:**
 ```
-gnome gnome-tweaks noto-fonts-emoji
+gnome gnome-tweaks noto-fonts noto-fonts-emoji
 ```
 
 **Vulkan:**

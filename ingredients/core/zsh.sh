@@ -6,8 +6,8 @@
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 
-# Oh-My-Zsh requires powerline symbols and therefore powerline patched fonts
-yay -Syu --noconfirm --needed zsh powerline-fonts-git
+# Oh-My-Zsh requires powerline symbols so install fira-code to guaruntee coverage 
+yay -Syu --noconfirm --needed zsh ttf-fira-code
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 

@@ -225,7 +225,7 @@ EOT
     arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
     # Install Gnome
-    COMMON_GNOME_PACKAGES="gnome gnome-tweaks noto-fonts-emoji"
+    COMMON_GNOME_PACKAGES="gnome gnome-tweaks noto-fonts noto-fonts-emoji"
 
     if [[ "$XORG_INSTALL" == "true" ]]; then
         arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_GNOME_PACKAGES xorg-server
