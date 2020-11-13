@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#|# VSCode (OSS Edition)
-#|#install-pkg code
+#|# VSCode
+#|#install-pkg visual-studio-code-bin
 
-sudo pacman -Syu --noconfirm --needed code
+yay -Syu --noconfirm --needed visual-studio-code-bin

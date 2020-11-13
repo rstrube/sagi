@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2020-11-11-16:26:37
+# recipe.sh : 2020-11-13-00:29:00
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -48,8 +48,8 @@ function main() {
 # .NET Core runitem and SDK
 #install-pkg dotnet-runtime dotnet-sdk
 
-# VSCode (OSS Edition)
-#install-pkg code
+# VSCode
+#install-pkg visual-studio-code-bin
 
 # VSCode font configuration (requires Gnome fonts)
 #./ingredients/dev/vscode-2-fonts.sh
