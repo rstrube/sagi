@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2020-11-13-00:29:00
+# recipe.sh : 2020-11-26-11:45:52
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ function main() {
 #install-pkg git-credential-manager-bin
 
 # .NET Core runitem and SDK
-#install-pkg dotnet-runtime dotnet-sdk
+#install-pkg dotnet-runtime dotnet-sdk aspnet-targeting-pack aspnet-runtime
 
 # VSCode
 #install-pkg visual-studio-code-bin
