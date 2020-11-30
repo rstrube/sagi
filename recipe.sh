@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2020-11-26-11:45:52
+# recipe.sh : 2020-11-30-11:01:15
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -119,7 +119,10 @@ function main() {
 # 9. Hardware Specific CPU
 # --------------------------------------------------------------------------
 
-# # Utilities neccessary to undervolt Intel CPUs
+#GUI utility to set CPU govenor settings
+#install-pkg cpupower-gui
+
+#Utilities neccessary to undervolt Intel CPUs
 #install-pkg msr-tools bc
 
 
