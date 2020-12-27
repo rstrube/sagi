@@ -83,11 +83,11 @@ function install() {
         ROOTFS_PARTITION="${HD_DEVICE}2"
     fi
 
-    # Format the partitions, ESP (/dev/${HD_DEVICE}1) as fat32, BTRFS-PART (/dev/${HD_DEVICE}2) as btrfs
+    # Create the filesystem for the ESP partition
     mkfs.fat -n ESP -F32 $BOOT_PARTITION
 
-    # Create the filesystem
-    mkfs."$FILE_SYSTEM_TYPE" -f -L ROOT $ROOTFS_PARTITION
+    # Create the filesystem for the root partition
+    yes | mkfs."$FILE_SYSTEM_TYPE" -L ROOT $ROOTFS_PARTITION
 
     # Mount the root partition
     mount -o defaults,noatime $ROOTFS_PARTITION /mnt
@@ -156,7 +156,8 @@ function install() {
 
     elif [[ "$INTEL_CPU" == "true" ]]; then
         arch-chroot /mnt pacman -Syu --noconfirm --needed linux-firmware intel-ucode
-    
+    fi
+
     # Install btrfs programs if neccessary
     if [[ "$FILE_SYSTEM_TYPE" == "btrfs" ]]; then
         arch-chroot /mnt pacman -Syu --noconfirm --needed btrfs-progs
