@@ -87,8 +87,13 @@ function install() {
     mkfs.fat -n ESP -F32 $BOOT_PARTITION
 
     # Create the filesystem for the root partition
-    yes | mkfs."$FILE_SYSTEM_TYPE" -L ROOT $ROOTFS_PARTITION
+    if [[ "$FILE_SYSTEM_TYPE" == "ext4" ]]; then
+        yes | mkfs.ext4 -L ROOT $ROOTFS_PARTITION
 
+    elif [[ "$FILE_SYSTEM_TYPE" == "btrfs" ]]; then
+        mkfs.btrfs -f -L ROOT $ROOTFS_PARTITION
+    fi
+    
     # Mount the root partition
     mount -o defaults,noatime $ROOTFS_PARTITION /mnt
 
