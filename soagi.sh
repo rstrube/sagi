@@ -86,20 +86,14 @@ function install() {
     # Format the partitions, ESP (/dev/${HD_DEVICE}1) as fat32, BTRFS-PART (/dev/${HD_DEVICE}2) as btrfs
     mkfs.fat -n ESP -F32 $BOOT_PARTITION
 
-    if [[ "$FILE_SYSTEM_TYPE" == "ext4" ]]; then
-        # Create the filesystem
-        mkfs.ext4 -l ROOT $ROOTFS_PARTITION
+    # Create the filesystem
+    mkfs."$FILE_SYSTEM_TYPE" -f -L ROOT $ROOTFS_PARTITION
 
-        # Mount the root partition
-        mount -o "defaults,noatime" $ROOT_PARTITION /mnt
+    # Mount the root partition
+    mount -o defaults,noatime $ROOTFS_PARTITION /mnt
 
     # Additional subvolume creation for btrfs
-    elif [[ "$FILE_SYSTEM_TYPE" == "btrfs" ]]; then
-        # Create the filesystem
-        mkfs.btrfs -f -L ROOT $ROOTFS_PARTITION
-
-        # Mount top level btrfs volume on /mnt
-        mount -o "defaults,noatime" $ROOTFS_PARTITION /mnt
+    if [[ "$FILE_SYSTEM_TYPE" == "btrfs" ]]; then
 
         # Create btrfs subvolumes
         btrfs subvolume create /mnt/rootfs
@@ -133,37 +127,41 @@ function install() {
     mkdir /mnt/boot
 
     # Mount the ESP partition
-    mount -o "defaults,noatime" $BOOT_PARTITION /mnt/boot
+    mount -o defaults,noatime $BOOT_PARTITION /mnt/boot
 
     SWAPFILE="/swapfile"
 
+    # Swapfile configuration for btrfs setups
     if [[ "$FILE_SYSTEM_TYPE" == "btrfs" ]]; then
         SWAPFILE="/swap/swapfile"
 
         # Make sure CoW and compression are disabled for /swapfile
-        touch /mnt$SWAPFILE
-        chattr +C /mnt$SWAPFILE
-        btrfs property set /mnt$SWAPFILE compression none
+        touch /mnt"$SWAPFILE"
+        chattr +C /mnt"$SWAPFILE"
+        btrfs property set /mnt"$SWAPFILE" compression none
     fi
     
-    fallocate --length ${SWAPSIZE}MiB /mnt$SWAPFILE
-    chown root /mnt$SWAPFILE
-    chmod 600 /mnt$SWAPFILE
-    mkswap /mnt$SWAPFILE
-
-    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim"
+    fallocate --length ${SWAPSIZE}MiB /mnt"$SWAPFILE"
+    chown root /mnt"$SWAPFILE"
+    chmod 600 /mnt"$SWAPFILE"
+    mkswap /mnt"$SWAPFILE"
 
     # Install essential packages via pacstrap
+    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs networkmanager git vim"
+    pacstrap /mnt $ESSENTIAL_PACKAGES
+
+    # Install additional firmware and uCode
     if [[ "$AMD_CPU" == "true" ]]; then
-        pacstrap /mnt $ESSENTIAL_PACKAGES linux-firmware amd-ucode
+        arch-chroot /mnt pacman -Syu --noconfirm --needed linux-firmware amd-ucode
 
     elif [[ "$INTEL_CPU" == "true" ]]; then
-        pacstrap /mnt $ESSENTIAL_PACKAGES linux-firmware intel-ucode
-
-    else
-        pacstrap /mnt $ESSENTIAL_PACKAGES # When installing in VM, do not install linux-firmware or ucode
-    fi
+        arch-chroot /mnt pacman -Syu --noconfirm --needed linux-firmware intel-ucode
     
+    # Install btrfs programs if neccessary
+    if [[ "$FILE_SYSTEM_TYPE" == "btrfs" ]]; then
+        arch-chroot /mnt pacman -Syu --noconfirm --needed btrfs-progs
+    fi
+
     # Enable NetworkManager.service
     # Note: NetworkManager will handle DHCP
     arch-chroot /mnt systemctl enable NetworkManager.service
