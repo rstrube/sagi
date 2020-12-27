@@ -86,7 +86,7 @@ function install() {
     # Format the partitions, ESP (/dev/${HD_DEVICE}1) as fat32, BTRFS-PART (/dev/${HD_DEVICE}2) as btrfs
     mkfs.fat -n ESP -F32 $BOOT_PARTITION
 
-    if [[ "$FILE_SYSTEM_TYPE" == "ext4"]]; then
+    if [[ "$FILE_SYSTEM_TYPE" == "ext4" ]]; then
         # Create the filesystem
         mkfs.ext4 -l ROOT $ROOTFS_PARTITION
 
@@ -94,7 +94,7 @@ function install() {
         mount -o "defaults,noatime" $ROOT_PARTITION /mnt
 
     # Additional subvolume creation for btrfs
-    elif [[ "$FILE_SYSTEM_TYPE" == "btrfs"]]; then
+    elif [[ "$FILE_SYSTEM_TYPE" == "btrfs" ]]; then
         # Create the filesystem
         mkfs.btrfs -f -L ROOT $ROOTFS_PARTITION
 
@@ -135,11 +135,9 @@ function install() {
     # Mount the ESP partition
     mount -o "defaults,noatime" $BOOT_PARTITION /mnt/boot
 
-    # Swapfile configuration
-    if [[ "$FILE_SYSTEM_TYPE" == "ext4"]]; then
-        SWAPFILE="/swapfile"
+    SWAPFILE="/swapfile"
 
-    elif [[ "$FILE_SYSTEM_TYPE" == "btrfs"]]; then
+    if [[ "$FILE_SYSTEM_TYPE" == "btrfs" ]]; then
         SWAPFILE="/swap/swapfile"
 
         # Make sure CoW and compression are disabled for /swapfile
@@ -190,7 +188,7 @@ function install() {
     echo "" >> /mnt/etc/fstab
 
     # Additional fstab entry for btrfs root volume and udisks2 config for externally mounted btrfs drives
-    if [[ "$FILE_SYSTEM_TYPE" == "btrfs"]]; then
+    if [[ "$FILE_SYSTEM_TYPE" == "btrfs" ]]; then
         # Grab the UUID for the rootfs partition
         UUID_ROOTFS_PARTITION=$(blkid -o value -s UUID "$ROOTFS_PARTITION")
 
@@ -364,7 +362,7 @@ function check_conflicts() {
         exit 1
     fi
 
-    if [[ "$FILE_SYSTEM_TYPE" != "ext4" && "$FILE_SYSTEM_TYPE" == "btrfs" ]]; then
+    if [[ "$FILE_SYSTEM_TYPE" != "ext4" && "$FILE_SYSTEM_TYPE" != "btrfs" ]]; then
         echo -e "${RED}Error: FILE_SYSTEM_TYPE must be either ext4 or btrfs.${NC}"
         exit 1
     fi
