@@ -14,7 +14,7 @@ SWAPSIZE="2048" # 4096 8912
 
 # Filesystem Configuration
 # This script supports both ext4 (default) and btrfs
-FILE_SYSTEM_TYPE="ext4" #"btrfs"
+FILE_SYSTEM_TYPE="ext4" # btrfs
 
 # CPU Configuration
 # Note: if installing in a VM leave both set to 'false'
@@ -72,7 +72,7 @@ function install() {
     timedatectl set-ntp true
 
     # Partion the drive with a single 512 MB ESP partition, and the rest of the drive as the root partition
-    parted -s $HD_DEVICE mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root btrfs 512MiB 100% set 1 esp on
+    parted -s $HD_DEVICE mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root $FILE_SYSTEM_TYPE 512MiB 100% set 1 esp on
 
     # Is the the hard drive an NVME SSD?
     if [[ -n "$(echo $HD_DEVICE | grep "^/dev/nvme")" ]]; then
