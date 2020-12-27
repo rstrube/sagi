@@ -12,6 +12,10 @@ HD_DEVICE="" # /dev/sda /dev/nvme0n1 /dev/vda
 TRIM_SUPPORT="true" # typically set to true if HD is an SSD, see notes above
 SWAPSIZE="2048" # 4096 8912
 
+# Filesystem Configuration
+# This script supports both ext4 (default) and btrfs
+FILE_SYSTEM_TYPE="ext4" #"btrfs"
+
 # CPU Configuration
 # Note: if installing in a VM leave both set to 'false'
 AMD_CPU="false"
@@ -23,7 +27,7 @@ INTEL_GPU="false"
 NVIDIA_GPU="false"
 
 # Install Xorg and configure Gnome to use it by default?
-XORG_INSTALL="true"
+XORG_INSTALL="true" #false
 
 # Hostname to ping to check network connection
 PING_HOSTNAME="www.google.com"
@@ -81,54 +85,73 @@ function install() {
 
     # Format the partitions, ESP (/dev/${HD_DEVICE}1) as fat32, BTRFS-PART (/dev/${HD_DEVICE}2) as btrfs
     mkfs.fat -n ESP -F32 $BOOT_PARTITION
-    mkfs.btrfs -f -L BTRFS-PART $ROOTFS_PARTITION
 
-    # Mount top level btrfs volume on /mnt
-    mount -o defaults,noatime $ROOTFS_PARTITION /mnt
+    if [[ "$FILE_SYSTEM_TYPE" == "ext4"]]; then
+        # Create the filesystem
+        mkfs.ext4 -l ROOT $ROOTFS_PARTITION
 
-    # Create btrfs subvolumes
-    btrfs subvolume create /mnt/rootfs
-    btrfs subvolume create /mnt/home
-    btrfs subvolume create /mnt/btr_snapshots
+        # Mount the root partition
+        mount -o "defaults,noatime" $ROOT_PARTITION /mnt
 
-    # Note we need to create a separate subvolume that will contain the swapfile so we can snapshot rootfs
-    btrfs subvolume create /mnt/swap
+    # Additional subvolume creation for btrfs
+    elif [[ "$FILE_SYSTEM_TYPE" == "btrfs"]]; then
+        # Create the filesystem
+        mkfs.btrfs -f -L ROOT $ROOTFS_PARTITION
 
-    # Unmount top level btrfs volume
-    umount /mnt
+        # Mount top level btrfs volume on /mnt
+        mount -o "defaults,noatime" $ROOTFS_PARTITION /mnt
 
-    # Mount btrfs subvolumes at the correct locations (with compression enabled)
-    # Mount rootfs subvolume at /mnt
-    mount -o "defaults,noatime,compress=lzo,space_cache=v2,subvol=/rootfs" $ROOTFS_PARTITION /mnt
-    
-    # Create the additional subdirectories to support mounting additional btrfs subvolumes
-    mkdir /mnt/{home,btr_snapshots,swap}
+        # Create btrfs subvolumes
+        btrfs subvolume create /mnt/rootfs
+        btrfs subvolume create /mnt/home
+        btrfs subvolume create /mnt/snapshots
+
+        # Note we need to create a separate subvolume that will contain the swapfile so we can snapshot rootfs
+        btrfs subvolume create /mnt/swap
+
+        # Unmount top level btrfs volume
+        umount /mnt
+
+        # Mount btrfs subvolumes at the correct locations (with compression enabled)
+        # Mount rootfs subvolume at /mnt
+        mount -o "defaults,noatime,compress=lzo,space_cache=v2,subvol=/rootfs" $ROOTFS_PARTITION /mnt
         
-    # Mount additional btrfs subvolumes
-    mount -o "defaults,noatime,compress=lzo,space_cache=v2,subvol=/home" $ROOTFS_PARTITION /mnt/home
-    mount -o "defaults,noatime,compress=lzo,space_cache=v2,subvol=/btr_snapshots" $ROOTFS_PARTITION /mnt/btr_snapshots
-    mount -o "defaults,noatime,space_cache=v2,subvol=/swap" $ROOTFS_PARTITION /mnt/swap
+        # Create the additional subdirectories to support mounting additional btrfs subvolumes
+        mkdir /mnt/{home,snapshots,swap}
+            
+        # Mount additional btrfs subvolumes
+        mount -o "defaults,noatime,compress=lzo,space_cache=v2,subvol=/home" $ROOTFS_PARTITION /mnt/home
+        mount -o "defaults,noatime,compress=lzo,space_cache=v2,subvol=/snapshots" $ROOTFS_PARTITION /mnt/snapshots
+        mount -o "defaults,noatime,space_cache=v2,subvol=/swap" $ROOTFS_PARTITION /mnt/swap
+
+        # Create mountpoint for the top level btrfs volume itself
+        # Note: this location can be used to create/restore snapshots to/from (e.g. of the rootfs, home, etc.)
+        mkdir -p /mnt/mnt/root_vol
+    fi
 
     # Create directory to support mounting ESP
     mkdir /mnt/boot
 
     # Mount the ESP partition
-    mount -o defaults,noatime $BOOT_PARTITION /mnt/boot
+    mount -o "defaults,noatime" $BOOT_PARTITION /mnt/boot
 
-    # Create mountpoint for the top level btrfs volume itself
-    # Note: this location can be used to create/restore snapshots to/from (e.g. of the rootfs, home, etc.)
-    mkdir -p /mnt/mnt/btr_root_vol
+    # Swapfile configuration
+    if [[ "$FILE_SYSTEM_TYPE" == "ext4"]]; then
+        SWAPFILE="/swapfile"
 
-    # Create the swapfile
-    # Make sure CoW and compression are disabled for /swapfile
-    SWAPFILE="/mnt/swap/swapfile"
-    touch $SWAPFILE
-    chattr +C $SWAPFILE
-    btrfs property set $SWAPFILE compression none
-    fallocate --length ${SWAPSIZE}MiB $SWAPFILE
-    chown root $SWAPFILE
-    chmod 600 $SWAPFILE
-    mkswap $SWAPFILE
+    elif [[ "$FILE_SYSTEM_TYPE" == "btrfs"]]; then
+        SWAPFILE="/swap/swapfile"
+
+        # Make sure CoW and compression are disabled for /swapfile
+        touch /mnt$SWAPFILE
+        chattr +C /mnt$SWAPFILE
+        btrfs property set /mnt$SWAPFILE compression none
+    fi
+    
+    fallocate --length ${SWAPSIZE}MiB /mnt$SWAPFILE
+    chown root /mnt$SWAPFILE
+    chmod 600 /mnt$SWAPFILE
+    mkswap /mnt$SWAPFILE
 
     ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim"
 
@@ -161,28 +184,31 @@ function install() {
     # Generate initial fstab using UUIDs
     genfstab -U /mnt > /mnt/etc/fstab
 
-    # Grab the UUID for the rootfs partition
-    UUID_ROOTFS_PARTITION=$(blkid -o value -s UUID "$ROOTFS_PARTITION")
-
-    # Create a dedicated entry so you can mount the btrfs root volume (for snapshots)
-    echo "# root volume (btrfs root volumes always have a subvolid=5)" >> /mnt/etc/fstab
-    echo "# Note: this provides an excellent mount point for creating snapshots" >> /mnt/etc/fstab
-    echo "UUID=$UUID_ROOTFS_PARTITION /mnt/btr_root_vol btrfs defaults,noatime,compress=lzo,space_cache=v2,subvolid=5 0 0" >> /mnt/etc/fstab
-    echo "" >> /mnt/etc/fstab
-
     # Create a dedicated entry for swapfile
     echo "# swapfile" >> /mnt/etc/fstab
-    echo "/swap/swapfile none swap defaults 0 0" >> /mnt/etc/fstab
+    echo "$SWAPFILE none swap defaults 0 0" >> /mnt/etc/fstab
     echo "" >> /mnt/etc/fstab
 
-    # Create udisks2 mount_options.conf for externally mounted btrfs drives
-    # This sets some sane default options (noatime,space_cache=v2,compress=lzo)
-    cat <<EOT > "/mnt/etc/udisks2/mount_options.conf"
+    # Additional fstab entry for btrfs root volume and udisks2 config for externally mounted btrfs drives
+    if [[ "$FILE_SYSTEM_TYPE" == "btrfs"]]; then
+        # Grab the UUID for the rootfs partition
+        UUID_ROOTFS_PARTITION=$(blkid -o value -s UUID "$ROOTFS_PARTITION")
+
+        # Create a dedicated entry so you can mount the btrfs root volume (for snapshots)
+        echo "# root volume (btrfs root volumes always have a subvolid=5)" >> /mnt/etc/fstab
+        echo "# Note: this provides an excellent mount point for creating snapshots" >> /mnt/etc/fstab
+        echo "UUID=$UUID_ROOTFS_PARTITION /mnt/root_vol btrfs defaults,noatime,compress=lzo,space_cache=v2,subvolid=5 0 0" >> /mnt/etc/fstab
+        echo "" >> /mnt/etc/fstab
+
+        # Create udisks2 mount_options.conf for externally mounted btrfs drives
+        # This sets some sane default options (noatime,space_cache=v2,compress=lzo)
+        cat <<EOT > "/mnt/etc/udisks2/mount_options.conf"
 [defaults]
 btrfs_defaults=noatime,space_cache=v2,compress=lzo
 btrfs_allow=noatime,space_cache,compress,compress-force,datacow,nodatacow,datasum,nodatasum,degraded,device,discard,nodiscard,subvol,subvolid
 EOT
-
+    fi
+    
     # Configure swappiness paramater (default=60) to improve system responsiveness
     echo "vm.swappiness=10" > /mnt/etc/sysctl.d/99-sysctl.conf
 
@@ -236,18 +262,10 @@ EOT
 
     arch-chroot /mnt systemctl enable gdm.service
 
-    # Hack to work around GDM startup race condition (bug). Add small delay when starting up GDM
-    # https://bugs.archlinux.org/task/63763
-    arch-chroot /mnt sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
-
-    # Also configure a pacman hook for GDM to reapply the fix if gdm package is ever updated
-    configure_pacman_gdm_hook
-
     # Install GPU Drivers
     COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
 
     if [[ "$INTEL_GPU" == "true" ]]; then
-
         # Note: installing newer intel-media-driver (iHD) instead of libva-intel-driver (i965)
         arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
     fi
@@ -289,6 +307,7 @@ function check_critical_prereqs() {
 function check_variables() {
 
     check_variables_value "HD_DEVICE" "$HD_DEVICE"
+    check_variables_value "FILE_SYSTEM_TYPE" "$FILE_SYSTEM_TYPE"
     check_variables_value "SWAPSIZE" "$SWAPSIZE"
     check_variables_boolean "TRIM_SUPPORT" "$TRIM_SUPPORT"
     check_variables_boolean "AMD_CPU" "$AMD_CPU"
@@ -344,6 +363,11 @@ function check_conflicts() {
         echo -e "${RED}Error: AMD_CPU and INTEL_CPU are mutually exclusve and can't both =true.${NC}"
         exit 1
     fi
+
+    if [[ "$FILE_SYSTEM_TYPE" != "ext4" && "$FILE_SYSTEM_TYPE" == "btrfs" ]]; then
+        echo -e "${RED}Error: FILE_SYSTEM_TYPE must be either ext4 or btrfs.${NC}"
+        exit 1
+    fi
 }
 
 function check_network() {
@@ -376,28 +400,6 @@ function confirm_install() {
             exit
             ;;
     esac
-}
-
-function configure_pacman_gdm_hook() {
-
-    if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then
-        mkdir -p /mnt/etc/pacman.d/hooks
-    fi
-
-    cat <<EOT > "/mnt/etc/pacman.d/hooks/gdm.hook"
-[Trigger]                            
-Operation=Install
-Operation=Upgrade
-Type=Package
-Target=gdm
-
-[Action]
-Description=Adds a small delay to /usr/lib/systemd/system/gdm.service to work around bug
-Depends=coreutils
-When=PostTransaction
-Exec=/usr/bin/sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
-EOT
-
 }
 
 function configure_pacman_nvidia_hook() {
