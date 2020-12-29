@@ -79,7 +79,7 @@ The list below represents (at a high level) the base system Soagi creates for yo
 * Grub bootloader
 * Latest Linux Zen kernel
 * Latest CPU uCode (AMD or Intel)
-* BTRFS filesystem with sane subvolume configuration
+* ext4 filesystem
 * Mesa/Vulkan support for Intel/AMD GPUs
 * Nvidia proprietary driver/Vulkan support for Nvidia GPUs
 * Gnome
@@ -91,7 +91,7 @@ Below is a more detailed list of the exact packages/virtual packages that are in
 
 **Always Installed:**
 ```
-base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs btrfs-progs networkmanager git vim grub efibootmgr
+base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs networkmanager git vim grub efibootmgr
 ```
 
 **Systems with AMD CPUs:**
@@ -148,12 +148,10 @@ The base installation process is quite simple:
 
 3. Run `lsblk` and note your HD device name
 
-
 *Note: common HD device names are:*
 * SATA HDs are usually something like: `/dev/sdx` (e.g. `/dev/sda`)
 * NVME HDs are usually something like: `/dev/nvme0n1`
 * KVM/Qemu VM HDs are usually: `/dev/vda`
-
 
 4. Download the main sogai installation script
 ```
