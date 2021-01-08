@@ -1,6 +1,4 @@
 #!/bin/bash
+#|#install-pkg gtg #Getting this Gnome (TTD application)
 
-#|# Getting this Gnome (TTD application)
-#|#install-fp org.gnome.GTG
-
-flatpak install -y flathub org.gnome.GTG
+yay -Syu --noconfirm --needed gtg

@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2020-11-30-11:01:15
+# recipe.sh : 2021-01-08-10:48:40
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -7,138 +7,71 @@ function main() {
 
 # 1. Core
 # --------------------------------------------------------------------------
-
-# Mandatory programs & utilities
-./ingredients/core/utils.sh
-
-# Zsh + Oh-my-Zsh (recommended)
-./ingredients/core/zsh.sh
-
+./ingredients/core/utils.sh #Mandatory programs & utilities
+#./ingredients/core/zsh.sh #Zsh + Oh-my-Zsh
 
 # 2. Gnome
 # --------------------------------------------------------------------------
-
-# Gnome fonts
-#./ingredients/gnome/fonts.sh
-
-# Gnome icons
-#./ingredients/gnome/icons.sh
-
-# Gnome Dracula theme
-#./ingredients/gnome/theme-dracula-1.sh
-
-# Gnome Dracula theme icons (requires Gnome icons)
-#./ingredients/gnome/theme-dracula-2-icons.sh
-
-# Gnome Dracula theme Flatpak support
-#./ingredients/gnome/theme-dracula-3-flatpak.sh
-
+#./ingredients/gnome/fonts.sh #Gnome fonts
+#./ingredients/gnome/icons.sh #Gnome icons
+#./ingredients/gnome/theme-dracula-1.sh #Gnome Dracula theme
+#./ingredients/gnome/theme-dracula-2-icons.sh #Gnome Dracula theme icons (requires Gnome icons ingredient)
+#./ingredients/gnome/theme-dracula-3-flatpak.sh #Gnome Dracula theme Flatpak support
 
 # 3. Development
 # --------------------------------------------------------------------------
-
-# Git (installation and configuration)
-#install-pkg git
+#install-pkg git #Git installation and configuration
 #git config --global user.name "First Last"
 #git config --global user.email "myname@mydomain.com"
-
-# Git Credential Manager (supports Git repos on Azure DevOps)
-#install-pkg git-credential-manager-bin
-
-# .NET Core runitem and SDK
-#install-pkg dotnet-runtime dotnet-sdk aspnet-targeting-pack aspnet-runtime
-
-# VSCode
-#install-pkg visual-studio-code-bin
-
-# VSCode font configuration (requires Gnome fonts)
-#./ingredients/dev/vscode-2-fonts.sh
-
-# VSCode Dracula theme
-#./ingredients/dev/vscode-3-dracula-theme.sh
-
+#install-pkg git-credential-manager-bin #Git Credential Manager (for Git on Azure DevOps)
+#install-pkg dotnet-runtime dotnet-sdk aspnet-targeting-pack aspnet-runtime #.NET Core runitem and SDK
+#install-pkg visual-studio-code-bin #VSCode
+#./ingredients/dev/vscode-2-fonts.sh #VSCode font configuration (requires Gnome fonts ingredient)
+#./ingredients/dev/vscode-3-dracula-theme.sh #VSCode Dracula theme
 
 # 4. Web
 # --------------------------------------------------------------------------
-
-# Chromium
-#install-pkg chromium
-
-# Chromium enable VAAPI support (requires Chromium)
-#./ingredients/web/chromium-2-enable-vaapi.sh
-
-# Firefox
-#install-pkg firefox
-
-# Slack
-#install-fp com.slack.Slack
-
-# Microsoft Teams
-#install-pkg teams
-
+#install-pkg chromium #Chromium
+#./ingredients/web/chromium-2-enable-vaapi.sh # Chromium enable VAAPI support (requires Chromium ingredient)
+#install-pkg firefox #Firefox
+#install-pkg slack-desktop #Slack
+#install-pkg teams #Microsoft Teams
 
 # 5. Productivity
 # --------------------------------------------------------------------------
-
-# Flameshot (screenshot application)
-#install-pkg flameshot
-
-# Getting this Gnome (TTD application)
-#install-fp org.gnome.GTG
-
+#install-pkg flameshot #Flameshot (screenshot application)
+#install-pkg gtg #Getting this Gnome (TTD application)
 
 # 6. Media
 # --------------------------------------------------------------------------
-
-# PulseEffects + "Perfect EQ"
-#./ingredients/media/pulseeffects.sh
-
-# Tauon Music Player
-#install-fp com.github.taiko2k.tauonmb
-
-# VLC media player and codecs
-#install-pkg a52dec aribb24 faac faad2 flac jasper lame libdca libdv libdvbpsi libmad libmatroska libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore libdvdcss vlc
-
+#./ingredients/media/pulseeffects.sh #PulseEffects + Perfect EQ
+#install-pkg tauon-music-box #Tauon Music Box
+#install-pkg a52dec aribb24 faac faad2 flac jasper lame libdca libdv libdvbpsi libmad libmatroska libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore libdvdcss vlc #VLC media player and codecs
 
 # 7. Gaming
 # --------------------------------------------------------------------------
-
-# Steam gaming platform
-#install-pkg steam
-
+#install-pkg steam #Steam gaming platform
 
 # 8. Backup
 # --------------------------------------------------------------------------
-
-# Btrbk: Command line btrfs backup utility
-# Usage: brtbk.sh {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}
-# Example: btrbk.sh /mnt/btr_root_vol btr_snapshots /run/media/robert/MyBackupHD MyLaptop
+#Btrbk: Command line btrfs backup utility
+#Usage: brtbk.sh {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}
+#Example: btrbk.sh /mnt/btr_root_vol btr_snapshots /run/media/robert/MyBackupHD MyLaptop
 #./ingredients/backup/brtbk.sh {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}
 
-
-# 9. Hardware Specific CPU
+# 9. CPU Utilities
 # --------------------------------------------------------------------------
-
-#GUI utility to set CPU govenor settings
-#install-pkg cpupower-gui
-
-#Utilities neccessary to undervolt Intel CPUs
-#install-pkg msr-tools bc
-
+#install-pkg cpupower-gui #GUI utility to set CPU govenor settings
+#install-pkg msr-tools bc #Utilities neccessary to undervolt Intel CPUs
 
 # 10. VM
 # --------------------------------------------------------------------------
-
-# KVM/Quem guest utilities (only install if running as VM)
-#./ingredients/vm/kvm-qemu-guest.sh
-
-# KVM/Quemu host installation and configuration
-#./ingredients/vm/kvm-qemu-host.sh
+#./ingredients/vm/kvm-qemu-guest.sh #KVM/Quem guest utilities (only install if running as VM)
+#./ingredients/vm/kvm-qemu-host.sh #KVM/Quemu host installation and configuration
 
 # 11. Additional Packages
 # --------------------------------------------------------------------------
 #install-pkg add-pkg1 add-pkg2 ...
-
 
 # 12. Additional Flatpaks
 # --------------------------------------------------------------------------

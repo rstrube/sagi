@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# Zsh + Oh-my-Zsh (recommended)
-#|./ingredients/core/zsh.sh
+#|#./ingredients/core/zsh.sh #Zsh + Oh-my-Zsh
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

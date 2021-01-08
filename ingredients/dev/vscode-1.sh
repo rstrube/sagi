@@ -1,6 +1,4 @@
 #!/bin/bash
-
-#|# VSCode
-#|#install-pkg visual-studio-code-bin
+#|#install-pkg visual-studio-code-bin #VSCode
 
 yay -Syu --noconfirm --needed visual-studio-code-bin

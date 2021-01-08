@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# Gnome icons
-#|#./ingredients/gnome/icons.sh
+#|#./ingredients/gnome/icons.sh #Gnome icons
 
 sudo pacman -Syu --noconfirm --needed papirus-icon-theme
 

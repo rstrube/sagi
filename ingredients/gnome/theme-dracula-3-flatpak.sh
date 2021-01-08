@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# Gnome Dracula theme Flatpak support
-#|#./ingredients/gnome/theme-dracula-3-flatpak.sh
+#|#./ingredients/gnome/theme-dracula-3-flatpak.sh #Gnome Dracula theme Flatpak support
 
 # remove existing flatpak theme (created with pakitheme previously)
 flatpak remove -y org.gtk.Gtk3theme.Dracula

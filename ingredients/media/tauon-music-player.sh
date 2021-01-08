@@ -1,6 +1,4 @@
 #!/bin/bash
+#|#install-pkg tauon-music-box #Tauon Music Box
 
-#|# Tauon Music Player
-#|#install-fp com.github.taiko2k.tauonmb
-
-flatpak install -y flathub com.github.taiko2k.tauonmb
+yay -Syu --noconfirm --needed tauon-music-box

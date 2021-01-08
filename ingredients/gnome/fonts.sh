@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# Gnome fonts
-#|#./ingredients/gnome/fonts.sh
+#|#./ingredients/gnome/fonts.sh #Gnome fonts
 
 # Install the following fonts:
 # Fira Code: https://github.com/tonsky/FiraCode

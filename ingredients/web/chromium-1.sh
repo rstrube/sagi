@@ -1,6 +1,4 @@
 #!/bin/bash
-
-#|# Chromium
-#|#install-pkg chromium
+#|#install-pkg chromium #Chromium
 
 sudo pacman -Syu --noconfirm --needed chromium

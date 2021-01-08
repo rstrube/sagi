@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# Gnome Dracula theme
-#|#./ingredients/gnome/theme-dracula-1.sh
+#|#./ingredients/gnome/theme-dracula-1.sh #Gnome Dracula theme
 
 # Please refer to https://draculatheme.com/contribute/ for a full list of hex codes
 

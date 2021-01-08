@@ -1,6 +1,4 @@
 #!/bin/bash
-
-#|# Steam gaming platform
-#|#install-pkg steam
+#|#install-pkg steam #Steam gaming platform
 
 sudo pacman -Syu --noconfirm --needed steam

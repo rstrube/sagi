@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# VSCode font configuration (requires Gnome fonts)
-#|#./ingredients/dev/vscode-2-fonts.sh
+#|#./ingredients/dev/vscode-2-fonts.sh #VSCode font configuration (requires Gnome fonts ingredient)
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

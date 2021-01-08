@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# KVM/Quemu host installation and configuration
-#|#./ingredients/vm/kvm-qemu-host.sh
+#|#./ingredients/vm/kvm-qemu-host.sh #KVM/Quemu host installation and configuration
 
 # Installs all the neccessary packages to support running / managing KVM virtual machines
 # Note edk2-ovmf supports VMs with UEFI instead of traditional BIOS

@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# Mandatory programs & utilities
-#|./ingredients/core/utils.sh
+#|./ingredients/core/utils.sh #Mandatory programs & utilities
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

@@ -34,13 +34,14 @@ function generate-recipe() {
     generate-recipe-section "# 6. Media" "../ingredients/media"
     generate-recipe-section "# 7. Gaming" "../ingredients/gaming"
     generate-recipe-section "# 8. Backup" "../ingredients/backup"
-    generate-recipe-section "# 9. Hardware Specific CPU" "../ingredients/cpu"
+    generate-recipe-section "# 9. CPU Utilities" "../ingredients/cpu"
     generate-recipe-section "# 10. VM" "../ingredients/vm"
 
+    echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
+    
     echo "# 11. Additional Packages" >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo $HR >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo "#install-pkg add-pkg1 add-pkg2 ..." >> $GENERATED_RECIPE_TEMPLATE_FILE
-    echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
 
     echo "# 12. Additional Flatpaks" >> $GENERATED_RECIPE_TEMPLATE_FILE
@@ -66,11 +67,9 @@ function generate-recipe-section() {
     echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo $SECTION_LABEL >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo $HR >> $GENERATED_RECIPE_TEMPLATE_FILE
-    echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
 
     for i in ${INGREDIENT_DIR}/*.sh; do
         cat $i | grep -P -o $INGREDIENT_HEADER_REGEX >> $GENERATED_RECIPE_TEMPLATE_FILE
-        echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
     done
 }
 

@@ -1,6 +1,4 @@
 #!/bin/bash
-
-#|# Git Credential Manager (supports Git repos on Azure DevOps)
-#|#install-pkg git-credential-manager-bin
+#|#install-pkg git-credential-manager-bin #Git Credential Manager (for Git on Azure DevOps)
 
 yay -Syu --noconfirm --needed git-credential-manager-bin

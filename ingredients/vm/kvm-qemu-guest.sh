@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# KVM/Quem guest utilities (only install if running as VM)
-#|#./ingredients/vm/kvm-qemu-guest.sh
+#|#./ingredients/vm/kvm-qemu-guest.sh #KVM/Quem guest utilities (only install if running as VM)
 
 # Install Qemu guest agent and Spice tools
 sudo pacman -Syu --noconfirm --needed qemu-guest-agent spice-vdagent

@@ -1,6 +1,4 @@
 #!/bin/bash
+#|#install-pkg slack-desktop #Slack
 
-#|# Slack
-#|#install-fp com.slack.Slack
-
-flatpak install -y flathub com.slack.Slack
+yay -Syu --noconfirm --needed slack-desktop

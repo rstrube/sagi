@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# VSCode Dracula theme
-#|#./ingredients/dev/vscode-3-dracula-theme.sh
+#|#./ingredients/dev/vscode-3-dracula-theme.sh #VSCode Dracula theme
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh

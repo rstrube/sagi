@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# PulseEffects + "Perfect EQ"
-#|#./ingredients/media/pulseeffects.sh
+#|#./ingredients/media/pulseeffects.sh #PulseEffects + Perfect EQ
 
 sudo pacman -Syu --noconfirm --needed pulseeffects
 mkdir -p ~/.config/PulseEffects/output

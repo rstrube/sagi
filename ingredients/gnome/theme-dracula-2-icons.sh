@@ -1,7 +1,5 @@
 #!/bin/bash
-
-#|# Gnome Dracula theme icons (requires Gnome icons)
-#|#./ingredients/gnome/theme-dracula-2-icons.sh
+#|#./ingredients/gnome/theme-dracula-2-icons.sh #Gnome Dracula theme icons (requires Gnome icons ingredient)
 
 GNOME_CURRENT_ICON_THEME=$(gsettings get org.gnome.desktop.interface icon-theme)
 

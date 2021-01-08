@@ -1,6 +1,4 @@
 #!/bin/bash
-
-#|#Utilities neccessary to undervolt Intel CPUs
-#|#install-pkg msr-tools bc
+#|#install-pkg msr-tools bc #Utilities neccessary to undervolt Intel CPUs
 
 sudo pacman -Syu --noconfirm --needed msr-tools bc
