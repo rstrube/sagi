@@ -1,5 +1,5 @@
 #!/bin/bash
-#|#./ingredients/web/chromium-2-enable-vaapi.sh # Chromium enable VAAPI support (requires Chromium ingredient)
+#|#./ingredients/web/chromium-2-enable-vaapi.sh #Chromium enable VAAPI support (requires Chromium ingredient)
 
 # Generate ~/.config/chromium-flags.conf to enable VAAPI support
 

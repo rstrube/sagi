@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-01-08-10:48:40
+# recipe.sh : 2021-01-08-10:57:08
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ function main() {
 # 4. Web
 # --------------------------------------------------------------------------
 #install-pkg chromium #Chromium
-#./ingredients/web/chromium-2-enable-vaapi.sh # Chromium enable VAAPI support (requires Chromium ingredient)
+#./ingredients/web/chromium-2-enable-vaapi.sh #Chromium enable VAAPI support (requires Chromium ingredient)
 #install-pkg firefox #Firefox
 #install-pkg slack-desktop #Slack
 #install-pkg teams #Microsoft Teams
