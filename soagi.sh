@@ -193,12 +193,10 @@ function install() {
 
     # Hack to work around GDM startup race condition (bug). Add small delay when starting up GDM
     # https://bugs.archlinux.org/task/63763	
-    if [[ -e /usr/lib/systemd/system/gdm.service ]]; then
 	arch-chroot /mnt sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
 
 	# Also configure a pacman hook for GDM to reapply the fix if gdm package is ever updated
 	configure_pacman_gdm_hook
-    fi
 
     # Install GPU Drivers
     COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
