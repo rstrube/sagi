@@ -33,9 +33,8 @@ function generate-recipe() {
     generate-recipe-section "# 5. Productivity" "../ingredients/productivity"
     generate-recipe-section "# 6. Media" "../ingredients/media"
     generate-recipe-section "# 7. Gaming" "../ingredients/gaming"
-    generate-recipe-section "# 8. Backup" "../ingredients/backup"
-    generate-recipe-section "# 9. CPU Utilities" "../ingredients/cpu"
-    generate-recipe-section "# 10. VM" "../ingredients/vm"
+    generate-recipe-section "# 8. CPU Utilities" "../ingredients/cpu"
+    generate-recipe-section "# 9. VM" "../ingredients/vm"
 
     echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
     

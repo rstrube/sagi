@@ -2,7 +2,7 @@
 #|#./ingredients/dev/vscode-2-fonts.sh #VSCode font configuration (requires Gnome fonts ingredient)
 
 DIR=$(dirname "$0")
-source $DIR/../_helper/_common-functions.sh
+source $DIR/../_helper/_vscode-functions.sh
 
 create_empty_vscode_settings_if_neccessary
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-01-08-10:57:08
+# recipe.sh : 2021-01-09-14:02:46
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -7,8 +7,9 @@ function main() {
 
 # 1. Core
 # --------------------------------------------------------------------------
-./ingredients/core/utils.sh #Mandatory programs & utilities
-#./ingredients/core/zsh.sh #Zsh + Oh-my-Zsh
+./ingredients/core/mandatory.sh #Mandatory programs & utilities
+#./ingredients/core/neovim #Neovim (replaces vim)
+#install-pkg reflector #Reflector (tool to refresh pacman's mirror list)
 
 # 2. Gnome
 # --------------------------------------------------------------------------
@@ -52,19 +53,12 @@ function main() {
 # --------------------------------------------------------------------------
 #install-pkg steam #Steam gaming platform
 
-# 8. Backup
-# --------------------------------------------------------------------------
-#Btrbk: Command line btrfs backup utility
-#Usage: brtbk.sh {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}
-#Example: btrbk.sh /mnt/btr_root_vol btr_snapshots /run/media/robert/MyBackupHD MyLaptop
-#./ingredients/backup/brtbk.sh {/path/to/src_btr_root_vol} {snapshot-subvolume-name} {/path/to/backup_btr_root_vol} {backup_label}
-
-# 9. CPU Utilities
+# 8. CPU Utilities
 # --------------------------------------------------------------------------
 #install-pkg cpupower-gui #GUI utility to set CPU govenor settings
 #install-pkg msr-tools bc #Utilities neccessary to undervolt Intel CPUs
 
-# 10. VM
+# 9. VM
 # --------------------------------------------------------------------------
 #./ingredients/vm/kvm-qemu-guest.sh #KVM/Quem guest utilities (only install if running as VM)
 #./ingredients/vm/kvm-qemu-host.sh #KVM/Quemu host installation and configuration
