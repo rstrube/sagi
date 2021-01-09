@@ -100,9 +100,12 @@ function install() {
     chmod 600 /mnt"$SWAPFILE"
     mkswap /mnt"$SWAPFILE"
 
-    # Install essential packages via pacstrap
-    ESSENTIAL_PACKAGES="base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs networkmanager git vim"
-    pacstrap /mnt $ESSENTIAL_PACKAGES
+    # Bootstrap new environment
+    pacstrap /mnt
+
+    # Install essential packages
+    ESSENTIAL_PACKAGES="base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs networkmanager git vim"
+    arch-chroot /mnt pacman -Syu --noconfirm --needed $ESSENTIAL_PACKAGES
 
     # Install additional firmware and uCode
     if [[ "$AMD_CPU" == "true" ]]; then
@@ -188,12 +191,14 @@ function install() {
 
     arch-chroot /mnt systemctl enable gdm.service
 
-    # Hack to work around GDM startup race condition (bug). Add small delay when starting up GDM	
+    # Hack to work around GDM startup race condition (bug). Add small delay when starting up GDM
     # https://bugs.archlinux.org/task/63763	
-    arch-chroot /mnt sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service	
+    if [[ -e /usr/lib/systemd/system/gdm.service ]]; then
+	arch-chroot /mnt sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
 
-    # Also configure a pacman hook for GDM to reapply the fix if gdm package is ever updated	
-    configure_pacman_gdm_hook
+	# Also configure a pacman hook for GDM to reapply the fix if gdm package is ever updated
+	configure_pacman_gdm_hook
+    fi
 
     # Install GPU Drivers
     COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
@@ -346,7 +351,7 @@ Description=Adds a small delay to /usr/lib/systemd/system/gdm.service to work ar
 Depends=coreutils	
 When=PostTransaction	
 Exec=/usr/bin/sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service	
-EOT	
+EOT
 
 }
 
