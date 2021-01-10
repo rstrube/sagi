@@ -89,11 +89,11 @@ function configure_gedit_theme {
 
 function configure_fish_theme {
 
-    echo "Installing Dracula theme for fish..."
+    echo "Installing Dracula theme for fish shell..."
 
     if [[ -d ~/.config/omf ]]; then
-        fish -c "omf install clearance"
         fish -c "omf install https://github.com/dracula/fish"
+        fish -c "omf install clearance"
     fi
 }
 
