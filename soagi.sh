@@ -294,7 +294,7 @@ function check_variables_boolean() {
 function print_variables_value() {
     NAME=$1
     VALUE=$2
-    echo -e "$NAME = ${LBLUE}${VALUE}${NC}"
+    echo -e "$NAME = ${WHITE}${VALUE}${NC}"
 }
 
 function print_variables_boolean() {
