@@ -1,5 +1,5 @@
 #!/bin/bash
-#|#./ingredients/gnome/theme-dracula-1.sh #Gnome Dracula theme
+#|#./ingredients/gnome/theme-dracula.sh #Gnome Dracula theme
 
 # Please refer to https://draculatheme.com/contribute/ for a full list of hex codes
 
@@ -14,6 +14,7 @@ function install() {
     configure_gnome_terminal_theme
     configure_gedit_theme
     configure_fish_theme
+    configure_dracula_papirus_icons
 }
 
 function configure_gtk_theme {
@@ -94,6 +95,19 @@ function configure_fish_theme {
     if [[ -d ~/.config/omf ]]; then
         fish -c "omf install https://github.com/dracula/fish"
         fish -c "omf install clearance"
+    fi
+}
+
+function configure_dracula_papirus_icons {
+
+    GNOME_CURRENT_ICON_THEME=$(gsettings get org.gnome.desktop.interface icon-theme)
+
+    if [[ "$GNOME_CURRENT_ICON_THEME" == "'Papirus-Dark'" ]]; then
+
+        echo "Setting papirus icons folder color to 'grey' via 'papirus-folders'..."
+
+        yay -Syu --noconfirm --needed papirus-folders
+        papirus-folders -C grey --theme Papirus-Dark
     fi
 }
 

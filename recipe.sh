@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-01-10-13:58:03
+# recipe.sh : 2021-01-10-16:35:59
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -15,9 +15,8 @@ function main() {
 # --------------------------------------------------------------------------
 #./ingredients/gnome/fonts.sh #Gnome fonts
 #./ingredients/gnome/icons.sh #Gnome icons
-#./ingredients/gnome/theme-dracula-1.sh #Gnome Dracula theme
-#./ingredients/gnome/theme-dracula-2-icons.sh #Gnome Dracula theme icons (requires Gnome icons ingredient)
-#./ingredients/gnome/theme-dracula-3-flatpak.sh #Gnome Dracula theme Flatpak support
+#./ingredients/gnome/theme-dracula.sh #Gnome Dracula theme
+#./ingredients/gnome/theme-flatpak-dracula.sh #Gnome Dracula theme Flatpak support
 
 # 3. Development
 # --------------------------------------------------------------------------
