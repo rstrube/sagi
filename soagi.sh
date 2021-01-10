@@ -37,6 +37,7 @@ KEYS="us"
 TIMEZONE="/usr/share/zoneinfo/America/Denver"
 LOCALE="en_US.UTF-8 UTF-8"
 LANG="en_US.UTF-8"
+REFLECTOR_COUNTRY="United States"
 
 # User Configuration
 ROOT_PASSWORD=""
@@ -66,6 +67,9 @@ function install() {
 
     # Update system clock
     timedatectl set-ntp true
+
+    # Update pacman mirrors
+    reflector --verbose --country $REFLECTOR_COUNTRY --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 
     # Partion the drive with a single 512 MB ESP partition, and the rest of the drive as the root partition
     parted -s $HD_DEVICE mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root ext4 512MiB 100% set 1 esp on
@@ -159,7 +163,7 @@ function install() {
     echo $HOSTNAME > /mnt/etc/hostname
     echo "127.0.0.1	localhost" >> /mnt/etc/hosts
     echo "::1 localhost" >> /mnt/etc/hosts
-    echo "127.0.0.1	${HOSTMAME}.localdomain $HOSTNAME" >> /mnt/etc/hosts
+    echo "127.0.0.1	${HOSTNAME}.localdomain $HOSTNAME" >> /mnt/etc/hosts
 
     # Configure root password
     printf "$ROOT_PASSWORD\n$ROOT_PASSWORD" | arch-chroot /mnt passwd

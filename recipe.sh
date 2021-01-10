@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-01-10-13:28:14
+# recipe.sh : 2021-01-10-13:58:03
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -8,6 +8,7 @@ function main() {
 # 1. Core
 # --------------------------------------------------------------------------
 ./ingredients/core/mandatory.sh #Mandatory programs & utilities
+#./ingredients/core/fish.sh #Fish shell + Oh my Fish
 #./ingredients/core/neovim.sh #Neovim (replaces vim)
 
 # 2. Gnome
