@@ -301,9 +301,9 @@ function print_variables_boolean() {
     NAME=$1
     VALUE=$2
     if [[ "$VALUE" == "true" ]]; then
-        echo -e "$NAME = '${GREEN}${VALUE}${NC}'"
+        echo -e "$NAME = ${GREEN}${VALUE}${NC}"
     else
-        echo "$NAME = '${RED}${VALUE}${NC}'"
+        echo -e "$NAME = ${RED}${VALUE}${NC}"
     fi
 }
 
