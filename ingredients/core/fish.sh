@@ -3,7 +3,9 @@
 
 sudo pacman -Syu --noconfirm --needed fish
 
-curl -L https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+curl -O https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install
+fish install --noninteractive --yes
+rm install
 
 cat <<EOT > "init.fish"	
 alias ls="ls --color=auto"
