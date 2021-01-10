@@ -294,7 +294,7 @@ function check_variables_boolean() {
 function print_variables_value() {
     NAME=$1
     VALUE=$2
-    echo -e "$NAME = '${LBLUE}${VALUE}${NC}'"
+    echo -e "$NAME = ${LBLUE}${VALUE}${NC}"
 }
 
 function print_variables_boolean() {
@@ -329,7 +329,7 @@ function confirm_install() {
     echo -e "${LBLUE}Soagi (Simple Opinionated Arch Gnome Installer)${NC}"
     echo ""
     echo -e "${RED}Warning"'!'"${NC}"
-    echo -e "${RED}This script will destroy all data on '${HD_DEVICE}'${NC}"
+    echo -e "${RED}This script will destroy all data on ${HD_DEVICE}${NC}"
     echo ""
 
     echo -e "${LBLUE}HD Configuration:${NC}"
