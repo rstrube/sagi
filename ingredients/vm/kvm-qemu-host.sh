@@ -18,10 +18,12 @@ sudo usermod -a -G libvirt $USER
 sudo systemctl enable libvirtd.service
 
 sudo virsh net-start default
-sudo virsh net-autostart --network default
+sudo virsh net-autostart default
 
 echo "===/etc/libvirt/qemu/networks/default.xml==="
 sudo cat /etc/libvirt/qemu/networks/default.xml
 echo "============================================"
+
+sudo virsh net-list --all
 
 echo -e "${YELLOW}Warning: you will need to reboot in order for the configuration changes to take affect.${NC}"
