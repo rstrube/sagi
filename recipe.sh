@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-01-09-14:02:46
+# recipe.sh : 2021-01-10-13:28:14
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -8,8 +8,7 @@ function main() {
 # 1. Core
 # --------------------------------------------------------------------------
 ./ingredients/core/mandatory.sh #Mandatory programs & utilities
-#./ingredients/core/neovim #Neovim (replaces vim)
-#install-pkg reflector #Reflector (tool to refresh pacman's mirror list)
+#./ingredients/core/neovim.sh #Neovim (replaces vim)
 
 # 2. Gnome
 # --------------------------------------------------------------------------
