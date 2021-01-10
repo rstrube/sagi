@@ -45,7 +45,7 @@ function check_args() {
 
 function print_help() {
 
-    echo -e "${LIGHT_BLUE}Usage: "$0" {\"full name\"} {email}${NC}"
+    echo -e "${LBLUE}Usage: "$0" {\"full name\"} {email}${NC}"
 }
 
 function check_variables() {

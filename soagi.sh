@@ -10,7 +10,7 @@
 # If running as VM, you'll need to double check if TRIM is supported.  Newer KVM/Qemu VMs should support TRIM.
 HD_DEVICE="" # /dev/sda /dev/nvme0n1 /dev/vda
 TRIM_SUPPORT="true" # typically set to true if HD is an SSD, see notes above
-SWAPSIZE="2048" # 4096 8912
+SWAPFILE_SIZE="2048" # 4096 8912 (in MiB)
 
 # CPU Configuration
 # Note: if installing in a VM leave both set to 'false'
@@ -51,7 +51,6 @@ CMDLINE_LINUX=""
 #################################################
 
 function main() {
-    
     check_critical_prereqs
     check_variables
     check_conflicts
@@ -64,7 +63,6 @@ function main() {
 }
 
 function install() {
-
     # Update system clock
     timedatectl set-ntp true
 
@@ -99,7 +97,7 @@ function install() {
     mount -o defaults,noatime $BOOT_PARTITION /mnt/boot
 
     SWAPFILE="/swapfile"
-    fallocate --length ${SWAPSIZE}MiB /mnt"$SWAPFILE"
+    fallocate --length ${SWAPFILE_SIZE}MiB /mnt"$SWAPFILE"
     chown root /mnt"$SWAPFILE"
     chmod 600 /mnt"$SWAPFILE"
     mkswap /mnt"$SWAPFILE"
@@ -229,7 +227,6 @@ function install() {
 }
 
 function check_critical_prereqs() {
-
     check_variables_value "HD_DEVICE" "$HD_DEVICE"
     
     if [[ ! -e "$HD_DEVICE" ]]; then
@@ -245,10 +242,9 @@ function check_critical_prereqs() {
 }
 
 function check_variables() {
-
     check_variables_value "HD_DEVICE" "$HD_DEVICE"
-    check_variables_value "SWAPSIZE" "$SWAPSIZE"
     check_variables_boolean "TRIM_SUPPORT" "$TRIM_SUPPORT"
+    check_variables_value "SWAPFILE_SIZE" "$SWAPFILE_SIZE"
     check_variables_boolean "AMD_CPU" "$AMD_CPU"
     check_variables_boolean "INTEL_CPU" "$INTEL_CPU"
     check_variables_boolean "AMD_GPU" "$AMD_GPU"
@@ -261,6 +257,7 @@ function check_variables() {
     check_variables_value "KEYS" "$KEYS"
     check_variables_value "LOCALE" "$LOCALE"
     check_variables_value "LANG" "$LANG"
+    check_variables_value "REFLECTOR_COUNTRY" "$REFLECTOR_COUNTRY"
     check_variables_value "ROOT_PASSWORD" "$ROOT_PASSWORD"
     check_variables_value "USER_NAME" "$USER_NAME"
     check_variables_value "USER_PASSWORD" "$USER_PASSWORD"
@@ -269,7 +266,6 @@ function check_variables() {
 ERROR_VARS_MESSAGE="${RED}Error: you must edit soagi.sh (e.g. with vim) and configure the required variables.${NC}"
 
 function check_variables_value() {
-
     NAME=$1
     VALUE=$2
     if [[ -z "$VALUE" ]]; then
@@ -280,7 +276,6 @@ function check_variables_value() {
 }
 
 function check_variables_boolean() {
-
     NAME=$1
     VALUE=$2
     case $VALUE in
@@ -296,8 +291,23 @@ function check_variables_boolean() {
     esac
 }
 
-function check_conflicts() {
+function print_variables_value() {
+    NAME=$1
+    VALUE=$2
+    echo -e "$NAME = '${LBLUE}${VALUE}${NC}'"
+}
 
+function print_variables_boolean() {
+    NAME=$1
+    VALUE=$2
+    if [[ "$VALUE" == "true" ]]; then
+        echo -e "$NAME = '${GREEN}${VALUE}${NC}'"
+    else
+        echo "$NAME = '${RED}${VALUE}${NC}'"
+    fi
+}
+
+function check_conflicts() {
     if [[ "$AMD_CPU" == "true" && "$INTEL_CPU" == "true" ]]; then
         echo -e "${RED}Error: AMD_CPU and INTEL_CPU are mutually exclusve and can't both =true.${NC}"
         exit 1
@@ -305,7 +315,6 @@ function check_conflicts() {
 }
 
 function check_network() {
-
     ping -c 1 -i 2 -W 5 -w 30 $PING_HOSTNAME
     
     if [ $? -ne 0 ]; then
@@ -315,14 +324,50 @@ function check_network() {
 }
 
 function confirm_install() {
-
     clear
 
-    echo -e "${LIGHT_BLUE}soagi (Simple Opinionated Arch Gnome Installer)${NC}"
+    echo -e "${LBLUE}Soagi (Simple Opinionated Arch Gnome Installer)${NC}"
     echo ""
     echo -e "${RED}Warning"'!'"${NC}"
-    echo -e "${RED}This script will destroy all data on ${HD_DEVICE}${NC}"
+    echo -e "${RED}This script will destroy all data on '${HD_DEVICE}'${NC}"
     echo ""
+
+    echo -e "${LBLUE}HD Configuration:${NC}"
+    print_variables_value "HD_DEVICE" "$HD_DEVICE"
+    print_variables_boolean "TRIM_SUPPORT" "$TRIM_SUPPORT"
+    print_variables_value "SWAPFILE_SIZE" "$SWAPFILE_SIZE"
+    echo ""
+
+    echo -e "${LBLUE}CPU Configuration:${NC}"
+    print_variables_boolean "AMD_CPU" "$AMD_CPU"
+    print_variables_boolean "INTEL_CPU" "$INTEL_CPU"
+    echo ""
+
+    echo -e "${LBLUE}GPU Configuration:${NC}"
+    print_variables_boolean "AMD_GPU" "$AMD_GPU"
+    print_variables_boolean "INTEL_GPU" "$INTEL_GPU"
+    print_variables_boolean "NVIDIA_GPU" "$NVIDIA_GPU"
+    echo ""
+
+    echo -e "${LBLUE}DE Configuration:${NC}"
+    print_variables_boolean "XORG_INSTALL" "$XORG_INSTALL"
+    echo ""
+
+    echo -e "${LBLUE}Host Configuration:${NC}"
+    print_variables_value "HOSTNAME" "$HOSTNAME"
+    print_variables_value "TIMEZONE" "$TIMEZONE"
+    print_variables_value "KEYS" "$KEYS"
+    print_variables_value "LOCALE" "$LOCALE"
+    print_variables_value "LANG" "$LANG"
+    print_variables_value "REFLECTOR_COUNTRY" "$REFLECTOR_COUNTRY"
+    echo ""
+
+    echo -e "${LBLUE}User Configuration:${NC}"
+    print_variables_value "ROOT_PASSWORD" "$ROOT_PASSWORD"
+    print_variables_value "USER_NAME" "$USER_NAME"
+    print_variables_value "USER_PASSWORD" "$USER_PASSWORD"
+    echo ""
+
     read -p "Do you want to continue? [y/N] " yn
     case $yn in
         [Yy]* )
@@ -337,7 +382,6 @@ function confirm_install() {
 }
 
 function configure_pacman_gdm_hook() {	
-
     if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then	
         mkdir -p /mnt/etc/pacman.d/hooks	
     fi	
@@ -358,7 +402,6 @@ EOT
 }
 
 function configure_pacman_nvidia_hook() {
-
     if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then
         mkdir -p /mnt/etc/pacman.d/hooks
     fi
@@ -381,9 +424,22 @@ EOT
 }
 
 # Console Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-LIGHT_BLUE='\033[1;34m'
 NC='\033[0m'
+
+RED='\033[00;31m'
+GREEN='\033[00;32m'
+YELLOW='\033[00;33m'
+BLUE='\033[00;34m'
+PURPLE='\033[00;35m'
+CYAN='\033[00;36m'
+LIGHTGRAY='\033[00;37m'
+
+LRED='\033[01;31m'
+LGREEN='\033[01;32m'
+LYELLOW='\033[01;33m'
+LBLUE='\033[01;34m'
+LPURPLE='\033[01;35m'
+LCYAN='\033[01;36m'
+WHITE='\033[01;37m'
 
 main "$@"
