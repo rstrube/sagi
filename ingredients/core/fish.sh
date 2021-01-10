@@ -1,6 +1,9 @@
 #!/bin/bash
 #|#./ingredients/core/fish.sh #Fish shell + Oh my Fish
 
+DIR=$(dirname "$0")
+source $DIR/../_helper/_common-functions.sh
+
 sudo pacman -Syu --noconfirm --needed fish
 
 curl -O https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install
