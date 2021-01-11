@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-01-10-16:35:59
+# recipe.sh : 2021-01-11-14:30:29
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -27,7 +27,8 @@ function main() {
 #install-pkg dotnet-runtime dotnet-sdk aspnet-targeting-pack aspnet-runtime #.NET Core runitem and SDK
 #install-pkg visual-studio-code-bin #VSCode
 #./ingredients/dev/vscode-2-fonts.sh #VSCode font configuration (requires Gnome fonts ingredient)
-#./ingredients/dev/vscode-3-dracula-theme.sh #VSCode Dracula theme
+#./ingredients/dev/vscode-3-vim.sh #VSCode vim extension
+#./ingredients/dev/vscode-4-theme-dracula.sh #VSCode Dracula theme extension
 
 # 4. Web
 # --------------------------------------------------------------------------
