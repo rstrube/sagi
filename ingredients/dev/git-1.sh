@@ -1,7 +1,5 @@
 #!/bin/bash
-#|#install-pkg git #Git installation and configuration
-#|#git config --global user.name "First Last"
-#|#git config --global user.email "myname@mydomain.com"
+#|#./ingredients/dev/git-1.sh "Firstname Lastname" "myname@mydomain.com" #Git installation and configuration
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
@@ -24,7 +22,7 @@ function main() {
 
 function install() {
 
-    sudo pacman -Syu --noconfirm --needed git
+    paru -Syu --noconfirm --needed git
     
     # Set git configuration
     git config --global user.name $GIT_USERNAME

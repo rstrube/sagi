@@ -6,7 +6,7 @@
 # Roboto: default font for Google's Android OS
 # Jetbrains Mono: a fantastic monospace font
 # Droid: another common font that came with Google's Android OS
-yay -Syu --noconfirm --needed ttf-fira-code ttf-roboto ttf-roboto-slab ttf-jetbrains-mono ttf-droid
+paru -Syu --noconfirm --needed ttf-fira-code ttf-roboto ttf-roboto-slab ttf-jetbrains-mono ttf-droid
 
 # This rebuilds the font-cache, taking into account any changes
 sudo fc-cache -r -v

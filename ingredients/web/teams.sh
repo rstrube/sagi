@@ -1,4 +1,4 @@
 #!/bin/bash
 #|#install-pkg teams #Microsoft Teams
 
-yay -Syu --noconfirm --needed teams
+paru -Syu --noconfirm --needed teams

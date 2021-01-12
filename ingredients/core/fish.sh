@@ -4,7 +4,7 @@
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 
-sudo pacman -Syu --noconfirm --needed fish
+paru -Syu --noconfirm --needed fish
 
 curl -O https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install
 fish install --noninteractive --yes
@@ -16,7 +16,7 @@ alias ll="ls -la --color=auto"
 alias l.="ls -d .* --color=auto"
 alias grep="grep --color"
 
-alias pacman_remove_orphans="yay -Yc"
+alias pacman_remove_orphans="paru -c"
 
 function reflector_refresh_mirrors --wraps reflector
     set DATE (date +%Y-%m-%d-%H:%M:%S)

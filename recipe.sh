@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-01-11-14:30:29
+# recipe.sh : 2021-01-12-01:10:12
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -20,9 +20,7 @@ function main() {
 
 # 3. Development
 # --------------------------------------------------------------------------
-#install-pkg git #Git installation and configuration
-#git config --global user.name "First Last"
-#git config --global user.email "myname@mydomain.com"
+#./ingredients/dev/git-1.sh "Firstname Lastname" "myname@mydomain.com" #Git installation and configuration
 #install-pkg git-credential-manager-bin #Git Credential Manager (for Git on Azure DevOps)
 #install-pkg dotnet-runtime dotnet-sdk aspnet-targeting-pack aspnet-runtime #.NET Core runitem and SDK
 #install-pkg visual-studio-code-bin #VSCode
@@ -75,7 +73,7 @@ function main() {
 
 function install-pkg() {
 
-    yay -Syu --noconfirm --needed "$@"
+    paru -Syu --noconfirm --needed "$@"
 }
 
 

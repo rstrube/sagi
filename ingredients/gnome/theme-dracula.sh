@@ -106,7 +106,7 @@ function configure_dracula_papirus_icons {
 
         echo "Setting papirus icons folder color to 'grey' via 'papirus-folders'..."
 
-        yay -Syu --noconfirm --needed papirus-folders
+        paru -Syu --noconfirm --needed papirus-folders
         papirus-folders -C grey --theme Papirus-Dark
     fi
 }

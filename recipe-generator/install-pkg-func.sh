@@ -1,6 +1,6 @@
 
 function install-pkg() {
 
-    yay -Syu --noconfirm --needed "$@"
+    paru -Syu --noconfirm --needed "$@"
 }
 
