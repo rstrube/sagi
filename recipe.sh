@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-02-20-15:14:29
+# recipe.sh : 2021-02-20-16:13:52
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ function main() {
 # --------------------------------------------------------------------------
 #./ingredients/dev/git-1.sh "Firstname Lastname" "myname@mydomain.com" #Git installation and configuration
 #install-pkg git-credential-manager-bin #Git Credential Manager (for Git on Azure DevOps)
-#install-pkg dotnet-runtime-bin dotnet-sdk-bin aspnet-runtime-bin aspnet-targeting-pack-bin #.NET Core runitem and SDK
+#install-pkg dotnet-host-bin dotnet-runtime-bin dotnet-sdk-bin dotnet-targeting-pack-bin aspnet-runtime-bin aspnet-targeting-pack-bin #.NET Core runitem and SDK
 #install-pkg visual-studio-code-bin #VSCode
 #./ingredients/dev/vscode-2-fonts.sh #VSCode font configuration (requires Gnome fonts ingredient)
 #./ingredients/dev/vscode-3-vim.sh #VSCode vim extension
