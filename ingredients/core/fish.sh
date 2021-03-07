@@ -32,6 +32,7 @@ EOT
 #cp init.fish ~/.config/omf/
 #rm init.fish
 
+mkdip -p ~/.config/fish
 cp config.fish ~/.config/fish/
 rm config.fish
 
