@@ -13,7 +13,7 @@ function install() {
     configure_gtk_theme
     configure_gnome_terminal_theme
     configure_gedit_theme
-    configure_fish_theme
+    # configure_fish_theme
     configure_dracula_papirus_icons
 }
 
@@ -88,15 +88,15 @@ function configure_gedit_theme {
     gsettings set org.gnome.gedit.preferences.editor scheme 'dracula'
 }
 
-function configure_fish_theme {
+# function configure_fish_theme {
 
-    echo "Installing Dracula theme for fish shell..."
+#     echo "Installing Dracula theme for fish shell..."
 
-    if [[ -d ~/.config/omf ]]; then
-        fish -c "omf install https://github.com/dracula/fish"
-        fish -c "omf install clearance"
-    fi
-}
+#     if [[ -d ~/.config/omf ]]; then
+#         fish -c "omf install https://github.com/dracula/fish"
+#         fish -c "omf install clearance"
+#     fi
+# }
 
 function configure_dracula_papirus_icons {
 
