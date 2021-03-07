@@ -16,6 +16,7 @@ sudo sed -i "s/#unix_sock_ro_perms/unix_sock_ro_perms/" "/etc/libvirt/libvirtd.c
 sudo usermod -a -G libvirt $USER
 
 sudo systemctl enable libvirtd.service
+sudo systemctl start libvirtd.service
 
 sudo virsh net-start default
 sudo virsh net-autostart default
