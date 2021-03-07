@@ -27,6 +27,7 @@ function install() {
     # Set git configuration
     git config --global user.name $GIT_USERNAME
     git config --global user.email $GIT_EMAIL
+    git config --global init.defaultBranch main
 }
 
 function check_args() {

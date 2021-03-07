@@ -1,16 +1,19 @@
 #!/bin/bash
-#|#./ingredients/core/fish.sh #Fish shell + Oh my Fish
+#|#./ingredients/core/fish.sh #Fish shell
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 
 paru -Syu --noconfirm --needed fish
 
-curl -O https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install
-fish install --noninteractive --yes
-rm install
+# Removing oh-my-fish
+#curl -O https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install
+#fish install --noninteractive --yes
+#rm install
 
-cat <<EOT > "init.fish"	
+# Removing oh-my-fish
+#cat <<EOT > "init.fish"	
+cat <<EOT > "config.fish"	
 alias ls="ls --color=auto"
 alias ll="ls -la --color=auto"
 alias l.="ls -d .* --color=auto"
@@ -25,8 +28,12 @@ function reflector_refresh_mirrors --wraps reflector
 end
 EOT
 
-cp init.fish ~/.config/omf/
-rm init.fish
+# Removing oh-my-fish
+#cp init.fish ~/.config/omf/
+#rm init.fish
+
+cp config.fish ~/.config/fish/
+rm config.fish
 
 # Change the shell to fish
 chsh -s /usr/bin/fish
