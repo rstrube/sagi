@@ -1,5 +1,5 @@
 #!/bin/bash
-#|./ingredients/core/mandatory.sh #Mandatory programs & utilities
+#|./ingredients/core/0_mandatory.sh #Mandatory programs & utilities
 
 sudo pacman -Syu --noconfirm --needed reflector rust
 
