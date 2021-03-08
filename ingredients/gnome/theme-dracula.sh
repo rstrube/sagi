@@ -13,7 +13,7 @@ function install() {
     configure_gtk_theme
     configure_gnome_terminal_theme
     configure_gedit_theme
-    # configure_fish_theme
+    configure_fish_theme
     configure_dracula_papirus_icons
 }
 
@@ -88,15 +88,72 @@ function configure_gedit_theme {
     gsettings set org.gnome.gedit.preferences.editor scheme 'dracula'
 }
 
-# function configure_fish_theme {
+function configure_fish_theme {
 
-#     echo "Installing Dracula theme for fish shell..."
+    echo "Installing Dracula theme for fish shell..."
 
-#     if [[ -d ~/.config/omf ]]; then
-#         fish -c "omf install https://github.com/dracula/fish"
-#         fish -c "omf install clearance"
-#     fi
-# }
+    if [[ -d ~/.config/fish ]]; then
+        cat <<EOT > "dracula.fish"
+# Reset all explicitly defined fish shell colors to use built in terminal colors
+
+set -g fish_color_autosuggestion      brblack
+set -g fish_color_cancel              -r
+set -g fish_color_command             brgreen
+set -g fish_color_comment             brmagenta
+set -g fish_color_cwd                 green
+set -g fish_color_cwd_root            red
+set -g fish_color_end                 brmagenta
+set -g fish_color_error               brred
+set -g fish_color_escape              brcyan
+set -g fish_color_history_current     --bold
+set -g fish_color_host                normal
+set -g fish_color_match               --background=brblue
+set -g fish_color_normal              normal
+set -g fish_color_operator            cyan
+set -g fish_color_param               brblue
+set -g fish_color_quote               yellow
+set -g fish_color_redirection         bryellow
+set -g fish_color_search_match        'bryellow' '--background=brblack'
+set -g fish_color_selection           'white' '--bold' '--background=brblack'
+set -g fish_color_status              red
+set -g fish_color_user                brgreen
+set -g fish_color_valid_path          --underline
+set -g fish_pager_color_completion    normal
+set -g fish_pager_color_description   yellow
+set -g fish_pager_color_prefix        'white' '--bold' '--underline'
+set -g fish_pager_color_progress      'brblack' '--background=cyan'
+
+# Helper function which displays terminal and fish shell colors
+function print_fish_colors --description 'Displays the terminal and fish colors being used'
+    echo 'Current terminal colors:'
+    set_color --print-colors
+    echo ''
+    echo 'Current fish colors:'
+    set -l clr_list (set -n | grep fish | grep color | grep -v __)
+    if test -n "$clr_list"
+        set -l bclr (set_color normal)
+        set -l bold (set_color --bold)
+        printf "\n| %-38s | %-38s |\n" Variable Definition
+        echo '|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|'
+        for var in $clr_list
+            set -l def $$var
+            set -l clr (set_color $def ^/dev/null)
+            or begin
+                printf "| %-38s | %s%-38s$bclr |\n" "$var" (set_color --bold white --background=red) "$def"
+                continue
+            end
+            printf "| $clr%-38s$bclr | $bold%-38s$bclr |\n" "$var" "$def"
+        end
+        echo '|________________________________________|________________________________________|'\n
+    end
+end
+EOT
+        cp dracula.fish ~/.config/fish/
+        rm dracula.fish
+        echo "# Dracula theme" >> ~/.config/fish/config.fish
+        echo "source ~/.config/fish/dracula.fish" >> ~/.config/fish/config.fish
+    fi
+}
 
 function configure_dracula_papirus_icons {
 

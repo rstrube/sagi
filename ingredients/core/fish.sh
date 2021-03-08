@@ -12,13 +12,15 @@ paru -Syu --noconfirm --needed fish
 #rm install
 
 # Removing oh-my-fish
-#cat <<EOT > "init.fish"	
-cat <<EOT > "config.fish"	
+#cat <<EOT > "init.fish"
+# ...
+# EOT
+
+cat <<EOT > "aliases.fish"	
 alias ls="ls --color=auto"
 alias ll="ls -la --color=auto"
 alias l.="ls -d .* --color=auto"
 alias grep="grep --color"
-
 alias pacman_remove_orphans="paru -c"
 
 function reflector_refresh_mirrors --wraps reflector
@@ -28,11 +30,18 @@ function reflector_refresh_mirrors --wraps reflector
 end
 EOT
 
-# Removing oh-my-fish
-#cp init.fish ~/.config/omf/
-#rm init.fish
-
 mkdip -p ~/.config/fish
+cp aliases.fish ~/.config/fish/
+rm aliases.fish
+
+cat <<EOT > "config.fish"
+# Don't shorten the working directory in the prompt
+set -g fish_prompt_pwd_dir_length 0
+
+# Aliases
+source ~/.config/fish/aliases.fish
+EOT
+
 cp config.fish ~/.config/fish/
 rm config.fish
 
