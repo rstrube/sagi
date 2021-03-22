@@ -30,7 +30,7 @@ function reflector_refresh_mirrors --wraps reflector
 end
 EOT
 
-mkdip -p ~/.config/fish
+mkdir -p ~/.config/fish
 cp aliases.fish ~/.config/fish/
 rm aliases.fish
 
