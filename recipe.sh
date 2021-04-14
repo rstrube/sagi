@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-03-22-10:35:14
+# recipe.sh : 2021-04-14-12:02:45
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ function main() {
 
 # 8. CPU Utilities
 # --------------------------------------------------------------------------
-#install-pkg cpupower-gui #GUI utility to set CPU govenor settings
+#./ingredients/cpu/cpupower-gui.sh #GUI utility to set CPU govenor settings
 #install-pkg msr-tools bc #Utilities neccessary to undervolt Intel CPUs
 
 # 9. VM
