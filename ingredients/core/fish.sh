@@ -4,7 +4,7 @@
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
 
-paru -Syu --noconfirm --needed fish
+paru -S --noconfirm --needed fish
 
 # Removing oh-my-fish
 #curl -O https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install
@@ -25,8 +25,8 @@ alias pacman_remove_orphans="paru -c"
 
 function reflector_refresh_mirrors --wraps reflector
     set DATE (date +%Y-%m-%d-%H:%M:%S)
-    sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.{$DATE}.bak
-    sudo reflector --verbose --country $argv --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+    sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.{\$DATE}.bak
+    sudo reflector --verbose --country \$argv --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 end
 EOT
 

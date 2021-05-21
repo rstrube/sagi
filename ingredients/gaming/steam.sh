@@ -1,4 +1,4 @@
 #!/bin/bash
-#|#install-pkg steam #Steam gaming platform
+#|#./ingredients/gaming/steam.sh steam #Steam gaming platform
 
-paru -Syu --noconfirm --needed steam
+paru -S --noconfirm --needed steam

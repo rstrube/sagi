@@ -27,31 +27,26 @@ function generate-recipe() {
     echo "function main() {" >> $GENERATED_RECIPE_TEMPLATE_FILE
 
     generate-recipe-section "# 1. Core" "../ingredients/core"
-    generate-recipe-section "# 2. Gnome" "../ingredients/gnome"
-    generate-recipe-section "# 3. Development" "../ingredients/dev"
-    generate-recipe-section "# 4. Web" "../ingredients/web"
-    generate-recipe-section "# 5. Productivity" "../ingredients/productivity"
-    generate-recipe-section "# 6. Media" "../ingredients/media"
-    generate-recipe-section "# 7. Gaming" "../ingredients/gaming"
-    generate-recipe-section "# 8. CPU Utilities" "../ingredients/cpu"
-    generate-recipe-section "# 9. VM" "../ingredients/vm"
+    generate-recipe-section "# 2. Development" "../ingredients/dev"
+    generate-recipe-section "# 3. Web" "../ingredients/web"
+    generate-recipe-section "# 4. Productivity" "../ingredients/productivity"
+    generate-recipe-section "# 5. Media" "../ingredients/media"
+    generate-recipe-section "# 6. Gaming" "../ingredients/gaming"
+    generate-recipe-section "# 7. CPU Utilities" "../ingredients/cpu"
+    generate-recipe-section "# 8. VM" "../ingredients/vm"
+    generate-recipe-section "# 9. Icons" "../ingredients/icons"
+    generate-recipe-section "# 10. Fonts" "../ingredients/fonts"
+    generate-recipe-section "# 11. Themes" "../ingredients/themes"
 
     echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
     
     echo "# 11. Additional Packages" >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo $HR >> $GENERATED_RECIPE_TEMPLATE_FILE
-    echo "#install-pkg add-pkg1 add-pkg2 ..." >> $GENERATED_RECIPE_TEMPLATE_FILE
-    echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
-
-    echo "# 12. Additional Flatpaks" >> $GENERATED_RECIPE_TEMPLATE_FILE
-    echo $HR >> $GENERATED_RECIPE_TEMPLATE_FILE
-    echo "#install-fp add-fp1 add-fp2 ..." >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "# paru -S --noconfirm --needed {package1} {package2} ..." >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
 
     echo "}" >> $GENERATED_RECIPE_TEMPLATE_FILE
-
-    cat install-pkg-func.sh >> $GENERATED_RECIPE_TEMPLATE_FILE
-    cat install-fp-func.sh >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
 
     echo 'main "$@"' >> $GENERATED_RECIPE_TEMPLATE_FILE
 

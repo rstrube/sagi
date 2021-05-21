@@ -22,7 +22,7 @@ function main() {
 
 function install() {
 
-    paru -Syu --noconfirm --needed git
+    paru -S --noconfirm --needed git
     
     # Set git configuration
     git config --global user.name $GIT_USERNAME
@@ -44,7 +44,7 @@ function check_args() {
 
 function print_help() {
 
-    echo -e "${LBLUE}Usage: "$0" {\"full name\"} {email}${NC}"
+    echo -e "${LBLUE}Usage: "$0" {\"full name\"} {\"email\"}${NC}"
 }
 
 function check_variables() {

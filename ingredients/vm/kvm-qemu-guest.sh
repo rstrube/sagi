@@ -1,8 +1,8 @@
 #!/bin/bash
-#|#./ingredients/vm/kvm-qemu-guest.sh #KVM/Quem guest utilities (only install if running as VM)
+#|#./ingredients/vm/kvm-qemu-guest.sh #KVM/QEMU guest utilities (only install if running as VM)
 
 # Install Qemu guest agent and Spice tools
-paru -Syu --noconfirm --needed qemu-guest-agent spice-vdagent
+paru -S --noconfirm --needed qemu-guest-agent spice-vdagent
 
 # Enable the Qemu guest agent service
 sudo systemctl enable qemu-ga.service

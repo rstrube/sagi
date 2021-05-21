@@ -23,7 +23,7 @@ INTEL_GPU="false"
 NVIDIA_GPU="false"
 
 # Install Xorg and configure Gnome to use it by default?
-XORG_INSTALL="true" #false
+XORG_INSTALL="false" # Note: Nvidia GPU users should set this to "true"
 
 # Hostname to ping to check network connection
 PING_HOSTNAME="www.google.com"

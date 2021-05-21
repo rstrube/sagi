@@ -1,7 +1,7 @@
 #!/bin/bash
 #|#./ingredients/cpu/cpupower-gui.sh #GUI utility to set CPU govenor settings
 
-paru -Syu --noconfirm --needed cpupower-gui
+paru -S --noconfirm --needed cpupower-gui
 
 cat <<EOT > "00-cpg.config"	
 [Profile]

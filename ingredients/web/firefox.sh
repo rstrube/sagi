@@ -1,4 +1,4 @@
 #!/bin/bash
-#|#install-pkg firefox #Firefox
+#|#./ingredients/web/firefox.sh #Firefox
 
-paru -Syu --noconfirm --needed firefox
+paru -S --noconfirm --needed firefox

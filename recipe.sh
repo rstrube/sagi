@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-04-14-12:02:45
+# recipe.sh : 2021-05-20-19:26:05
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -12,75 +12,65 @@ function main() {
 #./ingredients/core/neovim.sh #Neovim (replaces vim)
 #./ingredients/core/pipewire.sh #Pipewire (replaces Pulseaudio)
 
-# 2. Gnome
-# --------------------------------------------------------------------------
-#./ingredients/gnome/fonts.sh #Gnome fonts
-#./ingredients/gnome/icons.sh #Gnome icons
-#./ingredients/gnome/theme-dracula.sh #Gnome Dracula theme
-#./ingredients/gnome/theme-flatpak-dracula.sh #Gnome Dracula theme Flatpak support
-
-# 3. Development
+# 2. Development
 # --------------------------------------------------------------------------
 #./ingredients/dev/git.sh "Firstname Lastname" "myname@mydomain.com" #Git installation and configuration
-#install-pkg dotnet-host-bin dotnet-runtime-bin dotnet-sdk-bin dotnet-targeting-pack-bin aspnet-runtime-bin aspnet-targeting-pack-bin #.NET Core runitem and SDK
-#install-pkg visual-studio-code-bin #VSCode
-#./ingredients/dev/vscode-2-fonts.sh #VSCode font configuration (requires Gnome fonts ingredient)
-#./ingredients/dev/vscode-3-vim.sh #VSCode vim extension
-#./ingredients/dev/vscode-4-theme-dracula.sh #VSCode Dracula theme extension
+#./ingredients/dev/ms-dotnet.sh #.NET Core SDK and Runtimes
+#./ingredients/dev/vscode.sh #Visual Studio Code
+#./ingredients/dev/vscode-vim.sh #vim extension for Visual Studio Code [Requires /dev/vscode ingredient]
 
-# 4. Web
+# 3. Web
 # --------------------------------------------------------------------------
-#install-pkg chromium #Chromium
-#install-pkg firefox #Firefox
-#install-pkg google-chrome #Google Chrome
-#install-pkg slack-desktop #Slack
-#install-pkg teams-insiders #Microsoft Teams Insiders
-#install-pkg teams #Microsoft Teams
+#./ingredients/web/firefox.sh #Firefox
+#./ingredients/web/google-chrome.sh #Google Chrome
+#./ingredients/web/slack.sh #Slack
 
-# 5. Productivity
+# 4. Productivity
 # --------------------------------------------------------------------------
-#install-pkg flameshot #Flameshot (screenshot application)
-#install-pkg gtg #Getting this Gnome (TTD application)
+#./ingredients/productivity/flameshot.sh #Flameshot (screenshot application)
 
-# 6. Media
+# 5. Media
 # --------------------------------------------------------------------------
 #./ingredients/media/pulseeffects.sh #PulseEffects + Perfect EQ
-#install-pkg tauon-music-box #Tauon Music Box
-#install-pkg a52dec aribb24 faac faad2 flac jasper lame libdca libdv libdvbpsi libmad libmatroska libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore libdvdcss vlc #VLC media player and codecs
+#./ingredients/media/tauon-music-box.sh #Tauon Music Box
+#./ingredients/media/vlc-codecs.sh #VLC media player and codecs
 
-# 7. Gaming
+# 6. Gaming
 # --------------------------------------------------------------------------
-#install-pkg steam #Steam gaming platform
+#./ingredients/gaming/steam.sh steam #Steam gaming platform
 
-# 8. CPU Utilities
+# 7. CPU Utilities
 # --------------------------------------------------------------------------
 #./ingredients/cpu/cpupower-gui.sh #GUI utility to set CPU govenor settings
-#install-pkg msr-tools bc #Utilities neccessary to undervolt Intel CPUs
+#./ingredients/cpu/intel-undervolt-support.sh bc #Utilities neccessary to undervolt Intel CPUs
 
-# 9. VM
+# 8. VM
 # --------------------------------------------------------------------------
-#./ingredients/vm/kvm-qemu-guest.sh #KVM/Quem guest utilities (only install if running as VM)
-#./ingredients/vm/kvm-qemu-host.sh #KVM/Quemu host installation and configuration
+#./ingredients/vm/kvm-qemu-guest.sh #KVM/QEMU guest utilities (only install if running as VM)
+#./ingredients/vm/kvm-qemu-host.sh #KVM/QEMU host installation and configuration
+
+# 9. Icons
+# --------------------------------------------------------------------------
+#./ingredients/icons/papirus-icons-folders.sh indigo #Supplmental colored folders for Papirus icon theme [Requires /icons/papirus-icons ingredient]
+# Folder colors: black, bluegrey, brown, deeporange, grey, magenta, orange, paleorange, red, violet, yaru, blue, breeze, cyan, green, indigo, nordic, palebrown, pink, teal, white, yellow
+#./ingredients/icons/papirus-icons.sh #Papirus icon theme
+
+# 10. Fonts
+# --------------------------------------------------------------------------
+#./ingredients/fonts/enhanced-fonts.sh #Install and configure fonts: FiraCode, Roboto, JetBrains Mono
+#./ingredients/fonts/jetbrains-mono-vscode.sh #JetBrains Mono font for Visual Studio Code [Requires /dev/vscode and /fonts/enhanced-fonts ingredients]
+
+# 11. Themes
+# --------------------------------------------------------------------------
+#./ingredients/themes/dracula-gedit.sh #Dracula theme for gedit
+#./ingredients/themes/dracula-gnome-terminal.sh #Dracula theme for Gnome Terminal
+#./ingredients/themes/dracula-gtk.sh #Dracula theme for GTK
+#./ingredients/themes/dracula-vscode.sh #Dracula theme for VSCode [Requires /dev/vscode ingredient]
 
 # 11. Additional Packages
 # --------------------------------------------------------------------------
-#install-pkg add-pkg1 add-pkg2 ...
+# paru -S --noconfirm --needed {package1} {package2} ...
 
-# 12. Additional Flatpaks
-# --------------------------------------------------------------------------
-#install-fp add-fp1 add-fp2 ...
-
-}
-
-function install-pkg() {
-
-    paru -Syu --noconfirm --needed "$@"
-}
-
-
-function install-fp() {
-
-    flatpak install -y flathub "$@"
 }
 
 main "$@"

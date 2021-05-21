@@ -1,5 +1,5 @@
 #!/bin/bash
-#|#./ingredients/gnome/theme-dracula.sh #Gnome Dracula theme
+#|#./ingredients/themes/dracula-gnome-terminal.sh #Dracula theme for Gnome Terminal
 
 # Please refer to https://draculatheme.com/contribute/ for a full list of hex codes
 
@@ -10,34 +10,8 @@ function main() {
 
 function install() {
 
-    configure_gtk_theme
     configure_gnome_terminal_theme
-    configure_gedit_theme
     configure_fish_theme
-    configure_dracula_papirus_icons
-}
-
-function configure_gtk_theme {
-
-    echo "Installing Dracula GTK theme..."
-
-    curl -O -L https://github.com/dracula/gtk/archive/master.zip
-
-    if [[ -d ~/.local/share/themes/Dracula ]]; then
-        echo "Deleting existing locally installed Dracula GTK theme..."
-        rm -rf ~/.local/share/themes/Dracula
-    fi
-
-    mkdir -p ~/.local/share/themes
-
-    unzip master.zip -d ~/.local/share/themes
-    mv ~/.local/share/themes/gtk-master ~/.local/share/themes/Dracula
-
-    rm master.zip
-
-    # Get GTK theme to Dracula (which was locally installed in ~/.local/share/themes)
-    gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
-    gsettings set org.gnome.desktop.wm.preferences theme "Dracula"
 }
 
 function configure_gnome_terminal_theme {
@@ -69,23 +43,6 @@ function configure_gnome_terminal_theme {
     dconf write ${GT_DCONF_PROFILE_DIR}/palette "$GT_PROFILE_PALLETE"
     dconf write ${GT_DCONF_PROFILE_DIR}/use-theme-colors "false"
     dconf write ${GT_DCONF_PROFILE_DIR}/visible-name $GT_PROFILE_NAME
-}
-
-function configure_gedit_theme {
-
-    echo "Installing Dracula theme for gedit..."
-
-    curl -O https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
-
-    GEDIT_STYLE_PATH=$HOME/.local/share/gedit/styles
-
-    if [[ ! -d $GEDIT_STYLE_PATH ]]; then
-        mkdir -p $GEDIT_STYLE_PATH
-    fi
-
-    mv dracula.xml $GEDIT_STYLE_PATH
-    
-    gsettings set org.gnome.gedit.preferences.editor scheme 'dracula'
 }
 
 function configure_fish_theme {
@@ -130,19 +87,19 @@ function print_fish_colors --description 'Displays the terminal and fish colors 
     echo ''
     echo 'Current fish colors:'
     set -l clr_list (set -n | grep fish | grep color | grep -v __)
-    if test -n "$clr_list"
+    if test -n "\$clr_list"
         set -l bclr (set_color normal)
         set -l bold (set_color --bold)
         printf "\n| %-38s | %-38s |\n" Variable Definition
         echo '|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|'
-        for var in $clr_list
-            set -l def $$var
-            set -l clr (set_color $def ^/dev/null)
+        for var in \$clr_list
+            set -l def \$\$var
+            set -l clr (set_color \$def ^/dev/null)
             or begin
-                printf "| %-38s | %s%-38s$bclr |\n" "$var" (set_color --bold white --background=red) "$def"
+                printf "| %-38s | %s%-38s\$bclr |\n" "\$var" (set_color --bold white --background=red) "\$def"
                 continue
             end
-            printf "| $clr%-38s$bclr | $bold%-38s$bclr |\n" "$var" "$def"
+            printf "| \$clr%-38s\$bclr | \$bold%-38s\$bclr |\n" "\$var" "\$def"
         end
         echo '|________________________________________|________________________________________|'\n
     end
@@ -152,19 +109,6 @@ EOT
         rm dracula.fish
         echo "# Dracula theme" >> ~/.config/fish/config.fish
         echo "source ~/.config/fish/dracula.fish" >> ~/.config/fish/config.fish
-    fi
-}
-
-function configure_dracula_papirus_icons {
-
-    GNOME_CURRENT_ICON_THEME=$(gsettings get org.gnome.desktop.interface icon-theme)
-
-    if [[ "$GNOME_CURRENT_ICON_THEME" == "'Papirus-Dark'" ]]; then
-
-        echo "Setting papirus icons folder color to 'grey' via 'papirus-folders'..."
-
-        paru -Syu --noconfirm --needed papirus-folders
-        papirus-folders -C grey --theme Papirus-Dark
     fi
 }
 

@@ -1,4 +1,4 @@
 #!/bin/bash
-#|#install-pkg dotnet-host-bin dotnet-runtime-bin dotnet-sdk-bin dotnet-targeting-pack-bin aspnet-runtime-bin aspnet-targeting-pack-bin #.NET Core runitem and SDK
+#|#./ingredients/dev/ms-dotnet.sh #.NET Core SDK and Runtimes
 
-paru -Syu --noconfirm --needed dotnet-host-bin dotnet-runtime-bin dotnet-sdk-bin dotnet-targeting-pack-bin aspnet-runtime-bin aspnet-targeting-pack-bin
+paru -S --noconfirm --needed dotnet-host-bin dotnet-runtime-bin dotnet-sdk-bin dotnet-targeting-pack-bin aspnet-runtime-bin aspnet-targeting-pack-bin

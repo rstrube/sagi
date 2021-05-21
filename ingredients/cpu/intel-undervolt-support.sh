@@ -1,4 +1,4 @@
 #!/bin/bash
-#|#install-pkg msr-tools bc #Utilities neccessary to undervolt Intel CPUs
+#|#./ingredients/cpu/intel-undervolt-support.sh bc #Utilities neccessary to undervolt Intel CPUs
 
-paru -Syu --noconfirm --needed msr-tools bc
+paru -S --noconfirm --needed msr-tools bc

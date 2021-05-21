@@ -1,8 +1,9 @@
 #!/bin/bash
-#|#./ingredients/dev/vscode-2-fonts.sh #VSCode font configuration (requires Gnome fonts ingredient)
+#|#./ingredients/fonts/jetbrains-mono-vscode.sh #JetBrains Mono font for Visual Studio Code [Requires /dev/vscode and /fonts/enhanced-fonts ingredients]
+
 
 DIR=$(dirname "$0")
-source $DIR/../_helper/_vscode-functions.sh
+source $DIR/../dev/_helper/_vscode-functions.sh
 
 create_empty_vscode_settings_if_neccessary
 

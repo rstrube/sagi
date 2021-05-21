@@ -1,4 +1,4 @@
 #!/bin/bash
-#|#install-pkg slack-desktop #Slack
+#|#./ingredients/web/slack.sh #Slack
 
-paru -Syu --noconfirm --needed slack-desktop
+paru -S --noconfirm --needed slack-desktop

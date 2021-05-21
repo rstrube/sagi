@@ -1,8 +1,8 @@
 #!/bin/bash
-#|#./ingredients/dev/vscode-4-theme-dracula.sh #VSCode Dracula theme extension
+#|#./ingredients/themes/dracula-vscode.sh #Dracula theme for VSCode [Requires /dev/vscode ingredient]
 
 DIR=$(dirname "$0")
-source $DIR/../_helper/_vscode-functions.sh
+source $DIR/../dev/_helper/_vscode-functions.sh
 
 create_empty_vscode_settings_if_neccessary
 code --install-extension dracula-theme.theme-dracula

@@ -1,4 +1,4 @@
 #!/bin/bash
-#|#install-pkg google-chrome #Google Chrome
+#|#./ingredients/web/google-chrome.sh #Google Chrome
 
-paru -Syu --noconfirm --needed google-chrome
+paru -S --noconfirm --needed google-chrome

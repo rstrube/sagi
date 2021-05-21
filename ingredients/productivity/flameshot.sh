@@ -1,4 +1,4 @@
 #!/bin/bash
-#|#install-pkg flameshot #Flameshot (screenshot application)
+#|#./ingredients/productivity/flameshot.sh #Flameshot (screenshot application)
 
-paru -Syu --noconfirm --needed flameshot
+paru -S --noconfirm --needed flameshot
