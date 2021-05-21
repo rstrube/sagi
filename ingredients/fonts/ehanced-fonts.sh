@@ -1,12 +1,13 @@
 #!/bin/bash
-#|#./ingredients/fonts/enhanced-fonts.sh #Install and configure fonts: FiraCode, Roboto, JetBrains Mono
+#|#./ingredients/fonts/enhanced-fonts.sh #Install and configure fonts: Roboto, FiraCode, JetBrains Mono, Liberation Fonts
 
 # Install the following fonts:
-# Fira Code: https://github.com/tonsky/FiraCode
 # Roboto: default font for Google's Android OS
+# Fira Code: https://github.com/tonsky/FiraCode
 # Jetbrains Mono: a fantastic monospace font
 # Droid: another common font that came with Google's Android OS
-paru -S --noconfirm --needed ttf-fira-code ttf-roboto ttf-roboto-slab ttf-jetbrains-mono ttf-droid
+# Liberation: font family which aims at metric compatibility with Arial, Times New Roman, and Courier New
+paru -S --noconfirm --needed ttf-roboto ttf-fira-code ttf-jetbrains-mono ttf-droid ttf-liberation
 
 # This rebuilds the font-cache, taking into account any changes
 sudo fc-cache -r -v
@@ -52,7 +53,7 @@ mv fonts.conf ~/.config/fontconfig/
 
 # Configure Gnome to use newly installed fonts
 gsettings set org.gnome.desktop.interface font-name "Roboto 10"
-gsettings set org.gnome.desktop.interface document-font-name "Roboto Slab 11"
+gsettings set org.gnome.desktop.interface document-font-name "Roboto 10"
 gsettings set org.gnome.desktop.interface monospace-font-name "JetBrains Mono 11"
 gsettings set org.gnome.desktop.wm.preferences titlebar-font "Roboto Medium 10"
 
