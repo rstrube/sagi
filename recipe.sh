@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-05-20-19:26:05
+# recipe.sh : 2021-05-20-19:51:02
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -21,6 +21,7 @@ function main() {
 
 # 3. Web
 # --------------------------------------------------------------------------
+#./ingredients/web/edge.sh #Microsoft Edge (currently in beta)
 #./ingredients/web/firefox.sh #Firefox
 #./ingredients/web/google-chrome.sh #Google Chrome
 #./ingredients/web/slack.sh #Slack
@@ -44,30 +45,39 @@ function main() {
 #./ingredients/cpu/cpupower-gui.sh #GUI utility to set CPU govenor settings
 #./ingredients/cpu/intel-undervolt-support.sh bc #Utilities neccessary to undervolt Intel CPUs
 
-# 8. VM
+# 8. System Monitoring
+# --------------------------------------------------------------------------
+#./ingredients/system-monitor/bpytop.sh #bpytop: a terminal based system monitoring tool (like htop but better)
+
+# 9. VM
 # --------------------------------------------------------------------------
 #./ingredients/vm/kvm-qemu-guest.sh #KVM/QEMU guest utilities (only install if running as VM)
 #./ingredients/vm/kvm-qemu-host.sh #KVM/QEMU host installation and configuration
 
-# 9. Icons
+# 10. Icons
 # --------------------------------------------------------------------------
 #./ingredients/icons/papirus-icons-folders.sh indigo #Supplmental colored folders for Papirus icon theme [Requires /icons/papirus-icons ingredient]
 # Folder colors: black, bluegrey, brown, deeporange, grey, magenta, orange, paleorange, red, violet, yaru, blue, breeze, cyan, green, indigo, nordic, palebrown, pink, teal, white, yellow
 #./ingredients/icons/papirus-icons.sh #Papirus icon theme
 
-# 10. Fonts
+# 11. Fonts
 # --------------------------------------------------------------------------
 #./ingredients/fonts/enhanced-fonts.sh #Install and configure fonts: FiraCode, Roboto, JetBrains Mono
 #./ingredients/fonts/jetbrains-mono-vscode.sh #JetBrains Mono font for Visual Studio Code [Requires /dev/vscode and /fonts/enhanced-fonts ingredients]
 
-# 11. Themes
+# 12. Themes
 # --------------------------------------------------------------------------
 #./ingredients/themes/dracula-gedit.sh #Dracula theme for gedit
 #./ingredients/themes/dracula-gnome-terminal.sh #Dracula theme for Gnome Terminal
 #./ingredients/themes/dracula-gtk.sh #Dracula theme for GTK
 #./ingredients/themes/dracula-vscode.sh #Dracula theme for VSCode [Requires /dev/vscode ingredient]
 
-# 11. Additional Packages
+# 13. Gnome Extensions
+# --------------------------------------------------------------------------
+#./ingredients/gnome-ext/blur-my-shell.sh #Blur My Shell Gnome extension https://github.com/aunetx/blur-my-shell
+#./ingredients/gnome-ext/just-perfection.sh #Just Prefection Gnome Extension https://gitlab.com/justperfection.channel/just-perfection-gnome-shell-desktop
+
+# 14. Additional Packages
 # --------------------------------------------------------------------------
 # paru -S --noconfirm --needed {package1} {package2} ...
 

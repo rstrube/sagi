@@ -33,14 +33,16 @@ function generate-recipe() {
     generate-recipe-section "# 5. Media" "../ingredients/media"
     generate-recipe-section "# 6. Gaming" "../ingredients/gaming"
     generate-recipe-section "# 7. CPU Utilities" "../ingredients/cpu"
-    generate-recipe-section "# 8. VM" "../ingredients/vm"
-    generate-recipe-section "# 9. Icons" "../ingredients/icons"
-    generate-recipe-section "# 10. Fonts" "../ingredients/fonts"
-    generate-recipe-section "# 11. Themes" "../ingredients/themes"
+    generate-recipe-section "# 8. System Monitoring" "../ingredients/system-monitor"
+    generate-recipe-section "# 9. VM" "../ingredients/vm"
+    generate-recipe-section "# 10. Icons" "../ingredients/icons"
+    generate-recipe-section "# 11. Fonts" "../ingredients/fonts"
+    generate-recipe-section "# 12. Themes" "../ingredients/themes"
+    generate-recipe-section "# 13. Gnome Extensions" "../ingredients/gnome-ext"
 
     echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
     
-    echo "# 11. Additional Packages" >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "# 14. Additional Packages" >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo $HR >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo "# paru -S --noconfirm --needed {package1} {package2} ..." >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
