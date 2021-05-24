@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-05-24-15:41:10
+# recipe.sh : 2021-05-24-16:12:50
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -18,6 +18,7 @@ function main() {
 # --------------------------------------------------------------------------
 #./ingredients/dev/git.sh "Firstname Lastname" "myname@mydomain.com" #Git installation and configuration
 #./ingredients/dev/ms-dotnet.sh #.NET Core SDK and Runtimes
+#./ingredients/dev/postman.sh #Postman
 #./ingredients/dev/vscode.sh #Visual Studio Code
 #./ingredients/dev/vscode-vim.sh #vim extension for Visual Studio Code [Requires /dev/vscode ingredient]
 #./ingredients/dev/vscode-wayland.sh #Native Wayland Support for VSCode [Requires /dev/vscode ingredient]
