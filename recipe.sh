@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-05-24-12:15:29
+# recipe.sh : 2021-05-24-15:41:10
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ function main() {
 #./ingredients/core/fish.sh #Fish shell
 #./ingredients/core/neovim.sh #Neovim (replaces vim)
 #./ingredients/core/pipewire.sh #Pipewire (replaces Pulseaudio)
+#./ingredients/core/wayland.sh #Wayland utilities
 
 # 2. Development
 # --------------------------------------------------------------------------
