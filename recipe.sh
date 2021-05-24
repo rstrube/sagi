@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-05-20-19:51:02
+# recipe.sh : 2021-05-24-12:15:29
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -8,6 +8,7 @@ function main() {
 # 1. Core
 # --------------------------------------------------------------------------
 ./ingredients/core/0_mandatory.sh #Mandatory programs & utilities
+#./ingredients/core/android-mtp.sh #Android MTP (Media Transfer Protocol)
 #./ingredients/core/fish.sh #Fish shell
 #./ingredients/core/neovim.sh #Neovim (replaces vim)
 #./ingredients/core/pipewire.sh #Pipewire (replaces Pulseaudio)
@@ -18,17 +19,20 @@ function main() {
 #./ingredients/dev/ms-dotnet.sh #.NET Core SDK and Runtimes
 #./ingredients/dev/vscode.sh #Visual Studio Code
 #./ingredients/dev/vscode-vim.sh #vim extension for Visual Studio Code [Requires /dev/vscode ingredient]
+#./ingredients/dev/vscode-wayland.sh #Native Wayland Support for VSCode [Requires /dev/vscode ingredient]
 
 # 3. Web
 # --------------------------------------------------------------------------
 #./ingredients/web/edge.sh #Microsoft Edge (currently in beta)
 #./ingredients/web/firefox.sh #Firefox
+#./ingredients/web/firefox-wayland.sh #Native Wayland Support for Firefox [Requires /web/firefox ingredient]
 #./ingredients/web/google-chrome.sh #Google Chrome
 #./ingredients/web/slack.sh #Slack
 
 # 4. Productivity
 # --------------------------------------------------------------------------
 #./ingredients/productivity/flameshot.sh #Flameshot (screenshot application)
+#./ingredients/productivity/gromit-mpx.sh #Draw/highlight on your screen (useful for presentations)
 
 # 5. Media
 # --------------------------------------------------------------------------
@@ -62,7 +66,7 @@ function main() {
 
 # 11. Fonts
 # --------------------------------------------------------------------------
-#./ingredients/fonts/enhanced-fonts.sh #Install and configure fonts: FiraCode, Roboto, JetBrains Mono
+#./ingredients/fonts/enhanced-fonts.sh #Install and configure fonts: Roboto, FiraCode, JetBrains Mono, Liberation Fonts
 #./ingredients/fonts/jetbrains-mono-vscode.sh #JetBrains Mono font for Visual Studio Code [Requires /dev/vscode and /fonts/enhanced-fonts ingredients]
 
 # 12. Themes
@@ -76,6 +80,7 @@ function main() {
 # --------------------------------------------------------------------------
 #./ingredients/gnome-ext/blur-my-shell.sh #Blur My Shell Gnome extension https://github.com/aunetx/blur-my-shell
 #./ingredients/gnome-ext/just-perfection.sh #Just Prefection Gnome Extension https://gitlab.com/justperfection.channel/just-perfection-gnome-shell-desktop
+#./ingredients/gnome-ext/tray-icons.sh #Tray Icons Gnome Extension https://github.com/zhangkaizhao/gnome-shell-extension-tray-icons
 
 # 14. Additional Packages
 # --------------------------------------------------------------------------
