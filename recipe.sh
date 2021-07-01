@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-05-24-16:12:50
+# recipe.sh : 2021-07-01-16:34:34
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -16,6 +16,7 @@ function main() {
 
 # 2. Development
 # --------------------------------------------------------------------------
+#./ingredients/dev/android.sh #Android development tools (ADB, etc.)
 #./ingredients/dev/git.sh "Firstname Lastname" "myname@mydomain.com" #Git installation and configuration
 #./ingredients/dev/ms-dotnet.sh #.NET Core SDK and Runtimes
 #./ingredients/dev/postman.sh #Postman
@@ -82,7 +83,7 @@ function main() {
 # --------------------------------------------------------------------------
 #./ingredients/gnome-ext/blur-my-shell.sh #Blur My Shell Gnome extension https://github.com/aunetx/blur-my-shell
 #./ingredients/gnome-ext/just-perfection.sh #Just Prefection Gnome Extension https://gitlab.com/justperfection.channel/just-perfection-gnome-shell-desktop
-#./ingredients/gnome-ext/tray-icons.sh #Tray Icons Gnome Extension https://github.com/zhangkaizhao/gnome-shell-extension-tray-icons
+#./ingredients/gnome-ext/tray-icons.sh #Tray Icons Reloaded Gnome Extension https://github.com/MartinPL/Tray-Icons-Reloaded
 
 # 14. Additional Packages
 # --------------------------------------------------------------------------
