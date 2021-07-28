@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-07-27-16:22:46
+# recipe.sh : 2021-07-27-22:12:37
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -39,10 +39,11 @@ function main() {
 
 # 5. Media
 # --------------------------------------------------------------------------
+#./ingredients/media/codecs.sh #Codecs for Audio, Images, and Video
 #./ingredients/media/gstreamer.sh #Additional GStreamer plugins
 #./ingredients/media/pulseeffects.sh #PulseEffects + Perfect EQ
 #./ingredients/media/tauon-music-box.sh #Tauon Music Box
-#./ingredients/media/vlc-codecs.sh #VLC media player and codecs
+#./ingredients/media/vlc.sh #VLC media player
 
 # 6. Gaming
 # --------------------------------------------------------------------------
