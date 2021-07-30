@@ -36,7 +36,7 @@ cat <<EOT > "fonts.conf"
 
     <!-- by default fontconfig assumes any unrecognized font is sans-serif, so -->
     <!-- the fonts above now have /both/ families.  fix this. -->
-    <!-- note that "delete" applies to the first match -->
+    <!-- note that "delete" applies to the first match deleting the sans-serif family only -->
     <match>
         <test compare="eq" name="family">
             <string>sans-serif</string>
