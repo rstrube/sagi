@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-08-27-14:54:15
+# recipe.sh : 2021-09-22-10:40:51
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -31,6 +31,7 @@ function main() {
 #./ingredients/web/firefox.sh #Firefox
 #./ingredients/web/firefox-wayland.sh #Native Wayland Support for Firefox [Requires /web/firefox ingredient]
 #./ingredients/web/google-chrome.sh #Google Chrome
+#./ingredients/web/remmina.sh #Remmina RDP client
 #./ingredients/web/slack.sh #Slack
 
 # 4. Productivity
@@ -50,10 +51,11 @@ function main() {
 # --------------------------------------------------------------------------
 #./ingredients/gaming/steam.sh steam #Steam gaming platform
 
-# 7. CPU Utilities
+# 7. Hardware Related
 # --------------------------------------------------------------------------
-#./ingredients/cpu/cpupower-gui.sh #GUI utility to set CPU govenor settings
-#./ingredients/cpu/intel-undervolt-support.sh bc #Utilities neccessary to undervolt Intel CPUs
+#./ingredients/hardware/cpu-generic_cpupower-gui.sh #GUI utility to set CPU govenor settings
+#./ingredients/hardware/cpu-intel_undervolt-support.sh #Utilities neccessary to undervolt Intel CPUs
+#./ingredients/hardware/logitec-mouse_solaar.sh #GUI application for managing logitec unifying receivers
 
 # 8. System Monitoring
 # --------------------------------------------------------------------------
