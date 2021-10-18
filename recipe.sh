@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-09-22-10:40:51
+# recipe.sh : 2021-10-18-16:59:33
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ function main() {
 
 # 8. System Monitoring
 # --------------------------------------------------------------------------
-#./ingredients/system-monitor/bpytop.sh #bpytop: a terminal based system monitoring tool (like htop but better)
+#./ingredients/system-monitor/btop.sh #btop: a terminal based system monitoring tool (like htop but better)
 
 # 9. VM
 # --------------------------------------------------------------------------
