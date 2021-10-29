@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-10-18-16:59:33
+# recipe.sh : 2021-10-29-16:27:39
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -8,10 +8,10 @@ function main() {
 # 1. Core
 # --------------------------------------------------------------------------
 ./ingredients/core/0_mandatory.sh #Mandatory programs & utilities
-#./ingredients/core/android-mtp.sh #Android MTP (Media Transfer Protocol)
-#./ingredients/core/fish.sh #Fish shell
+#./ingredients/core/fs_android-mtp.sh #Android MTP (Media Transfer Protocol) Filesystem
 #./ingredients/core/neovim.sh #Neovim (replaces vim)
 #./ingredients/core/pipewire.sh #Pipewire (replaces Pulseaudio)
+#./ingredients/core/shell_fish.sh #Fish shell
 #./ingredients/core/wayland.sh #Wayland utilities
 
 # 2. Development

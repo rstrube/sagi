@@ -1,5 +1,5 @@
 #!/bin/bash
-#|#./ingredients/core/fish.sh #Fish shell
+#|#./ingredients/core/shell_fish.sh #Fish shell
 
 DIR=$(dirname "$0")
 source $DIR/../_helper/_common-functions.sh
