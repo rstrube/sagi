@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-10-29-16:27:39
+# recipe.sh : 2021-11-03-21:22:06
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -27,10 +27,10 @@ function main() {
 
 # 3. Web
 # --------------------------------------------------------------------------
-#./ingredients/web/edge.sh #Microsoft Edge (currently in beta)
 #./ingredients/web/firefox.sh #Firefox
 #./ingredients/web/firefox-wayland.sh #Native Wayland Support for Firefox [Requires /web/firefox ingredient]
 #./ingredients/web/google-chrome.sh #Google Chrome
+#./ingredients/web/google-chrome-wayland.sh #Native Wayland Support for Google Chrome [Requires /web/google-chrome ingredient]
 #./ingredients/web/remmina.sh #Remmina RDP client
 #./ingredients/web/slack.sh #Slack
 
