@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-11-05-13:24:09
+# recipe.sh : 2021-11-05-13:54:48
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -8,6 +8,10 @@ function main() {
 # Core
 # --------------------------------------------------------------------------
 ./ingredients/core/aur.sh #Mandatory AUR helper
+
+# Shell
+# --------------------------------------------------------------------------
+#./ingredients/shell/fish.sh #Fish shell
 
 # Filesystem
 # --------------------------------------------------------------------------
