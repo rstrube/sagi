@@ -15,7 +15,7 @@ Sagi has the following goals:
 1. Provide optional post-installation capabalities 
 
 ### Easy to Follow, Easy to Learn From
-The main [sagi.sh](https://github.com/rstrube/sagi/blob/master/sagi.sh) installation script was designed to very easy to follow and understand.  The script itself it not very long, and has comments for each and every action that takes place.
+The main [sagi.sh](https://github.com/rstrube/sagi/blob/main/sagi.sh) installation script was designed to very easy to follow and understand.  The script itself it not very long, and has comments for each and every action that takes place.
 
 ### Follows Arch Wiki Installation
 Each and every action in the installation script *directly* correlates to actions that are described in the [Arch Wiki Installation Guide](https://wiki.archlinux.org/index.php/Installation_guide).  The goal here is to provide a learning opportunity for new Arch users, and to not do anything out of the ordinary.
@@ -158,7 +158,7 @@ The base installation process is quite simple:
 
 4. Download the main sogai installation script
 ```
-curl -O https://raw.githubusercontent.com/rstrube/sagi/master/sagi.sh
+curl -O https://raw.githubusercontent.com/rstrube/sagi/main/sagi.sh
 ```
 5. Edit the installation script and setup configuration options
 
