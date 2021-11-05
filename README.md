@@ -1,7 +1,7 @@
 # sagi (Simple Arch Gnome Installer)
 Sagi is a concise, easy to follow installation script for Arch linux which results in a minimal Arch "vanilla" Gnome installation.
 
-![Base Sagi Installation Result](https://github.com/rstrube/sagi/blob/master/doc/img/base-install.png)
+![Base Sagi Installation Result](https://github.com/rstrube/sagi/blob/main/doc/img/base-install.png)
 
 ## Inspiration
 Sagi was heavily inspired by [alis (Arch Linx Install Script)](https://github.com/picodotdev/alis).  alis is extremely customizable and offers a wide variety of installation options, filesystems, partitioning schemes, packages, DEs' etc. but for many people that just want to get up and running on Arch quickly it can provide *too many* options.
