@@ -212,13 +212,12 @@ function install() {
     # Xorg installs
     if [[ "$XORG_INSTALL" == "true" ]]; then
         arch-chroot /mnt sed -i "s/#WaylandEnable=false/WaylandEnable=false/" /etc/gdm/custom.conf
-    
     else
         # Wayland installs
         arch-chroot /mnt pacman -Syu --noconfirm --needed \
             xorg-xlsclients             `# Utility for listing XWayland clients` \
             xdg-desktop-portal-gtk      `# Support for screensharing in pipewire for Gnome` \
-            wl-clipboard                `# Cliboard support for Wayland compositors`
+            wl-clipboard                `# Clipboard support for Wayland compositors`
     fi
 
     arch-chroot /mnt systemctl enable gdm.service
