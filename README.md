@@ -80,8 +80,9 @@ The list below represents (at a high level) the base system Sagi creates for you
 * UEFI systems only
 * Grub bootloader
 * Latest Linux kernel
-* Latest CPU uCode (AMD or Intel)
 * ext4 filesystem
+* Swapfile
+* Latest CPU uCode (AMD or Intel)
 * Mesa/Vulkan support for Intel/AMD GPUs
 * Nvidia proprietary driver/Vulkan support for Nvidia GPUs
 * Gnome
@@ -90,11 +91,21 @@ The list below represents (at a high level) the base system Sagi creates for you
 
 Below is a more detailed list of the exact packages/virtual packages that are installed:
 
-*Note: some of the packages (e.g. `base, base-devel` etc.) are virtual packages that bundle together many individual packages.  In total you can expect **~730-750** total packages to be installed as part of the base installation.*
+*Note: some of the packages (e.g. `base, base-devel` etc.) are virtual packages that bundle together many individual packages. There are also packages that are installed because they are dependencies. In total you can expect **~730-750** total packages to be installed as part of the base installation.*
 
 **Always Installed:**
 ```
-base base-devel linux linux-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs networkmanager git vim grub efibootmgr
+base base-devel linux linux-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs networkmanager git vim grub efibootmgr gnome gnome-tweaks noto-fonts noto-fonts-emoji pipewire pipewire-pulse
+```
+
+**Xorg installs:**
+```
+xorg-server
+```
+
+**Wayland installs:**
+```
+xorg-xlsclients xdg-desktop-portal-gtk wl-clipboard
 ```
 
 **Systems with AMD CPUs:**
@@ -105,16 +116,6 @@ linux-firmware amd-ucode
 **Systems with Intel CPUs:**
 ```
 linux-firmware intel-ucode
-```
-
-**Optional Xorg (will use Wayland otherwise):**
-```
-xorg-server
-```
-
-**Gnome:**
-```
-gnome gnome-tweaks noto-fonts noto-fonts-emoji
 ```
 
 **Vulkan:**
@@ -136,7 +137,6 @@ mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils
 ```
 nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings
 ```
-That's it! :)
 
 ### Post-Installation Capabilities
 *Still need some time to document these.*
