@@ -1,0 +1,1 @@
+../../../saxx-common/ingredients/core/aur.sh

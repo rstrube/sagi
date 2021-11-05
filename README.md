@@ -1,13 +1,13 @@
-# soagi (Simple Opinionated Arch Gnome Installer)
-Soagi is a concise, easy to follow installation script for Arch linux which results in a minimal Arch "vanilla" Gnome installation.
+# sagi (Simple Arch Gnome Installer)
+Sagi is a concise, easy to follow installation script for Arch linux which results in a minimal Arch "vanilla" Gnome installation.
 
-![Base Soagi Installation Result](https://github.com/rstrube/soagi/blob/master/doc/img/base-install.png)
+![Base Sagi Installation Result](https://github.com/rstrube/sagi/blob/master/doc/img/base-install.png)
 
 ## Inspiration
-Soagi was heavily inspired by [alis (Arch Linx Install Script)](https://github.com/picodotdev/alis).  alis is extremely customizable and offers a wide variety of installation options, filesystems, partitioning schemes, packages, DEs' etc. but for many people that just want to get up and running on Arch quickly it can provide *too many* options.
+Sagi was heavily inspired by [alis (Arch Linx Install Script)](https://github.com/picodotdev/alis).  alis is extremely customizable and offers a wide variety of installation options, filesystems, partitioning schemes, packages, DEs' etc. but for many people that just want to get up and running on Arch quickly it can provide *too many* options.
 
 ## Goals
-Soagi has the following goals:
+Sagi has the following goals:
 1. Be easy to follow and learn from
 1. Follow the installation approach outlined in the Arch Linux wiki
 1. Provide minimal configuration options
@@ -15,7 +15,7 @@ Soagi has the following goals:
 1. Provide optional post-installation capabalities 
 
 ### Easy to Follow, Easy to Learn From
-The main [soagi.sh](https://github.com/rstrube/soagi/blob/master/soagi.sh) installation script was designed to very easy to follow and understand.  The script itself it not very long, and has comments for each and every action that takes place.
+The main [sagi.sh](https://github.com/rstrube/sagi/blob/master/sagi.sh) installation script was designed to very easy to follow and understand.  The script itself it not very long, and has comments for each and every action that takes place.
 
 ### Follows Arch Wiki Installation
 Each and every action in the installation script *directly* correlates to actions that are described in the [Arch Wiki Installation Guide](https://wiki.archlinux.org/index.php/Installation_guide).  The goal here is to provide a learning opportunity for new Arch users, and to not do anything out of the ordinary.
@@ -35,7 +35,7 @@ Here is the configuration section from the installation script:
 # If running as VM, you'll need to double check if TRIM is supported.  Newer KVM/Qemu VMs should support TRIM.
 HD_DEVICE="" # /dev/sda /dev/nvme0n1 /dev/vda
 TRIM_SUPPORT="true" # typically set to true if HD is an SSD, see notes above
-SWAPSIZE="2048" # 4096 8912
+SWAPFILE_SIZE="2048" # 4096 8912 (in MiB)
 
 # CPU Configuration
 # Note: if installing in a VM leave both set to 'false'
@@ -48,13 +48,14 @@ INTEL_GPU="false"
 NVIDIA_GPU="false"
 
 # Install Xorg and configure Gnome to use it by default?
-XORG_INSTALL="true"
+# If set to "false" Gnome will be configured to use Wayland by default
+XORG_INSTALL="false"
 
 # Hostname to ping to check network connection
 PING_HOSTNAME="www.google.com"
 
 # Hostname Configuration
-HOSTNAME="soagi"
+HOSTNAME="sagi"
 
 # Locale Configuration
 # To list out all timezones in US run "ls -l /usr/share/zoneinfo/America"
@@ -62,6 +63,7 @@ KEYS="us"
 TIMEZONE="/usr/share/zoneinfo/America/Denver"
 LOCALE="en_US.UTF-8 UTF-8"
 LANG="en_US.UTF-8"
+REFLECTOR_COUNTRY="United States"
 
 # User Configuration
 ROOT_PASSWORD=""
@@ -71,19 +73,20 @@ USER_PASSWORD=""
 # Additional Linux Command Line Params
 CMDLINE_LINUX=""
 ```
-### Sane (Opinionated) Defaults
-Soagi takes a very different approach compared to other installation scripts and utitities - it's very opionated with the *base* system.  As such the core set of packages that are installed doesn't vary much based on your configuration options (the exception being driver related packages).
+### Sane Defaults
+Sagi installs a "sane" set of packages with the *base* system.  As such the core set of packages that are installed doesn't vary much based on your configuration options (the exception being driver related packages).
 
-The list below represents (at a high level) the base system Soagi creates for you:
+The list below represents (at a high level) the base system Sagi creates for you:
 * UEFI systems only
 * Grub bootloader
-* Latest Linux Zen kernel
+* Latest Linux kernel
 * Latest CPU uCode (AMD or Intel)
 * ext4 filesystem
 * Mesa/Vulkan support for Intel/AMD GPUs
 * Nvidia proprietary driver/Vulkan support for Nvidia GPUs
 * Gnome
 * NetworkManager
+* Pipewire
 
 Below is a more detailed list of the exact packages/virtual packages that are installed:
 
@@ -91,7 +94,7 @@ Below is a more detailed list of the exact packages/virtual packages that are in
 
 **Always Installed:**
 ```
-base base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs networkmanager git vim grub efibootmgr
+base base-devel linux linux-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs networkmanager git vim grub efibootmgr
 ```
 
 **Systems with AMD CPUs:**
@@ -155,20 +158,20 @@ The base installation process is quite simple:
 
 4. Download the main sogai installation script
 ```
-curl -O https://raw.githubusercontent.com/rstrube/soagi/master/soagi.sh
+curl -O https://raw.githubusercontent.com/rstrube/sagi/master/sagi.sh
 ```
 5. Edit the installation script and setup configuration options
 
 ```
-vim sogai.sh
+vim sgai.sh
 ```
 6. Change permissions on script to make it executable
 ```
-chmod +x soagi.sh
+chmod +x sagi.sh
 ```
 7. Execute script
 ```
-./soagi.sh
+./sagi.sh
 ```
 On most modern systems the installation takes between 5-7 minutes.
 
@@ -182,4 +185,4 @@ After booting up enter the following commands:
 1. `iwctl station {DEVICE} get-networks` should get you a list of SSIDs.  Use your SSID in place of `{SSID}` for the following command:
 1. `iwctl station {DEVICE} connect {SSID}` should prompt you to enter in your password to connect to specified network.
 
-Note: Soagi does **not** install `iwctl`, instead NetworkManager is installed, including `nmcli` for command line operations. `iwctl` should *only* be used for installation and is recommended because it comes by default with the Arch Linux Installation ISO.
+Note: Sagi does **not** install `iwctl`, instead NetworkManager is installed, including `nmcli` for command line operations, and `nmtui` for a terminal based graphical way to configure your network settings. `iwctl` should *only* be used for installation and is recommended because it comes by default with the Arch Linux Installation ISO.

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Simple Opinionated Arch Gnome Installer
+# Simple Arch Gnome Installer
 
 # Configuration
 #################################################
@@ -23,13 +23,14 @@ INTEL_GPU="false"
 NVIDIA_GPU="false"
 
 # Install Xorg and configure Gnome to use it by default?
-XORG_INSTALL="false" # Note: Nvidia GPU users should set this to "true"
+# If set to "false" Gnome will be configured to use Wayland by default
+XORG_INSTALL="false"
 
 # Hostname to ping to check network connection
 PING_HOSTNAME="www.google.com"
 
 # Hostname Configuration
-HOSTNAME="soagi"
+HOSTNAME="sagi"
 
 # Locale Configuration
 # To list out all timezones in US run "ls -l /usr/share/zoneinfo/America"
@@ -96,6 +97,7 @@ function install() {
     # Mount the ESP partition
     mount -o defaults,noatime $BOOT_PARTITION /mnt/boot
 
+    # Build out swapfile
     SWAPFILE="/swapfile"
     fallocate --length ${SWAPFILE_SIZE}MiB /mnt"$SWAPFILE"
     chown root /mnt"$SWAPFILE"
@@ -106,8 +108,17 @@ function install() {
     pacstrap /mnt
 
     # Install essential packages
-    ESSENTIAL_PACKAGES="base-devel linux-zen linux-zen-headers fwupd xdg-user-dirs man-db man-pages texinfo dosfstools exfatprogs e2fsprogs networkmanager git vim"
-    arch-chroot /mnt pacman -Syu --noconfirm --needed $ESSENTIAL_PACKAGES
+    arch-chroot /mnt pacman -Syu --noconfirm --needed \
+        base-devel              `# Core development libraries (gcc, etc.)` \
+        linux linux-headers     `# Linux kernel and headers` \
+        fwupd                   `# Support for updating firmware from Linux Vendor Firmware Service [https://fwupd.org/]` \
+        man-db man-pages        `# man pages` \
+        texinfo                 `# GUN documentation format` \
+        dosfstools exfatprogs   `# Tools and utilities for FAT and exFAT filesystems` \
+        e2fsprogs               `# Tools and utiltiies for ext filesystems` \
+        networkmanager          `# Networkmanager` \
+        git                     `# Git` \
+        vim                     `# Text editor`
 
     # Install additional firmware and uCode
     if [[ "$AMD_CPU" == "true" ]]; then
@@ -182,10 +193,25 @@ function install() {
     arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
     # Install Gnome
-    arch-chroot /mnt pacman -Syu --noconfirm --needed gnome gnome-tweaks noto-fonts noto-fonts-emoji
+    arch-chroot /mnt pacman -Syu --noconfirm --needed \
+        gnome                       `# Gnome DE` \
+        gnome-tweaks                `# Gnome tweak tool` \
+        pipewire pipewire-pulse     `# Pipewire and Pipewire drop in replacement for PulseAudio` \
+        noto-fonts noto-fonts-emoji `# Noto fonts to support emojis`
 
+    # Xorg installs
     if [[ "$XORG_INSTALL" == "true" ]]; then
         arch-chroot /mnt sed -i "s/#WaylandEnable=false/WaylandEnable=false/" /etc/gdm/custom.conf
+    
+    else
+        # Wayland installs
+        arch-chroot /mnt pacman -Syu --noconfirm --needed \
+            xorg-xlsclients             `# Utility for listing XWayland clients` \
+            xdg-desktop-portal-gtk      `# Support for screensharing in pipewire for Gnome` \
+            wl-clipboard                `# Cliboard support for Wayland compositors`
+
+        arch-chroot /mnt systemctl enable --user pipewire.service
+        arch-chroot /mnt systemctl enable --user --now pipewire-pulse.service
     fi
 
     arch-chroot /mnt systemctl enable gdm.service
@@ -216,9 +242,9 @@ function install() {
         configure_pacman_nvidia_hook
     fi
 
-    # Clone soagi git repo so that user can run post-install recipe
-    arch-chroot /mnt git clone https://github.com/rstrube/soagi /home/${USER_NAME}/soagi
-    arch-chroot /mnt chown -R ${USER_NAME}:${USER_NAME} /home/${USER_NAME}/soagi
+    # Clone sagi git repo so that user can run post-install recipe
+    arch-chroot /mnt git clone https://github.com/rstrube/sagi /home/${USER_NAME}/sagi
+    arch-chroot /mnt chown -R ${USER_NAME}:${USER_NAME} /home/${USER_NAME}/sagi
     
     echo -e "${LIGHT_BLUE}Installation has completed! Run 'reboot' to reboot your machine.${NC}"
 }
@@ -232,7 +258,7 @@ function check_critical_prereqs() {
     fi
 
     if [[ ! -d /sys/firmware/efi ]]; then
-        echo -e "${RED}Error: soagi can only be run on UEFI systems.${NC}"
+        echo -e "${RED}Error: installation can only be run on UEFI systems.${NC}"
         echo "If running in a VM, make sure the VM is configured to use UEFI instead of BIOS."
         exit 1
     fi
@@ -260,7 +286,7 @@ function check_variables() {
     check_variables_value "USER_PASSWORD" "$USER_PASSWORD"
 }
 
-ERROR_VARS_MESSAGE="${RED}Error: you must edit soagi.sh (e.g. with vim) and configure the required variables.${NC}"
+ERROR_VARS_MESSAGE="${RED}Error: you must edit sagi.sh (e.g. with vim) and configure the required variables.${NC}"
 
 function check_variables_value() {
     NAME=$1
@@ -323,7 +349,7 @@ function check_network() {
 function confirm_install() {
     clear
 
-    echo -e "${LBLUE}Soagi (Simple Opinionated Arch Gnome Installer)${NC}"
+    echo -e "${LBLUE}Sagi (Simple Arch Gnome Installer)${NC}"
     echo ""
     echo -e "${RED}Warning"'!'"${NC}"
     echo -e "${RED}This script will destroy all data on ${HD_DEVICE}${NC}"
