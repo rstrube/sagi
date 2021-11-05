@@ -250,7 +250,7 @@ function install() {
     fi
 
     # Clone sagi git repo so that user can run post-install recipe
-    arch-chroot -u robert /mnt git clone https://github.com/rstrube/sagi ~/sagi
+    arch-chroot -u $USER_NAME /mnt git clone https://github.com/rstrube/sagi ~/sagi
     
     echo -e "${LIGHT_BLUE}Installation has completed! Run 'reboot' to reboot your machine.${NC}"
 }
