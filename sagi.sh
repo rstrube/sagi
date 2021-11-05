@@ -200,14 +200,14 @@ function install() {
         noto-fonts noto-fonts-emoji `# Noto fonts to support emojis`
 
     #Note: systemctl enable --user doesn't work via arch-chroot, performing manual creation of symlinks
-    arch-chroot -u $USER_NAME /mnt mkdir -p ~/.config/systemd/user/default.target.wants
-    arch-chroot -u $USER_NAME /mnt mkdir -p ~/.config/systemd/user/sockets.target.wants
+    arch-chroot -u $USER_NAME /mnt mkdir -p /home/${USER_NAME}/.config/systemd/user/default.target.wants
+    arch-chroot -u $USER_NAME /mnt mkdir -p /home/${USER_NAME}/.config/systemd/user/sockets.target.wants
 
-    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire.service ~/.config/systemd/user/default.target.wants/pipewire.service
-    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire.socket ~/.config/systemd/user/sockets.target.wants/pipewire.socket
+    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire.service /home/${USER_NAME}/.config/systemd/user/default.target.wants/pipewire.service
+    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire.socket /home/${USER_NAME}/.config/systemd/user/sockets.target.wants/pipewire.socket
 
-    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire-pulse.service ~/.config/systemd/user/default.target.wants/pipewire-pulse.service
-    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire-pulse.socket ~/.config/systemd/user/sockets.target.wants/pipewire-pulse.socket
+    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire-pulse.service /home/${USER_NAME}/.config/systemd/user/default.target.wants/pipewire-pulse.service
+    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire-pulse.socket /home/${USER_NAME}/.config/systemd/user/sockets.target.wants/pipewire-pulse.socket
 
     # Xorg installs
     if [[ "$XORG_INSTALL" == "true" ]]; then
@@ -250,7 +250,7 @@ function install() {
     fi
 
     # Clone sagi git repo so that user can run post-install recipe
-    arch-chroot -u $USER_NAME /mnt git clone https://github.com/rstrube/sagi ~/sagi
+    arch-chroot -u $USER_NAME /mnt git clone https://github.com/rstrube/sagi /home/${USER_NAME}/sagi
     
     echo -e "${LIGHT_BLUE}Installation has completed! Run 'reboot' to reboot your machine.${NC}"
 }
