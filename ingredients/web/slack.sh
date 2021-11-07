@@ -1,4 +1,1 @@
-#!/bin/bash
-#|#./ingredients/web/slack.sh #Slack
-
-paru -S --noconfirm --needed slack-desktop
+../../../saxx-common/ingredients/web/slack.sh

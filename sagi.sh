@@ -118,7 +118,8 @@ function install() {
         e2fsprogs               `# Tools and utiltiies for ext filesystems` \
         networkmanager          `# Networkmanager` \
         git                     `# Git` \
-        vim                     `# Text editor`
+        vim                     `# Text editor` \
+        reflector               `# Utility to manage pacman mirrors`
 
     # Install additional firmware and uCode
     if [[ "$AMD_CPU" == "true" ]]; then
@@ -192,6 +193,15 @@ function install() {
     printf "$USER_PASSWORD\n$USER_PASSWORD" | arch-chroot /mnt passwd $USER_NAME
     arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
+    # Configure reflector
+    echo "--save /etc/pacman.d/mirrorlist" > /mnt/etc/xdg/reflector/reflector.conf
+    echo "--country ""$REFLECTOR_COUNTRY""" >> /mnt/etc/xdg/reflector/reflector.conf
+    echo "--protocol https" >> /mnt/etc/xdg/reflector/reflector.conf
+    echo "--latest 10" >> /mnt/etc/xdg/reflector/reflector.conf
+    echo "--sort rate" >> /mnt/etc/xdg/reflector/reflector.conf
+
+    configure_pacman_mirrorupgrade_hook
+    
     # Install Gnome
     arch-chroot /mnt pacman -Syu --noconfirm --needed \
         gnome                       `# Gnome DE` \
@@ -409,22 +419,42 @@ function confirm_install() {
     esac
 }
 
+function configure_pacman_mirrorupgrade_hook() {	
+    if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then	
+        mkdir -p /mnt/etc/pacman.d/hooks	
+    fi	
+
+    cat <<EOT > "/mnt/etc/pacman.d/hooks/mirrorupgrade.hook"	
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = pacman-mirrorlist
+
+[Action]
+Description = Updating pacman-mirrorlist with reflector and removing pacnew...
+When = PostTransaction
+Depends = reflector
+Exec = /bin/sh -c 'systemctl start reflector.service; [ -f /etc/pacman.d/mirrorlist.pacnew ] && rm /etc/pacman.d/mirrorlist.pacnew'
+EOT
+
+}
+
 function configure_pacman_gdm_hook() {	
     if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then	
         mkdir -p /mnt/etc/pacman.d/hooks	
     fi	
 
     cat <<EOT > "/mnt/etc/pacman.d/hooks/gdm.hook"	
-[Trigger]                            	
-Operation=Install	
-Operation=Upgrade	
-Type=Package	
+[Trigger]
+Operation=Install
+Operation=Upgrade
+Type=Package
 Target=gdm	
-[Action]	
-Description=Adds a small delay to /usr/lib/systemd/system/gdm.service to work around bug	
-Depends=coreutils	
-When=PostTransaction	
-Exec=/usr/bin/sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service	
+[Action]
+Description=Adds a small delay to /usr/lib/systemd/system/gdm.service to work around bug
+Depends=coreutils
+When=PostTransaction
+Exec=/usr/bin/sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
 EOT
 
 }

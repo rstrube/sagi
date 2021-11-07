@@ -1,4 +1,1 @@
-#!/bin/bash
-#|#./ingredients/web/firefox.sh #Firefox
-
-paru -S --noconfirm --needed firefox
+../../../saxx-common/ingredients/web/firefox.sh
