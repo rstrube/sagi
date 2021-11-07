@@ -1,6 +1,10 @@
 # sagi (Simple Arch Gnome Installer)
 Sagi is a concise, easy to follow installation script for Arch linux which results in a minimal Arch "vanilla" Gnome installation.
 
+![Editing sagi.sh](https://github.com/rstrube/sagi/blob/main/doc/img/editing-sh.png)
+
+![Confirmation](https://github.com/rstrube/sagi/blob/main/doc/img/confirmation.png)
+
 ![Base Sagi Installation Result](https://github.com/rstrube/sagi/blob/main/doc/img/base-install.png)
 
 ## Inspiration
