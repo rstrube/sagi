@@ -1,15 +1,19 @@
 # sagi (Simple Arch Gnome Installer)
 Sagi is a concise, easy to follow installation script for Arch linux which results in a minimal Arch "vanilla" Gnome installation.
 
-To install you boot off of the Arch Linux ISO like any other Arch install.  After that you download the main installation shell script and edit it with you paramaters (more details below).
+To install you boot off of the Arch Linux ISO (like a manual Arch Linux install).  Once you've booted up your system, configure your network and download the main installation shell script.
+
+![Editing sagi.sh](https://github.com/rstrube/sagi/blob/main/doc/img/download-sh.png)
+
+Edit the installation script and define your configuration parameters (more details below).
 
 ![Editing sagi.sh](https://github.com/rstrube/sagi/blob/main/doc/img/editing-sh.png)
 
-Sagi will give you a final confirmation summarizing your parameters:
+Sagi will give you a final confirmation summarizing your parameters.
 
 ![Confirmation](https://github.com/rstrube/sagi/blob/main/doc/img/confirmation.png)
 
-In the end, you'll end up with an almost completely vanilla / stock Gnome installation.
+Installation should take around 5 minutes and you'll end up with an almost completely vanilla / stock Gnome installation.
 
 ![Base Sagi Installation Result](https://github.com/rstrube/sagi/blob/main/doc/img/base-install.png)
 
@@ -155,7 +159,7 @@ nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings
 The base installation process is quite simple:
 
 1. Boot off of the [Arch installation ISO](https://www.archlinux.org/download/)
-1. Run `iwctl` to connect to WiFi (see below).
+2. Run `iwctl` to connect to WiFi (see below)
 
 *Note: ethernet connections should be setup automatically*
 
@@ -166,24 +170,24 @@ The base installation process is quite simple:
 * NVME HDs are usually something like: `/dev/nvme0n1`
 * KVM/Qemu VM HDs are usually: `/dev/vda`
 
-4. Download the main sogai installation script
+4. Download the main sogai installation script:
 ```
 curl -O https://raw.githubusercontent.com/rstrube/sagi/main/sagi.sh
 ```
-5. Edit the installation script and setup configuration options
+5. Edit the installation script and define your configuration parameters:
 
 ```
 vim sgai.sh
 ```
-6. Change permissions on script to make it executable
+6. Change permissions on script to make it executable:
 ```
 chmod +x sagi.sh
 ```
-7. Execute script
+7. Execute script:
 ```
 ./sagi.sh
 ```
-On most modern systems the installation takes between 5-7 minutes.
+On most modern systems the installation takes around 5 minutes.
 
 ### Using iwctl to Connect to WiFi for Installation
 The Arch Linux Installation ISO comes with `iwctl` which can be used to easily connect to WiFi networks.
