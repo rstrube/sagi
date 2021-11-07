@@ -1,1 +1,4 @@
-../../../saxx-common/ingredients/gaming/steam.sh
+#!/bin/bash
+#|#./ingredients/gaming/steam.sh steam #Steam gaming platform
+
+paru -S --noconfirm --needed steam

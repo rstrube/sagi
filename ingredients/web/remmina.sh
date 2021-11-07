@@ -1,1 +1,4 @@
-../../../saxx-common/ingredients/web/remmina.sh
+#!/bin/bash
+#|#./ingredients/web/remmina.sh #Remmina RDP client
+
+paru -S --noconfirm --needed remmina

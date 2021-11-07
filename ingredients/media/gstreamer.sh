@@ -1,1 +1,4 @@
-../../../saxx-common/ingredients/media/gstreamer.sh
+#!/bin/bash
+#|#./ingredients/media/gstreamer.sh #Additional GStreamer plugins
+
+paru -S --noconfirm --needed gst-libav gst-plugins-good gst-plugins-bad gst-plugins-ugly
