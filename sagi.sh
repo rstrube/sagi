@@ -195,7 +195,7 @@ function install() {
 
     # Configure reflector
     echo "--save /etc/pacman.d/mirrorlist" > /mnt/etc/xdg/reflector/reflector.conf
-    echo "--country ""$REFLECTOR_COUNTRY""" >> /mnt/etc/xdg/reflector/reflector.conf
+    echo "--country \"$REFLECTOR_COUNTRY\"" >> /mnt/etc/xdg/reflector/reflector.conf
     echo "--protocol https" >> /mnt/etc/xdg/reflector/reflector.conf
     echo "--latest 10" >> /mnt/etc/xdg/reflector/reflector.conf
     echo "--sort rate" >> /mnt/etc/xdg/reflector/reflector.conf
