@@ -25,6 +25,7 @@ function generate-recipe() {
     echo $HR >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo "function main() {" >> $GENERATED_RECIPE_TEMPLATE_FILE
+    echo "sudo pacman -Syu --noconfirm --needed" >> $GENERATED_RECIPE_TEMPLATE_FILE
 
     generate-recipe-section "# Core" "../ingredients/core"
     generate-recipe-section "# Shell" "../ingredients/shell"

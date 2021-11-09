@@ -1,9 +1,10 @@
 #!/bin/bash
-# recipe.sh : 2021-11-05-13:54:48
+# recipe.sh : 2021-11-08-22:08:29
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
 function main() {
+sudo pacman -Syu --noconfirm --needed
 
 # Core
 # --------------------------------------------------------------------------

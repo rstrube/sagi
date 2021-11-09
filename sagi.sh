@@ -207,6 +207,7 @@ function install() {
         gnome                       `# Gnome DE` \
         gnome-tweaks                `# Gnome tweak tool` \
         pipewire pipewire-pulse     `# Pipewire and Pipewire drop in replacement for PulseAudio` \
+        ttf-liberation              `# Liberation fonts` \
         noto-fonts noto-fonts-emoji `# Noto fonts to support emojis`
 
     #Note: systemctl enable --user doesn't work via arch-chroot, performing manual creation of symlinks
