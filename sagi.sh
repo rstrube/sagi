@@ -212,6 +212,8 @@ function install() {
         noto-fonts noto-fonts-emoji `# Noto fonts to support emojis`
 
     #Note: systemctl enable --user doesn't work via arch-chroot, performing manual creation of symlinks
+    # systemctl enable --user --now pipewire.service
+    # systemctl enable --user --now pipewire-pulse.service
     arch-chroot -u $USER_NAME /mnt mkdir -p /home/${USER_NAME}/.config/systemd/user/default.target.wants
     arch-chroot -u $USER_NAME /mnt mkdir -p /home/${USER_NAME}/.config/systemd/user/sockets.target.wants
 
@@ -228,8 +230,7 @@ function install() {
         # Wayland installs
         arch-chroot /mnt pacman -Syu --noconfirm --needed \
             xorg-xlsclients             `# Utility for listing XWayland clients` \
-            xdg-desktop-portal-gtk      `# Support for screensharing in pipewire for Gnome` \
-            wl-clipboard                `# Clipboard support for Wayland compositors`
+            xdg-desktop-portal-gtk      `# Support for screensharing in pipewire for Gnome`
     fi
 
     arch-chroot /mnt systemctl enable gdm.service
@@ -259,6 +260,12 @@ function install() {
         # Configure pacman to rebuild the initramfs each time the nvidia package is updated
         configure_pacman_nvidia_hook
     fi
+
+    # Install AUR helper
+    install_aur_helper
+
+    # Install AUR packages
+    # exec_aur "paru -S --noconfirm --needed xxx"
 
     # Clone sagi git repo so that user can run post-install recipe
     arch-chroot -u $USER_NAME /mnt git clone https://github.com/rstrube/sagi.git /home/${USER_NAME}/sagi
@@ -419,6 +426,18 @@ function confirm_install() {
             exit
             ;;
     esac
+}
+
+function install_aur_helper() {
+    COMMAND="rm -rf /home/$USER_NAME/.paru-makepkg && mkdir -p /home/$USER_NAME/.paru-makepkg && cd /home/$USER_NAME/.paru-makepkg && git clone https://aur.archlinux.org/paru.git && (cd paru && makepkg -si --noconfirm) && rm -rf /home/$USER_NAME/.paru-makepkg"
+    exec_aur "$COMMAND"
+}
+
+function exec_aur() {
+    COMMAND="$1"
+    arch-chroot /mnt sed -i 's/^%wheel ALL=(ALL) ALL$/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+    arch-chroot /mnt bash -c "echo -e \"$USER_PASSWORD\n$USER_PASSWORD\n$USER_PASSWORD\n$USER_PASSWORD\n\" | su $USER_NAME -s /usr/bin/bash -c \"$COMMAND\""
+    arch-chroot /mnt sed -i 's/^%wheel ALL=(ALL) NOPASSWD: ALL$/%wheel ALL=(ALL) ALL/' /etc/sudoers
 }
 
 function configure_pacman_mirrorupgrade_hook() {	
