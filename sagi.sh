@@ -209,7 +209,8 @@ function install() {
         gnome-tweaks                `# Gnome tweak tool` \
         pipewire pipewire-pulse     `# Pipewire and Pipewire drop in replacement for PulseAudio` \
         ttf-liberation              `# Liberation fonts` \
-        noto-fonts noto-fonts-emoji `# Noto fonts to support emojis`
+        noto-fonts noto-fonts-emoji `# Noto fonts to support emojis` \
+        rust                        `# Rust for paru AUR helper`
 
     #Note: systemctl enable --user doesn't work via arch-chroot, performing manual creation of symlinks
     # systemctl enable --user --now pipewire.service
@@ -471,6 +472,7 @@ Operation=Install
 Operation=Upgrade
 Type=Package
 Target=gdm	
+
 [Action]
 Description=Adds a small delay to /usr/lib/systemd/system/gdm.service to work around bug
 Depends=coreutils
