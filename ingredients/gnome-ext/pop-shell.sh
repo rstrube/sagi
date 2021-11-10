@@ -1,8 +1,27 @@
 #!/bin/bash
-#|#./ingredients/gnome-ext/pop-shell.sh #Pop-Shell Gnome extension to add tiling window support to Gnome
+#|#./ingredients/gnome-ext/pop-shell.sh #pop-shell gnome extension to add tiling window support to gnome
+#|# Note: pop-shell looks way better with the pop-gtk-theme, so this will be installed and configured as well
 
-paru -S --noconfirm --needed gnome-shell-extension-pop-shell-git
+# Install pop-gtk-theme and pop-shell
+paru -S --noconfirm --needed pop-gtk-theme-git gnome-shell-extension-pop-shell-git
 
+# Fix an issue with symbolic links that prevents 'Pop-dark' from being made available as a gnome shell theme
+sudo ln -s /usr/share/gnome-shell/theme/Pop-dark /usr/share/themes/Pop-dark/gnome-shell
+
+# Enable the gnome 'user-theme' extension (comes with 'gnome-shell-extensions' package)
+# Note: you can get a list of gnome extensions in /usr/share/gnome-shell/extensions
+gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com
+
+# Set the gnome-shell theme, gtk theme, and wm theme to 'Pop-dark'
+# Note you can use gsettings list-keys org.gnome.xxx.xxx to get a list of keys that can be retrieved/set under a schema
+gsettings set org.gnome.shell.extensions.user-theme name "Pop-dark"
+gsettings set org.gnome.desktop.interface gtk-theme "Pop-dark"
+gsettings set org.gnome.desktop.wm.preferences theme "Pop-dark"
+
+# Enable the 'pop-shell' extension
+gnome-extensions enable pop-shell@system76.com
+
+# Update global key bindings to properly support the 'pop-shell' shortcuts
 left="h"
 down="j"
 up="k"

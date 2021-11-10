@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-11-10-11:23:10
+# recipe.sh : 2021-11-10-13:41:03
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -89,7 +89,8 @@ sudo pacman -Syu --noconfirm --needed
 
 # Gnome Extensions
 # --------------------------------------------------------------------------
-#./ingredients/gnome-ext/pop-shell.sh #Pop-Shell Gnome extension to add tiling window support to Gnome
+#./ingredients/gnome-ext/pop-shell.sh #pop-shell gnome extension to add tiling window support to gnome
+# Note: pop-shell looks way better with the pop-gtk-theme, so this will be installed and configured as well
 #./ingredients/gnome-ext/tray-icons.sh #Tray Icons Reloaded Gnome Extension https://github.com/MartinPL/Tray-Icons-Reloaded
 
 # Additional Packages
