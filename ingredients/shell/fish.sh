@@ -27,12 +27,6 @@ alias ll="ls -la --color=auto"
 alias l.="ls -d .* --color=auto"
 alias grep="grep --color"
 alias pacman_remove_orphans="paru -c"
-
-function reflector_refresh_mirrors --wraps reflector
-    set DATE (date +%Y-%m-%d-%H:%M:%S)
-    sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.{\$DATE}.bak
-    sudo reflector --verbose --country \$argv --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
-end
 EOT
 
     mkdir -p ~/.config/fish
