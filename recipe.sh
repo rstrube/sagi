@@ -1,14 +1,10 @@
 #!/bin/bash
-# recipe.sh : 2021-11-08-22:08:29
+# recipe.sh : 2021-11-10-11:23:10
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
 function main() {
 sudo pacman -Syu --noconfirm --needed
-
-# Core
-# --------------------------------------------------------------------------
-./ingredients/core/aur.sh #Mandatory AUR helper
 
 # Shell
 # --------------------------------------------------------------------------
@@ -93,6 +89,7 @@ sudo pacman -Syu --noconfirm --needed
 
 # Gnome Extensions
 # --------------------------------------------------------------------------
+#./ingredients/gnome-ext/pop-shell.sh #Pop-Shell Gnome extension to add tiling window support to Gnome
 #./ingredients/gnome-ext/tray-icons.sh #Tray Icons Reloaded Gnome Extension https://github.com/MartinPL/Tray-Icons-Reloaded
 
 # Additional Packages
