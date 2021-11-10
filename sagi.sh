@@ -208,6 +208,7 @@ function install() {
         gnome                       `# Gnome DE` \
         gnome-tweaks                `# Gnome tweak tool` \
         pipewire pipewire-pulse     `# Pipewire and Pipewire drop in replacement for PulseAudio` \
+        xdg-desktop-portal-gnome    `# Support for screensharing in pipewire for Gnome` \
         ttf-liberation              `# Liberation fonts` \
         noto-fonts noto-fonts-emoji `# Noto fonts to support emojis` \
         rust                        `# Rust for paru AUR helper`
@@ -227,11 +228,6 @@ function install() {
     # Xorg installs
     if [[ "$XORG_INSTALL" == "true" ]]; then
         arch-chroot /mnt sed -i "s/#WaylandEnable=false/WaylandEnable=false/" /etc/gdm/custom.conf
-    else
-        # Wayland installs
-        arch-chroot /mnt pacman -Syu --noconfirm --needed \
-            xorg-xlsclients             `# Utility for listing XWayland clients` \
-            xdg-desktop-portal-gtk      `# Support for screensharing in pipewire for Gnome`
     fi
 
     arch-chroot /mnt systemctl enable gdm.service

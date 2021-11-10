@@ -2,6 +2,9 @@
 #|#./ingredients/gnome-ext/pop-shell.sh #pop-shell gnome extension to add tiling window support to gnome
 #|# Note: pop-shell looks way better with the pop-gtk-theme, so this will be installed and configured as well
 
+DIR=$(dirname "$0")
+source $DIR/../_helper/_common-functions.sh
+
 # Install pop-gtk-theme and pop-shell
 paru -S --noconfirm --needed pop-gtk-theme-git gnome-shell-extension-pop-shell-git
 
@@ -18,10 +21,9 @@ gsettings set org.gnome.shell.extensions.user-theme name "Pop-dark"
 gsettings set org.gnome.desktop.interface gtk-theme "Pop-dark"
 gsettings set org.gnome.desktop.wm.preferences theme "Pop-dark"
 
-# Enable the 'pop-shell' extension
-gnome-extensions enable pop-shell@system76.com
+# Update global keybindings
+echo "Updating gnome global key bindings to properly support pop-shell shortcuts..."
 
-# Update global key bindings to properly support the 'pop-shell' shortcuts
 left="h"
 down="j"
 up="k"
@@ -94,3 +96,7 @@ dconf write ${KEYS_MEDIA}/rotate-video-lock-static "@as []"
 
 # Close Window
 dconf write ${KEYS_GNOME_WM}/close "['<Super>q', '<Alt>F4']"
+
+echo "After restarting gnome, you can enable the pop-shell extension."
+echo "You can enable the extension via the Extensions app, or via terminal:"
+echo -e "${LBLUE}gnome-extensions enable pop-shell@system76.com${NC}"
