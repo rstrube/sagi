@@ -200,6 +200,7 @@ function install() {
     echo "--latest 10" >> /mnt/etc/xdg/reflector/reflector.conf
     echo "--sort rate" >> /mnt/etc/xdg/reflector/reflector.conf
 
+    # Configure pacman hook for upgrading pacman-mirrorlist package
     configure_pacman_mirrorupgrade_hook
     
     # Install Gnome
