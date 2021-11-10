@@ -41,7 +41,7 @@ function generate-recipe() {
     generate-recipe-section "# VM" "../ingredients/vm"
     generate-recipe-section "# Icons" "../ingredients/icons"
     generate-recipe-section "# Fonts" "../ingredients/fonts"
-    generate-recipe-section "# Themes" "../ingredients/themes"
+    generate-recipe-section "# Theming" "../ingredients/theme"
     generate-recipe-section "# Gnome Extensions" "../ingredients/gnome-ext"
 
     echo "" >> $GENERATED_RECIPE_TEMPLATE_FILE

@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-11-10-14:15:37
+# recipe.sh : 2021-11-10-15:38:29
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -21,13 +21,14 @@ sudo pacman -Syu --noconfirm --needed
 # Development
 # --------------------------------------------------------------------------
 #./ingredients/dev/0_git.sh "Firstname Lastname" "myname@mydomain.com" #Git installation and configuration
+#./ingredients/dev/1_vscode.sh #Visual Studio Code
 #./ingredients/dev/android.sh #Android development tools (ADB, etc.)
 #./ingredients/dev/dotnet.sh #.NET Core SDK and Runtimes
 #./ingredients/dev/git-credential-manager-core.sh #Git Crendential Manager (.NET Core based)
 #./ingredients/dev/postman.sh #Postman
-#./ingredients/dev/vscode.sh #Visual Studio Code
-#./ingredients/dev/vscode-vim.sh #vim extension for Visual Studio Code [Requires /dev/vscode ingredient]
-#./ingredients/dev/vscode-wayland.sh #Native Wayland Support for VSCode [Requires /dev/vscode ingredient]
+#./ingredients/dev/vscode-dracula-theme.sh #Dracula theme for VSCode [Requires /dev/1_vscode ingredient]
+#./ingredients/dev/vscode-vim.sh #vim extension for VSCode [Requires /dev/1_vscode ingredient]
+#./ingredients/dev/vscode-wayland.sh #Native Wayland Support for VSCode [Requires /dev/1_vscode ingredient]
 
 # Web
 # --------------------------------------------------------------------------
@@ -80,12 +81,9 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/fonts/enhanced-fonts.sh #Install and configure fonts: Font Awesome, Roboto, FiraCode, JetBrains Mono, Liberation Fonts
 #./ingredients/fonts/jetbrains-mono-vscode.sh #JetBrains Mono font for Visual Studio Code [Requires /dev/vscode and /fonts/enhanced-fonts ingredients]
 
-# Themes
+# Theming
 # --------------------------------------------------------------------------
-#./ingredients/themes/dracula-gedit.sh #Dracula theme for gedit
-#./ingredients/themes/dracula-gnome-terminal.sh #Dracula theme for Gnome Terminal
-#./ingredients/themes/dracula-gtk.sh #Dracula theme for GTK
-#./ingredients/themes/dracula-vscode.sh #Dracula theme for VSCode [Requires /dev/vscode ingredient]
+#./ingredients/theme/gnome-terminal-dracula-theme.sh #Dracula theme for Gnome Terminal
 
 # Gnome Extensions
 # --------------------------------------------------------------------------
