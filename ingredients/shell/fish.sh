@@ -6,7 +6,6 @@ source $DIR/../_helper/_common-functions.sh
 
 paru -S --noconfirm --needed fish
 
-
 function main() {
 
     install
@@ -88,6 +87,8 @@ EOT
     cp config.fish ~/.config/fish/
     rm config.fish
 }
+
+main "$@"
 
 # Change the shell to fish
 chsh -s /usr/bin/fish
