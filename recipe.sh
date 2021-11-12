@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-11-10-15:38:29
+# recipe.sh : 2021-11-12-11:31:11
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -27,6 +27,7 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/dev/git-credential-manager-core.sh #Git Crendential Manager (.NET Core based)
 #./ingredients/dev/postman.sh #Postman
 #./ingredients/dev/vscode-dracula-theme.sh #Dracula theme for VSCode [Requires /dev/1_vscode ingredient]
+#./ingredients/dev/vscode-fonts-jetbrains-mono.sh #JetBrains Mono font for Visual Studio Code [Requires /dev/vscode and /fonts/fonts ingredients]
 #./ingredients/dev/vscode-vim.sh #vim extension for VSCode [Requires /dev/1_vscode ingredient]
 #./ingredients/dev/vscode-wayland.sh #Native Wayland Support for VSCode [Requires /dev/1_vscode ingredient]
 
@@ -78,8 +79,7 @@ sudo pacman -Syu --noconfirm --needed
 
 # Fonts
 # --------------------------------------------------------------------------
-#./ingredients/fonts/enhanced-fonts.sh #Install and configure fonts: Font Awesome, Roboto, FiraCode, JetBrains Mono, Liberation Fonts
-#./ingredients/fonts/jetbrains-mono-vscode.sh #JetBrains Mono font for Visual Studio Code [Requires /dev/vscode and /fonts/enhanced-fonts ingredients]
+#./ingredients/fonts/gnome-fonts.sh #Install and configure sane fonts for Gnome
 
 # Theming
 # --------------------------------------------------------------------------
