@@ -123,10 +123,10 @@ function install() {
 
     # Install additional firmware and uCode
     if [[ "$AMD_CPU" == "true" ]]; then
-        arch-chroot /mnt pacman -Syu --noconfirm --needed linux-firmware amd-ucode
+        arch-chroot /mnt pacman -S --noconfirm --needed linux-firmware amd-ucode
 
     elif [[ "$INTEL_CPU" == "true" ]]; then
-        arch-chroot /mnt pacman -Syu --noconfirm --needed linux-firmware intel-ucode
+        arch-chroot /mnt pacman -S --noconfirm --needed linux-firmware intel-ucode
     fi
 
     # Enable NetworkManager.service
@@ -181,7 +181,7 @@ function install() {
     arch-chroot /mnt sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="'"$CMDLINE_LINUX"'"/' /etc/default/grub
 
     # Install and configure Grub as bootloader on ESP
-    arch-chroot /mnt pacman -Syu --noconfirm --needed grub efibootmgr
+    arch-chroot /mnt pacman -S --noconfirm --needed grub efibootmgr
 
     # Note the '--removable' switch will also setup grub on /boot/EFI/BOOT/BOOTX64.EFI (which is the Windows default location)
     # This is neccessary because many BIOSes don't honor efivars correctly
@@ -204,7 +204,7 @@ function install() {
     configure_pacman_mirrorupgrade_hook
     
     # Install Gnome
-    arch-chroot /mnt pacman -Syu --noconfirm --needed \
+    arch-chroot /mnt pacman -S --noconfirm --needed \
         gnome                       `# Gnome DE` \
         gnome-tweaks                `# Gnome tweak tool` \
         pipewire pipewire-pulse     `# Pipewire and Pipewire drop in replacement for PulseAudio` \
@@ -244,15 +244,15 @@ function install() {
 
     if [[ "$INTEL_GPU" == "true" ]]; then
         # Note: installing newer intel-media-driver (iHD) instead of libva-intel-driver (i965)
-        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
+        arch-chroot /mnt pacman -S --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
     fi
 
     if [[ "$AMD_GPU" == "true" ]]; then
-        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils
+        arch-chroot /mnt pacman -S --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils
     fi
     
     if [[ "$NVIDIA_GPU" == "true" ]]; then
-        arch-chroot /mnt pacman -Syu --noconfirm --needed $COMMON_VULKAN_PACKAGES nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings
+        arch-chroot /mnt pacman -S --noconfirm --needed $COMMON_VULKAN_PACKAGES nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings
 
         # Configure pacman to rebuild the initramfs each time the nvidia package is updated
         configure_pacman_nvidia_hook
