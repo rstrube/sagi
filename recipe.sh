@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-11-12-11:31:11
+# recipe.sh : 2021-11-12-11:47:36
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -48,7 +48,6 @@ sudo pacman -Syu --noconfirm --needed
 # --------------------------------------------------------------------------
 #./ingredients/media/codecs.sh #Codecs for Audio, Images, and Video
 #./ingredients/media/gstreamer.sh #Additional GStreamer plugins
-#./ingredients/media/pulseeffects.sh #PulseEffects + Perfect EQ
 #./ingredients/media/tauon-music-box.sh #Tauon Music Box
 #./ingredients/media/vlc.sh #VLC media player
 
