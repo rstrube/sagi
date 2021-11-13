@@ -208,7 +208,8 @@ function install() {
         gnome                       `# Gnome DE` \
         gnome-tweaks                `# Gnome tweak tool` \
         pipewire pipewire-pulse     `# Pipewire and Pipewire drop in replacement for PulseAudio` \
-        xdg-desktop-portal-gnome    `# Support for screensharing in pipewire for Gnome` \
+        xdg-desktop-portal          `# Support for screensharing in pipewire for Gnome` \
+        xdg-desktop-portal-gnome \
         ttf-liberation              `# Liberation fonts` \
         noto-fonts noto-fonts-emoji `# Noto fonts to support emojis` \
         rust                        `# Rust for paru AUR helper`
