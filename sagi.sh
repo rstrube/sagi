@@ -209,6 +209,7 @@ function install() {
         gnome-tweaks                `# Gnome tweak tool` \
         pipewire pipewire-pulse     `# Pipewire and Pipewire drop in replacement for PulseAudio` \
         xdg-desktop-portal          `# Support for screensharing in pipewire for Gnome` \
+        xdg-desktop-portal-gtk \
         xdg-desktop-portal-gnome \
         ttf-liberation              `# Liberation fonts` \
         noto-fonts noto-fonts-emoji `# Noto fonts to support emojis` \
