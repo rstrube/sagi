@@ -107,11 +107,9 @@ function install() {
     # Bootstrap new environment
     pacstrap /mnt
 
-    # Make sure pacman keys are all up-to-date
-    arch-chroot /mnt pacman -Syu --noconfirm --needed archlinux-keyring
-
     # Install essential packages
     arch-chroot /mnt pacman -Syu --noconfirm --needed \
+        archlinux-keyring       `# Arch Keyring` \
         base-devel              `# Core development libraries (gcc, etc.)` \
         linux linux-headers     `# Linux kernel and headers` \
         fwupd                   `# Support for updating firmware from Linux Vendor Firmware Service [https://fwupd.org/]` \
@@ -207,7 +205,7 @@ function install() {
     configure_pacman_mirrorupgrade_hook
     
     # Install Gnome
-    arch-chroot /mnt pacman -S --noconfirm --needed \
+    arch-chroot /mnt pacman -S --needed \
         gnome                       `# Gnome DE` \
         gnome-tweaks                `# Gnome tweak tool` \
         pipewire pipewire-pulse     `# Pipewire and Pipewire drop in replacement for PulseAudio` \
