@@ -107,6 +107,9 @@ function install() {
     # Bootstrap new environment
     pacstrap /mnt
 
+    # Make sure pacman keys are all up-to-date
+    arch-chroot /mnt pacman -Syu --noconfirm --needed archlinux-keyring
+
     # Install essential packages
     arch-chroot /mnt pacman -Syu --noconfirm --needed \
         base-devel              `# Core development libraries (gcc, etc.)` \
