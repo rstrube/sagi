@@ -111,7 +111,7 @@ function install() {
     arch-chroot /mnt pacman -Syyu --noconfirm archlinux-keyring
 
     # Install essential packages
-    arch-chroot /mnt pacman -Syu --noconfirm --needed \
+    arch-chroot /mnt pacman -S --noconfirm --needed \
         base-devel              `# Core development libraries (gcc, etc.)` \
         linux linux-headers     `# Linux kernel and headers` \
         fwupd                   `# Support for updating firmware from Linux Vendor Firmware Service [https://fwupd.org/]` \
