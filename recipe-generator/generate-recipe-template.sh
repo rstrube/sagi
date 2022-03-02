@@ -27,9 +27,9 @@ function generate-recipe() {
     echo "function main() {" >> $GENERATED_RECIPE_TEMPLATE_FILE
     echo "sudo pacman -Syu --noconfirm --needed" >> $GENERATED_RECIPE_TEMPLATE_FILE
 
-    # generate-recipe-section "# Core" "../ingredients/core"
     generate-recipe-section "# Shell" "../ingredients/shell"
     generate-recipe-section "# Filesystem" "../ingredients/fs"
+    generate-recipe-section "# System" "../ingredients/system"
     generate-recipe-section "# Editors" "../ingredients/editor"
     generate-recipe-section "# Development" "../ingredients/dev"
     generate-recipe-section "# Web" "../ingredients/web"
@@ -37,7 +37,6 @@ function generate-recipe() {
     generate-recipe-section "# Media" "../ingredients/media"
     generate-recipe-section "# Gaming" "../ingredients/gaming"
     generate-recipe-section "# Hardware" "../ingredients/hardware"
-    generate-recipe-section "# System Monitoring" "../ingredients/system-monitor"
     generate-recipe-section "# VM" "../ingredients/vm"
     generate-recipe-section "# Icons" "../ingredients/icons"
     generate-recipe-section "# Fonts" "../ingredients/fonts"

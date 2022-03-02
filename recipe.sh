@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2021-11-12-11:47:36
+# recipe.sh : 2022-03-01-23:30:19
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -13,6 +13,11 @@ sudo pacman -Syu --noconfirm --needed
 # Filesystem
 # --------------------------------------------------------------------------
 #./ingredients/fs/android-mtp.sh #Android MTP (Media Transfer Protocol) Filesystem
+
+# System
+# --------------------------------------------------------------------------
+#./ingredients/system/btop.sh #btop: a terminal based system monitoring tool (like htop but better)
+#./ingredients/system/seahorse.sh #GUI application for managing Gnome keyring
 
 # Editors
 # --------------------------------------------------------------------------
@@ -60,10 +65,6 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/hardware/cpu-generic_cpupower-gui.sh #GUI utility to set CPU govenor settings
 #./ingredients/hardware/cpu-intel_undervolt-support.sh #Utilities neccessary to undervolt Intel CPUs
 #./ingredients/hardware/logitec-mouse_solaar.sh #GUI application for managing logitec unifying receivers
-
-# System Monitoring
-# --------------------------------------------------------------------------
-#./ingredients/system-monitor/btop.sh #btop: a terminal based system monitoring tool (like htop but better)
 
 # VM
 # --------------------------------------------------------------------------
