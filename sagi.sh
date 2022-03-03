@@ -46,7 +46,8 @@ USER_NAME=""
 USER_PASSWORD=""
 
 # Additional Linux Command Line Params
-CMDLINE_LINUX=""
+# Note if using a NVIDIA GPU + Wayland make sure to add "nvidia-drm.modeset=1"
+CMDLINE_LINUX="" #"nvidia-drm.modeset=1"
 
 # Installation Scripts
 #################################################
@@ -252,11 +253,13 @@ function install() {
         # Note: installing newer intel-media-driver (iHD) instead of libva-intel-driver (i965)
         # Intel drivers only supports VA-API
         arch-chroot /mnt pacman -S --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
+        arch-chroot /mnt echo "LIBVA_DRIVER_NAME=iHD" >> /etc/environment
     fi
 
     if [[ "$AMD_GPU" == "true" ]]; then
         # AMDGPU supports both VA-API and VDPAU, but we're only installing support for VA-API
         arch-chroot /mnt pacman -S --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver libva-utils
+        arch-chroot /mnt echo "LIBVA_DRIVER_NAME=radeonsi" >> /etc/environment
     fi
     
     if [[ "$NVIDIA_GPU" == "true" ]]; then
