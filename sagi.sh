@@ -123,6 +123,7 @@ function install() {
         networkmanager          `# Networkmanager` \
         git                     `# Git` \
         vim                     `# Text editor` \
+        cpupower                `# Tool for managing your CPU frequency and govenor` \
         reflector               `# Utility to manage pacman mirrors`
 
     # Install additional firmware and uCode
