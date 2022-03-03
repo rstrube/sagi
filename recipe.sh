@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-03-02-18:51:23
+# recipe.sh : 2022-03-03-14:02:42
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -61,11 +61,6 @@ sudo pacman -Syu --noconfirm --needed
 # --------------------------------------------------------------------------
 #./ingredients/gaming/steam.sh steam #Steam gaming platform
 
-# Hardware
-# --------------------------------------------------------------------------
-#./ingredients/hardware/cpu-intel_undervolt-support.sh #Utilities neccessary to undervolt Intel CPUs
-#./ingredients/hardware/logitec-mouse_solaar.sh #GUI application for managing logitec unifying receivers
-
 # VM
 # --------------------------------------------------------------------------
 #./ingredients/vm/kvm-qemu-guest.sh #KVM/QEMU guest utilities (only install if running as VM)
@@ -90,6 +85,11 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/gnome-ext/appindicator.sh #AppIndicator/KStatusNotifierItem support for Gnome Shell
 #./ingredients/gnome-ext/pop-shell.sh #pop-shell gnome extension to add tiling window support to gnome
 # Note: pop-shell looks way better with the pop-gtk-theme, so this will be installed and configured as well
+
+# Hardware
+# --------------------------------------------------------------------------
+#./ingredients/hardware/amd-cpu_undervolt-support.sh #Support for undervolting AMD CPUs [Requires additional configuration]
+#./ingredients/hardware/logitec-mouse_solaar.sh #GUI application for managing logitec unifying receivers
 
 # Additional Packages
 # --------------------------------------------------------------------------
