@@ -4,12 +4,7 @@
 DIR=$(dirname "$0")
 source $DIR/_helper/_vscode-functions.sh
 
-# Copy the system .desktop file to your $HOME and tweak it to launch VSCode as a native Wayland application
-if [[ ! -d "~/.local/share/applications" ]]; then
-    mkdir -p ~/.local/share/applications
-fi
-cp /usr/share/applications/visual-studio-code.desktop ~/.local/share/applications/.
-sed -i 's/\/usr\/bin\/code/& --enable-features=UseOzonePlatform --ozone-platform=wayland/' ~/.local/share/applications/visual-studio-code.desktop
+create_and_configure_code_flags_for_wayland
 
 # Tweak VSCode settings to ensure that a custom titlebar is used.  Without this there will be no titlebar on Gnome + Wayland
 sed -i '$i\    "window.titleBarStyle": "custom",' "$VSCODE_SETTINGS_FILE_PATH"
