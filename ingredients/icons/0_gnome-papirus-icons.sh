@@ -1,5 +1,5 @@
 #!/bin/bash
-#|#./ingredients/icons/0_papirus-icons.sh #Papirus icon theme
+#|#./ingredients/icons/0_gnome-papirus-icons.sh #Papirus icon theme and config for Gnome
 
 paru -S --noconfirm --needed papirus-icon-theme
 

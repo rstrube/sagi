@@ -1,5 +1,5 @@
 #!/bin/bash
-#|#./ingredients/fonts/gnome-fonts.sh #Install and configure sane fonts for Gnome
+#|#./ingredients/fonts/0_gnome-fonts.sh #Install and configure sane fonts for Gnome
 
 DIR=$(dirname "$0")
 source $DIR/_helper/_font-common-functions.sh
