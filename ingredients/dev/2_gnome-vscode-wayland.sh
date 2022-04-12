@@ -1,7 +1,7 @@
 #!/bin/bash
 #|#./ingredients/dev/2_gnome-vscode-wayland.sh #Native Wayland Support for VSCode [Requires /dev/1_vscode ingredient]
 
-function update_desktop_file_for_wayland_gnome {
+function update_code_desktop_file_for_wayland_gnome {
 
     # Copy the system .desktop file to your $HOME and tweak it to launch VSCode as a native Wayland application
     if [[ ! -d "~/.local/share/applications" ]]; then
@@ -14,6 +14,10 @@ function update_desktop_file_for_wayland_gnome {
 
 function create_and_configure_code_flags_for_wayland_gnome {
 
+    if [[ ! -d "~./config" ]]; then
+        mkdir -p ~/.config
+    fi
+
     cat <<EOT > "code-flags.conf"	
 --enable-features=UseOzonePlatform,WaylandWindowDecorations
 --ozone-platform=wayland
@@ -24,4 +28,3 @@ EOT
 }
 
 create_and_configure_code_flags_for_wayland_gnome
-
