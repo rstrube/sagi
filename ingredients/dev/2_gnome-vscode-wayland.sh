@@ -19,7 +19,7 @@ function create_and_configure_code_flags_for_wayland_gnome {
     fi
 
     cat <<EOT > "code-flags.conf"	
---enable-features=UseOzonePlatform,WaylandWindowDecorations
+--enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer
 --ozone-platform=wayland
 EOT
 
