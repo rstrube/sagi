@@ -45,6 +45,9 @@ ROOT_PASSWORD=""
 USER_NAME=""
 USER_PASSWORD=""
 
+# Bootloader
+BOOTLOADER="grub" # systemd
+
 # Additional Linux Command Line Params
 CMDLINE_LINUX="" #"msr.allow_writes=on"
 
@@ -128,9 +131,11 @@ function install() {
     # Install additional firmware and uCode
     if [[ "$AMD_CPU" == "true" ]]; then
         arch-chroot /mnt pacman -S --noconfirm --needed linux-firmware amd-ucode
+        MICROCODE="amd-ucode.img"
 
     elif [[ "$INTEL_CPU" == "true" ]]; then
         arch-chroot /mnt pacman -S --noconfirm --needed linux-firmware intel-ucode
+        MICROCODE="intel-ucode.img"
     fi
 
     # Enable systemd-resolved local caching DNS provider
@@ -194,12 +199,67 @@ function install() {
     fi
 
     CMDLINE_LINUX=$(trim_variable "$CMDLINE_LINUX")
-    arch-chroot /mnt sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="'"$CMDLINE_LINUX"'"/' /etc/default/grub
 
-    # Note the '--removable' switch will also setup grub on /boot/EFI/BOOT/BOOTX64.EFI (which is the Windows default location)
-    # This is neccessary because many BIOSes don't honor efivars correctly
-    arch-chroot /mnt grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot --recheck --removable
-    arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+    if [[ "$BOOTLOADER" == "grub" ]]; then
+        arch-chroot /mnt sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="'"$CMDLINE_LINUX"'"/' /etc/default/grub
+
+        # Note: the '--removable' switch will also setup grub on /boot/EFI/BOOT/BOOTX64.EFI (which is the Windows default location)
+        # This is neccessary because many BIOSes don't honor efivars correctly
+        arch-chroot /mnt grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot --recheck --removable
+        arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+
+    elif [[ "$BOOTLOADER" == "systemd" ]]; then
+        # Note: standard hooks for /etc/mkinitcpio.conf are: (base udev autodetect modconf block filesystems keyboard fsck)
+        # This updates the standard hooks to support systemd-boot
+        arch-chroot /mnt sed -i "s/^HOOKS=(.*)$/HOOKS=(base systemd autodetect modconf block filesystems keyboard sd-vconsole fsck)/" /etc/mkinitcpio.conf
+
+        # Need to rebuild the initramfs after updating hooks
+        arch-chroot /mnt mkinitcpio -P
+
+        # Get the UUID for the root partition
+        UUID_ROOTFS_PARTITION=$(blkid -s UUID -o value "$ROOTFS_PARTITION")
+        CMDLINE_LINUX_ROOT="root=UUID=$UUID_ROOTFS_PARTITION"
+
+        arch-chroot /mnt systemd-machine-id-setup
+        arch-chroot /mnt bootctl install
+
+        arch-chroot /mnt mkdir -p /boot/loader
+        arch-chroot /mnt mkdir -p /boot/loader/entries
+
+        # Main systemd-boot config
+        echo "timeout 5" >> "/mnt/boot/loader/loader.conf"
+        echo "default archlinux.conf" >> "/mnt/boot/loader/loader.conf"
+        echo "editor 0" >> "/mnt/boot/loader/loader.conf"
+
+        # Config for normal boot
+        echo "title Arch Linux" >> "/mnt/boot/loader/entries/archlinux.conf"
+        echo "efi /vmlinuz-linux" >> "/mnt/boot/loader/entries/archlinux.conf"
+        if [ -n "$MICROCODE" ]; then
+            echo "initrd /$MICROCODE" >> "/mnt/boot/loader/entries/archlinux.conf"
+        fi
+        echo "initrd /initramfs-linux.img" >> "/mnt/boot/loader/entries/archlinux.conf"
+        echo "options initrd=initramfs-linux.img $CMDLINE_LINUX_ROOT rw $CMDLINE_LINUX" >> "/mnt/boot/loader/entries/archlinux.conf"
+
+        # Config for booting into terminal only
+        echo "title Arch Linux (terminal)" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
+        echo "efi /vmlinuz-linux" >> "$/mnt/boot/loader/entries/archlinux-terminal.conf"
+        if [ -n "$MICROCODE" ]; then
+            echo "initrd /$MICROCODE" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
+        fi
+        echo "initrd /initramfs-linux.img" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
+        echo "options initrd=initramfs-linux.img $CMDLINE_LINUX_ROOT rw $CMDLINE_LINUX systemd.unit=multi-user.target" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
+
+        # Config for fallback boot (uses old initramfs)
+        echo "title Arch Linux (fallback)" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
+        echo "efi /vmlinuz-linux" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
+        if [ -n "$MICROCODE" ]; then
+            echo "initrd /$MICROCODE" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
+        fi
+        echo "initrd /initramfs-linux-fallback.img" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
+        echo "options initrd=initramfs-linux-fallback.img $CMDLINE_LINUX_ROOT rw $CMDLINE_LINUX" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
+
+        configure_pacman_systemd_boot_hook
+    fi
 
     # Setup user and allow user to use "sudo"
     arch-chroot /mnt useradd -m -G wheel,storage,optical -s /bin/bash $USER_NAME
@@ -337,6 +397,7 @@ function check_variables() {
     check_variables_value "ROOT_PASSWORD" "$ROOT_PASSWORD"
     check_variables_value "USER_NAME" "$USER_NAME"
     check_variables_value "USER_PASSWORD" "$USER_PASSWORD"
+    check_variables_value "BOOTLOADER" "$BOOTLOADER"
 }
 
 ERROR_VARS_MESSAGE="${RED}Error: you must edit sagi.sh (e.g. with vim) and configure the required variables.${NC}"
@@ -392,7 +453,12 @@ function print_variables_boolean() {
 
 function check_conflicts() {
     if [[ "$AMD_CPU" == "true" && "$INTEL_CPU" == "true" ]]; then
-        echo -e "${RED}Error: AMD_CPU and INTEL_CPU are mutually exclusve and can't both =true.${NC}"
+        echo -e "${RED}Error: AMD_CPU and INTEL_CPU are mutually exclusve and can't both be set to 'true'.${NC}"
+        exit 1
+    fi
+
+    if [[ "$BOOTLOADER" != "grub" && "$BOOTLOADER" != "systemd" ]]; then
+        echo -e "${RED}Error: BOOTLOADER must be set to 'grub' or 'systemd'.${NC}"
         exit 1
     fi
 }
@@ -451,6 +517,10 @@ function confirm_install() {
     print_variables_value "USER_PASSWORD" "$USER_PASSWORD"
     echo ""
 
+    echo -e "${LBLUE}Bootloader:${NC}"
+    print_variables_value "BOOTLOADER" "$BOOTLOADER"
+    echo ""
+
     echo -e "${LBLUE}Linux Command Line Params:${NC}"
     print_variables_value "CMDLINE_LINUX" "$CMDLINE_LINUX"
     echo ""
@@ -480,9 +550,28 @@ function exec_as_user() {
     arch-chroot /mnt sed -i 's/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL$/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 }
 
+function configure_pacman_systemd_boot_hook() {	
+    if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then	
+        arch-chroot /mnt mkdir -p /etc/pacman.d/hooks	
+    fi	
+
+    cat <<EOT > "/mnt/etc/pacman.d/hooks/sytemd-boot.hook"
+[Trigger]
+Type= ackage
+Operation=Upgrade
+Target=systemd
+
+[Action]
+Description=Gracefully upgrading systemd-boot...
+When=PostTransaction
+Exec=/usr/bin/systemctl restart systemd-boot-update.service
+EOT
+
+}
+
 function configure_pacman_mirrorupgrade_hook() {	
     if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then	
-        mkdir -p /mnt/etc/pacman.d/hooks	
+        arch-chroot /mnt mkdir -p /etc/pacman.d/hooks	
     fi	
 
     cat <<EOT > "/mnt/etc/pacman.d/hooks/mirrorupgrade.hook"	
@@ -502,7 +591,7 @@ EOT
 
 function configure_pacman_gdm_hook() {	
     if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then	
-        mkdir -p /mnt/etc/pacman.d/hooks	
+        arch-chroot /mnt mkdir -p /etc/pacman.d/hooks	
     fi	
 
     cat <<EOT > "/mnt/etc/pacman.d/hooks/gdm.hook"	
@@ -523,7 +612,7 @@ EOT
 
 function configure_pacman_nvidia_hook() {
     if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then
-        mkdir -p /mnt/etc/pacman.d/hooks
+        arch-chroot /mnt mkdir -p /etc/pacman.d/hooks
     fi
 
     cat <<EOT > "/mnt/etc/pacman.d/hooks/nvidia.hook"
