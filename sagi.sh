@@ -70,9 +70,6 @@ function install() {
     # Update system clock
     timedatectl set-ntp true
 
-    # Update pacman mirrors
-    reflector --verbose --country "$REFLECTOR_COUNTRY" --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
-
     # Partion the drive with a single 512 MB ESP partition, and the rest of the drive as the root partition
     parted -s $HD_DEVICE mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root ext4 512MiB 100% set 1 esp on
 
@@ -107,8 +104,14 @@ function install() {
     chmod 600 /mnt"$SWAPFILE"
     mkswap /mnt"$SWAPFILE"
 
+    # Force a refresh of the pacman-mirrorlist package for the arch installation environment
+    pacman -Syyu --noconfirm pacman-mirrorlist
+
+    # Select the fastest pacman mirrors
+    reflector --verbose --country "$REFLECTOR_COUNTRY" --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+
     # Force a refresh of the archlinux-keyring package for the arch installation environment
-    pacman -Sy --noconfirm archlinux-keyring
+    pacman -S --noconfirm archlinux-keyring
 
     # Bootstrap new environment
     pacstrap /mnt
@@ -190,9 +193,6 @@ function install() {
     # Configure root password
     printf "$ROOT_PASSWORD\n$ROOT_PASSWORD" | arch-chroot /mnt passwd
 
-    # Install and configure Grub as bootloader on ESP
-    arch-chroot /mnt pacman -S --noconfirm --needed grub efibootmgr
-
     # Add KMS if using a NVIDIA GPU
     if [[ "$NVIDIA_GPU" == "true" ]]; then
         CMDLINE_LINUX="$CMDLINE_LINUX nvidia-drm.modeset=1"
@@ -201,6 +201,10 @@ function install() {
     CMDLINE_LINUX=$(trim_variable "$CMDLINE_LINUX")
 
     if [[ "$BOOTLOADER" == "grub" ]]; then
+
+        # Install and configure Grub as bootloader on ESP
+        arch-chroot /mnt pacman -S --noconfirm --needed grub efibootmgr
+
         arch-chroot /mnt sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="'"$CMDLINE_LINUX"'"/' /etc/default/grub
 
         # Note: the '--removable' switch will also setup grub on /boot/EFI/BOOT/BOOTX64.EFI (which is the Windows default location)
@@ -229,7 +233,7 @@ function install() {
         # Main systemd-boot config
         echo "timeout 5" >> "/mnt/boot/loader/loader.conf"
         echo "default archlinux.conf" >> "/mnt/boot/loader/loader.conf"
-        echo "editor 0" >> "/mnt/boot/loader/loader.conf"
+        echo "editor 1" >> "/mnt/boot/loader/loader.conf"
 
         # Config for normal boot
         echo "title Arch Linux" >> "/mnt/boot/loader/entries/archlinux.conf"
@@ -242,7 +246,7 @@ function install() {
 
         # Config for booting into terminal only
         echo "title Arch Linux (terminal)" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
-        echo "efi /vmlinuz-linux" >> "$/mnt/boot/loader/entries/archlinux-terminal.conf"
+        echo "efi /vmlinuz-linux" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
         if [ -n "$MICROCODE" ]; then
             echo "initrd /$MICROCODE" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
         fi
