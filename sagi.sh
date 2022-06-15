@@ -557,7 +557,7 @@ function configure_pacman_systemd_boot_hook() {
 
     cat <<EOT > "/mnt/etc/pacman.d/hooks/sytemd-boot.hook"
 [Trigger]
-Type= ackage
+Type=Package
 Operation=Upgrade
 Target=systemd
 
