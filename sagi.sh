@@ -181,6 +181,9 @@ function install() {
     arch-chroot /mnt locale-gen
     echo -e "LANG=$LANG" >> /mnt/etc/locale.conf
 
+    # Configure keymap for virtual console (tty)
+    echo -e "KEYMAP=$KEYS" > /mnt/etc/vconsole.conf
+
     # Configure hostname and hosts files
     echo $HOSTNAME > /mnt/etc/hostname
     echo "127.0.0.1	localhost" >> /mnt/etc/hosts
