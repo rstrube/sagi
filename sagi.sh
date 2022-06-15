@@ -70,6 +70,9 @@ function install() {
     # Update system clock
     timedatectl set-ntp true
 
+    # Select the fastest pacman mirrors
+    reflector --verbose --country "$REFLECTOR_COUNTRY" --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+
     # Partion the drive with a single 512 MB ESP partition, and the rest of the drive as the root partition
     parted -s $HD_DEVICE mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root ext4 512MiB 100% set 1 esp on
 
@@ -104,14 +107,8 @@ function install() {
     chmod 600 /mnt"$SWAPFILE"
     mkswap /mnt"$SWAPFILE"
 
-    # Force a refresh of the pacman-mirrorlist package for the arch installation environment
-    pacman -Syyu --noconfirm pacman-mirrorlist
-
-    # Select the fastest pacman mirrors
-    reflector --verbose --country "$REFLECTOR_COUNTRY" --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
-
     # Force a refresh of the archlinux-keyring package for the arch installation environment
-    pacman -S --noconfirm archlinux-keyring
+    pacman -Sy --noconfirm archlinux-keyring
 
     # Bootstrap new environment
     pacstrap /mnt
