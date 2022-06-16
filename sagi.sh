@@ -45,9 +45,6 @@ ROOT_PASSWORD=""
 USER_NAME=""
 USER_PASSWORD=""
 
-# Bootloader
-BOOTLOADER="grub" # systemd
-
 # Additional Linux Command Line Params
 CMDLINE_LINUX="" #"msr.allow_writes=on"
 
@@ -200,19 +197,21 @@ function install() {
 
     CMDLINE_LINUX=$(trim_variable "$CMDLINE_LINUX")
 
-    if [[ "$BOOTLOADER" == "grub" ]]; then
+    # Note: removing grub support for now, standardizing on systemd-boot
+    #if [[ "$BOOTLOADER" == "grub" ]]; then
 
         # Install and configure Grub as bootloader on ESP
-        arch-chroot /mnt pacman -S --noconfirm --needed grub efibootmgr
+        #arch-chroot /mnt pacman -S --noconfirm --needed grub efibootmgr
 
-        arch-chroot /mnt sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="'"$CMDLINE_LINUX"'"/' /etc/default/grub
+        #arch-chroot /mnt sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="'"$CMDLINE_LINUX"'"/' /etc/default/grub
 
         # Note: the '--removable' switch will also setup grub on /boot/EFI/BOOT/BOOTX64.EFI (which is the Windows default location)
         # This is neccessary because many BIOSes don't honor efivars correctly
-        arch-chroot /mnt grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot --recheck --removable
-        arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+        #arch-chroot /mnt grub-install --target=x86_64-efi --bootloader-id=grub --efi-directory=/boot --recheck --removable
+        #arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
-    elif [[ "$BOOTLOADER" == "systemd" ]]; then
+    #elif [[ "$BOOTLOADER" == "systemd" ]]; then
+
         # Note: standard hooks for /etc/mkinitcpio.conf are: (base udev autodetect modconf block filesystems keyboard fsck)
         # This updates the standard hooks to support systemd-boot
         arch-chroot /mnt sed -i "s/^HOOKS=(.*)$/HOOKS=(base systemd autodetect modconf block filesystems keyboard sd-vconsole fsck)/" /etc/mkinitcpio.conf
@@ -262,8 +261,7 @@ function install() {
         echo "initrd /initramfs-linux-fallback.img" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
         echo "options initrd=initramfs-linux-fallback.img $CMDLINE_LINUX_ROOT rw $CMDLINE_LINUX" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
 
-        configure_pacman_systemd_boot_hook
-    fi
+    #fi
 
     # Setup user and allow user to use "sudo"
     arch-chroot /mnt useradd -m -G wheel,storage,optical -s /bin/bash $USER_NAME
@@ -277,12 +275,11 @@ function install() {
     echo "--latest 10" >> /mnt/etc/xdg/reflector/reflector.conf
     echo "--sort rate" >> /mnt/etc/xdg/reflector/reflector.conf
 
-    # Configure pacman hook for upgrading pacman-mirrorlist package
-    configure_pacman_mirrorupgrade_hook
     
     # Install Gnome
     arch-chroot /mnt pacman -S --noconfirm --needed \
         gnome                       `# Gnome DE` \
+        gnome-themes-extra          `# Adwaita-dark theme for legacy GTK apps` \
         gnome-tweaks                `# Gnome tweak tool` \
         pipewire wireplumber        `# Pipewire and wireplumber session manager` \
         pipewire-pulse              `# Pipewire drop in replacement for PulseAudio` \
@@ -290,7 +287,6 @@ function install() {
         xdg-desktop-portal          `# Support for screensharing in pipewire for Gnome` \
         xdg-desktop-portal-gtk \
         xdg-desktop-portal-gnome \
-        ttf-liberation              `# Liberation fonts` \
         noto-fonts noto-fonts-emoji `# Noto fonts to support emojis` \
         rust                        `# Rust for paru AUR helper`
 
@@ -360,6 +356,12 @@ function install() {
     # Install AUR packages
     # exec_as_user "paru -S --noconfirm --needed xxx"
 
+    # Configure pacman hook for upgrading pacman-mirrorlist package
+    configure_pacman_mirrorupgrade_hook
+
+    # Configure pacman hook for updating systemd-boot when systemd is updated
+    configure_pacman_systemd_boot_hook
+
     # Clone sagi git repo so that user can run post-install recipe
     arch-chroot -u $USER_NAME /mnt git clone https://github.com/rstrube/sagi.git /home/${USER_NAME}/sagi
     
@@ -401,7 +403,6 @@ function check_variables() {
     check_variables_value "ROOT_PASSWORD" "$ROOT_PASSWORD"
     check_variables_value "USER_NAME" "$USER_NAME"
     check_variables_value "USER_PASSWORD" "$USER_PASSWORD"
-    check_variables_value "BOOTLOADER" "$BOOTLOADER"
 }
 
 ERROR_VARS_MESSAGE="${RED}Error: you must edit sagi.sh (e.g. with vim) and configure the required variables.${NC}"
@@ -460,11 +461,6 @@ function check_conflicts() {
         echo -e "${RED}Error: AMD_CPU and INTEL_CPU are mutually exclusve and can't both be set to 'true'.${NC}"
         exit 1
     fi
-
-    if [[ "$BOOTLOADER" != "grub" && "$BOOTLOADER" != "systemd" ]]; then
-        echo -e "${RED}Error: BOOTLOADER must be set to 'grub' or 'systemd'.${NC}"
-        exit 1
-    fi
 }
 
 function check_network() {
@@ -519,10 +515,6 @@ function confirm_install() {
     print_variables_value "ROOT_PASSWORD" "$ROOT_PASSWORD"
     print_variables_value "USER_NAME" "$USER_NAME"
     print_variables_value "USER_PASSWORD" "$USER_PASSWORD"
-    echo ""
-
-    echo -e "${LBLUE}Bootloader:${NC}"
-    print_variables_value "BOOTLOADER" "$BOOTLOADER"
     echo ""
 
     echo -e "${LBLUE}Linux Command Line Params:${NC}"

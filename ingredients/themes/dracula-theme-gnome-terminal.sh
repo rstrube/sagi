@@ -3,10 +3,11 @@
 
 # Please refer to https://draculatheme.com/contribute/ for a full list of hex codes
 
-echo "Installing Dracula theme for gnome-terminal..."
-
 # Reset gnome-terminal
 dconf reset -f /org/gnome/terminal/
+
+# Make sure terminal uses the dark theme
+gsettings set org.gnome.Terminal.Legacy.Settings theme-variant 'dark'
 
 GT_DCONF_DIR=/org/gnome/terminal/legacy/profiles:
 GT_PROFILE_ID="$(uuidgen)"

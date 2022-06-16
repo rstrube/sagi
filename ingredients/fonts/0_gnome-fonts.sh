@@ -13,4 +13,8 @@ gsettings set org.gnome.desktop.interface document-font-name "Roboto 10"
 gsettings set org.gnome.desktop.interface monospace-font-name "JetBrains Mono 11"
 gsettings set org.gnome.desktop.wm.preferences titlebar-font "Roboto Medium 10"
 
+# Set some sane values for hinting and AA
+gsettings set org.gnome.desktop.interface font-hinting "slight"
+gsettings set org.gnome.desktop.interface font-antialiasing "rgba"
+
 test_coverage
