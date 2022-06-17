@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-04-12-16:17:17
+# recipe.sh : 2022-06-17-09:34:13
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -84,6 +84,7 @@ sudo pacman -Syu --noconfirm --needed
 
 # Theming
 # --------------------------------------------------------------------------
+#./ingredients/themes/adwaita-dark-theme-legacy-gtk-apps.sh #Set Adwaita-dark as default theme for legacy GTK apps
 #./ingredients/themes/dracula-theme-gnome-terminal.sh #Dracula theme for Gnome Terminal
 #./ingredients/themes/dracula-theme-vscode.sh #Dracula theme for VSCode [Requires /dev/1_vscode ingredient]
 

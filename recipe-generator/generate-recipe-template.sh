@@ -1,6 +1,15 @@
 #!/bin/bash
 # Generate Recipe Template
 
+echo "Copying ingredients from saxx_common..."
+cp -r ../../saxx-common/ingredients/* ../ingredients/
+
+echo "Removing unrelated ingredients for sagi..."
+rm ../ingredients/core/aur.sh 
+rm ../ingredients/fonts/0_fonts.sh 
+rm ../ingredients/icons/0_papirus-icons.sh
+
+echo "Generating recipe..."
 DATE=$(date +%Y-%m-%d-%H:%M:%S)
 GENERATED_RECIPE_TEMPLATE_NAME="recipe.sh"
 GENERATED_RECIPE_TEMPLATE_FILE="../$GENERATED_RECIPE_TEMPLATE_NAME"

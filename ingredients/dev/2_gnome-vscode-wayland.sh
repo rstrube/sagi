@@ -1,30 +1,10 @@
 #!/bin/bash
 #|#./ingredients/dev/2_gnome-vscode-wayland.sh #Native Wayland Support for VSCode [Requires /dev/1_vscode ingredient]
 
-function update_code_desktop_file_for_wayland_gnome {
+DIR=$(dirname "$0")
+source $DIR/_helper/_vscode-functions.sh
 
-    # Copy the system .desktop file to your $HOME and tweak it to launch VSCode as a native Wayland application
-    if [[ ! -d "~/.local/share/applications" ]]; then
-        mkdir -p ~/.local/share/applications
-    fi
+create_and_configure_code_flags_for_wayland
 
-    cp /usr/share/applications/visual-studio-code.desktop ~/.local/share/applications/.
-    sed -i 's/\/usr\/bin\/code/& --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland/' ~/.local/share/applications/visual-studio-code.desktop
-}
-
-function create_and_configure_code_flags_for_wayland_gnome {
-
-    if [[ ! -d "~./config" ]]; then
-        mkdir -p ~/.config
-    fi
-
-    cat <<EOT > "code-flags.conf"	
---enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer
---ozone-platform=wayland
-EOT
-
-    cp code-flags.conf ~/.config/
-    rm code-flags.conf
-}
-
-create_and_configure_code_flags_for_wayland_gnome
+# For gnome we need custom CSD
+sed -i '$i\    "window.titleBarStyle": "custom"' "$VSCODE_SETTINGS_FILE_PATH"
