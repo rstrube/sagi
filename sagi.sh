@@ -68,7 +68,7 @@ function install() {
     timedatectl set-ntp true
 
     # Select the fastest pacman mirrors
-    reflector --verbose --country "$REFLECTOR_COUNTRY" --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+    reflector --verbose --country "$REFLECTOR_COUNTRY" --latest 25 --sort rate --save /etc/pacman.d/mirrorlist
 
     # Partion the drive with a single 512 MB ESP partition, and the rest of the drive as the root partition
     parted -s $HD_DEVICE mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root ext4 512MiB 100% set 1 esp on
@@ -272,7 +272,7 @@ function install() {
     echo "--save /etc/pacman.d/mirrorlist" > /mnt/etc/xdg/reflector/reflector.conf
     echo "--country \"$REFLECTOR_COUNTRY\"" >> /mnt/etc/xdg/reflector/reflector.conf
     echo "--protocol https" >> /mnt/etc/xdg/reflector/reflector.conf
-    echo "--latest 10" >> /mnt/etc/xdg/reflector/reflector.conf
+    echo "--latest 25" >> /mnt/etc/xdg/reflector/reflector.conf
     echo "--sort rate" >> /mnt/etc/xdg/reflector/reflector.conf
 
     
