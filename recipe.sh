@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-06-17-10:15:16
+# recipe.sh : 2022-06-17-11:30:08
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -45,9 +45,12 @@ sudo pacman -Syu --noconfirm --needed
 
 # Productivity
 # --------------------------------------------------------------------------
+#./ingredients/productivity/cht.sh #cht.sh is a command line cheatsheet that provides TLDR for tons of things
 #./ingredients/productivity/flameshot.sh #Flameshot (screenshot application)
 #./ingredients/productivity/obsidian.sh #Excellent markdown based note manager and "second brain"
 #./ingredients/productivity/obsidian-wayland.sh #Configure Obsidian to run as a native Wayland application
+#./ingredients/productivity/pdftk.sh #PDF Toolkit allows for merging, splitting, etc.
+#./ingredients/productivity/xournalpp.sh #Xournal++ PDF annotation application
 
 # Media
 # --------------------------------------------------------------------------
