@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-06-17-11:30:08
+# recipe.sh : 2022-06-20-10:01:18
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -37,6 +37,8 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/dev/0_git.sh "Firstname Lastname" "myname@mydomain.com" #Git installation and configuration
 #./ingredients/dev/1_vscode.sh #Visual Studio Code
 #./ingredients/dev/2_gnome-vscode-wayland.sh #Native Wayland Support for VSCode [Requires /dev/1_vscode ingredient]
+#./ingredients/dev/3_dotnet.sh #.NET Core SDK and Runtimes
+#./ingredients/dev/4_dotnet-https-dev-cert.sh #ASP.NET Dev HTTPS Cert [Requires /dev/dotnet ingredient]
 #./ingredients/dev/android.sh #Android development tools (ADB, etc.)
 #./ingredients/dev/dotnet.sh #.NET Core SDK and Runtimes, Setup ASP.NET Dev HTTPS Cert
 #./ingredients/dev/git-credential-manager-core.sh #Git Crendential Manager (.NET Core based)
