@@ -5,9 +5,10 @@ echo "Copying ingredients from saxx_common..."
 cp -r ../../saxx-common/ingredients/* ../ingredients/
 
 echo "Removing unrelated ingredients for sagi..."
-rm ../ingredients/core/aur.sh 
-rm ../ingredients/fonts/0_fonts.sh 
-rm ../ingredients/icons/0_papirus-icons.sh
+rm ../ingredients/core/aur.sh
+rm ../ingredients/dev/2_kde-vscode-wayland.sh
+rm ../ingredients/fonts/0_kde-fonts.sh
+rm ../ingredients/icons/0_kde-papirus-icons.sh
 
 echo "Generating recipe..."
 DATE=$(date +%Y-%m-%d-%H:%M:%S)

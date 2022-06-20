@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-06-20-10:01:18
+# recipe.sh : 2022-06-20-10:24:39
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -40,7 +40,6 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/dev/3_dotnet.sh #.NET Core SDK and Runtimes
 #./ingredients/dev/4_dotnet-https-dev-cert.sh #ASP.NET Dev HTTPS Cert [Requires /dev/dotnet ingredient]
 #./ingredients/dev/android.sh #Android development tools (ADB, etc.)
-#./ingredients/dev/dotnet.sh #.NET Core SDK and Runtimes, Setup ASP.NET Dev HTTPS Cert
 #./ingredients/dev/git-credential-manager-core.sh #Git Crendential Manager (.NET Core based)
 #./ingredients/dev/postman.sh #Postman
 #./ingredients/dev/vscode-vim.sh #vim extension for VSCode [Requires /dev/1_vscode ingredient]
@@ -89,9 +88,9 @@ sudo pacman -Syu --noconfirm --needed
 
 # Theming
 # --------------------------------------------------------------------------
-#./ingredients/themes/adwaita-dark-theme-legacy-gtk-apps.sh #Set Adwaita-dark as default theme for legacy GTK apps
-#./ingredients/themes/dracula-theme-gnome-terminal.sh #Dracula theme for Gnome Terminal
 #./ingredients/themes/dracula-theme-vscode.sh #Dracula theme for VSCode [Requires /dev/1_vscode ingredient]
+#./ingredients/themes/gnome-adwaita-dark-legacy-gtk.sh #Set Adwaita-dark as default theme for legacy GTK apps
+#./ingredients/themes/gnome-dracula-theme-gnome-terminal.sh #Dracula theme for Gnome Terminal
 
 # Gnome Extensions
 # --------------------------------------------------------------------------

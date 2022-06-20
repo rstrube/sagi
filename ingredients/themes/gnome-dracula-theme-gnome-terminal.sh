@@ -1,5 +1,5 @@
 #!/bin/bash
-#|#./ingredients/themes/dracula-theme-gnome-terminal.sh #Dracula theme for Gnome Terminal
+#|#./ingredients/themes/gnome-dracula-theme-gnome-terminal.sh #Dracula theme for Gnome Terminal
 
 # Please refer to https://draculatheme.com/contribute/ for a full list of hex codes
 
