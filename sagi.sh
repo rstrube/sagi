@@ -69,16 +69,18 @@ function main() {
 
 function install() {
 
-    echo "${LBLUE}1. System clock and initial reflector pass${NC}"
-    # ------------------------------------------
+    echo "=========================================="
+    echo "1. System clock and initial reflector pass"
+    echo "=========================================="
     # Update system clock
     timedatectl set-ntp true
 
     # Select the fastest pacman mirrors
     reflector --verbose --country "$REFLECTOR_COUNTRY" --latest 25 --sort rate --save /etc/pacman.d/mirrorlist
 
-    echo "${LBLUE}2. HD partitioning and formatting${NC}"
-    # ---------------------------------
+    echo "================================="
+    echo "2. HD partitioning and formatting"
+    echo "================================="
     # Partion the drive with a single 512 MB ESP partition, and the rest of the drive as the root partition
     parted -s $HD_DEVICE mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root ext4 512MiB 100% set 1 esp on
 
@@ -113,20 +115,18 @@ function install() {
     chmod 600 /mnt"$SWAPFILE"
     mkswap /mnt"$SWAPFILE"
 
-    echo "${LBLUE}3. Initial pacstrap and core packages${NC}"
-    # -------------------------------------
+    echo "====================================="
+    echo "3. Initial pacstrap and core packages"
+    echo "====================================="
     # Force a refresh of the archlinux-keyring package for the arch installation environment
     pacman -Sy --noconfirm archlinux-keyring
 
     # Bootstrap new environment
-    pacstrap /mnt
-
-    # Install essential packages
-    arch-chroot /mnt pacman -S --noconfirm --needed \
+    pacstrap /mnt \
+        base
         base-devel              `# Core development libraries (gcc, etc.)` \
         linux linux-headers     `# Linux kernel and headers` \
-        iptables-nft            `# Newer firewall config with many benefits over traditional iptables` \
-        sudo                    \
+        linux-firmware          `# Linux firmawre` \
         fwupd                   `# Support for updating firmware from Linux Vendor Firmware Service [https://fwupd.org/]` \
         man-db man-pages        `# man pages` \
         texinfo                 `# GUN documentation format` \
@@ -148,8 +148,9 @@ function install() {
         MICROCODE="intel-ucode.img"
     fi
 
-    echo "${LBLUE}4. Core system configuration${NC}"
-    # ----------------------------
+    echo "============================"
+    echo "4. Core system configuration"
+    echo "============================"
     # Enable systemd-resolved local caching DNS provider
     # Note: NetworkManager uses systemd-resolved by default
     arch-chroot /mnt systemctl enable systemd-resolved.service
@@ -212,8 +213,9 @@ function install() {
     echo "--latest 25" >> /mnt/etc/xdg/reflector/reflector.conf
     echo "--sort rate" >> /mnt/etc/xdg/reflector/reflector.conf
 
+    echo "=========================================="
     echo "5. Bootloader configuration (systemd-boot)"
-    # ------------------------------------------
+    echo "=========================================="
     # Add KMS if using a NVIDIA GPU
     if [[ "$NVIDIA_GPU" == "true" ]]; then
         CMDLINE_LINUX="$CMDLINE_LINUX nvidia-drm.modeset=1"
@@ -287,15 +289,17 @@ function install() {
 
     #fi
 
-    echo "${LBLUE}6. User configuration${NC}"
-    # ---------------------
+    echo "======================"
+    echo "6. User configuration"
+    echo "======================"
     # Setup user and allow user to use "sudo"
     arch-chroot /mnt useradd -m -G wheel,storage,optical -s /bin/bash $USER_NAME
     printf "$USER_PASSWORD\n$USER_PASSWORD" | arch-chroot /mnt passwd $USER_NAME
     arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
-    echo "${LBLUE}7. DE & audio system configuration${NC}"
-    # ----------------------------------
+    echo "=================================="
+    echo "7. DE & audio system configuration"
+    echo "=================================="
     # Install Gnome
     arch-chroot /mnt pacman -S --noconfirm --needed \
         gnome                       `# Gnome DE` \
@@ -342,8 +346,9 @@ function install() {
 	# Also configure a pacman hook for GDM to reapply the fix if gdm package is ever updated
 	configure_pacman_gdm_hook
 
-    echo "${LBLUE}8. GPU Configuration${NC}"
-    # --------------------
+    echo "===================="
+    echo "8. GPU Configuration"
+    echo "===================="
     # Install GPU Drivers
     COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
 
@@ -372,28 +377,33 @@ function install() {
         configure_pacman_nvidia_hook
     fi
 
-    echo "${LBLUE}9. AUR configuration${NC}"
-    # --------------------
+    echo "===================="
+    echo "9. AUR configuration"
+    echo "===================="
     # Install AUR helper
     install_aur_helper
 
     # Install AUR packages
     # exec_as_user "paru -S --noconfirm --needed xxx"
 
-    echo "${LBLUE}10. Additional pacman hooks${NC}"
-    # ---------------------------
+    echo "==========================="
+    echo "10. Additional pacman hooks"
+    echo "==========================="
     # Configure pacman hook for upgrading pacman-mirrorlist package
     configure_pacman_mirrorupgrade_hook
 
     # Configure pacman hook for updating systemd-boot when systemd is updated
     configure_pacman_systemd_boot_hook
 
-    echo "${LBLUE}11. Clone repo for additional ingredients${NC}"
-    # -----------------------------------------
+    echo "========================================="
+    echo "11. Clone repo for additional ingredients"
+    echo "========================================="
     # Clone sagi git repo so that user can run post-install recipe
     arch-chroot -u $USER_NAME /mnt git clone https://github.com/rstrube/sagi.git /home/${USER_NAME}/sagi
     
-    echo "${LBLUE}12. Copy sagi installation log file to /mnt/${USER_NAME}/${LOG_FILE}${NC}"
+    echo "===================================================================="
+    echo "12. Copy sagi installation log file to /mnt/${USER_NAME}/${LOG_FILE}"
+    echo "===================================================================="
 
     echo -e "${LBLUE}Installation has completed! Run 'reboot' to reboot your machine.${NC}"
 }
