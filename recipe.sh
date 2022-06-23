@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-06-23-10:52:04
+# recipe.sh : 2022-06-23-11:33:57
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -58,6 +58,7 @@ sudo pacman -Syu --noconfirm --needed
 
 # Media
 # --------------------------------------------------------------------------
+#./ingredients/media/blanket.sh #Whitenoise generation application
 #./ingredients/media/codecs.sh #Codecs for Audio, Images, and Video
 #./ingredients/media/gpodder.sh #Excellent podcast manager
 #./ingredients/media/gstreamer.sh #Additional GStreamer plugins
