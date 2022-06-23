@@ -54,11 +54,6 @@ CMDLINE_LINUX="" #"msr.allow_writes=on"
 # Installation Scripts
 #################################################
 
-if [ -n "$LOG_FILE" ]; then
-    exec > >(tee ./${LOG_FILE}) 2>&1
-    echo "Installation logging enabled to: ${LOG_FILE}"
-fi
-
 function main() {
     check_critical_prereqs
     check_variables
@@ -72,6 +67,14 @@ function main() {
 }
 
 function install() {
+
+    PACMAN_ARGS=""
+
+    if [ -n "$LOG_FILE" ]; then
+        exec > >(tee ./${LOG_FILE}) 2>&1
+        echo "Installation logging enabled to: ${LOG_FILE}"
+        PACMAN_ARGS="--noprogressbar"
+    fi
 
     echo "=========================================="
     echo "1. System clock and initial reflector pass"
@@ -123,13 +126,13 @@ function install() {
     echo "3. Initial pacstrap and core packages"
     echo "====================================="
     # Force a refresh of the archlinux-keyring package for the arch installation environment
-    pacman -Sy --noconfirm archlinux-keyring
+    pacman -Sy --noconfirm $PACMAN_ARGS archlinux-keyring
 
     # Bootstrap new environment (base)
     pacstrap /mnt
 
     # Install essential packages
-    arch-chroot /mnt pacman -S --noconfirm --needed \
+    arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS \
         base-devel              `# Core development libraries (gcc, etc.)` \
         linux linux-headers     `# Linux kernel and headers` \
         linux-firmware          `# Linux firmawre` \
@@ -146,11 +149,11 @@ function install() {
 
     # Install additional firmware and uCode
     if [[ "$AMD_CPU" == "true" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed linux-firmware amd-ucode
+        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS linux-firmware amd-ucode
         MICROCODE="amd-ucode.img"
 
     elif [[ "$INTEL_CPU" == "true" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed linux-firmware intel-ucode
+        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS linux-firmware intel-ucode
         MICROCODE="intel-ucode.img"
     fi
 
@@ -173,7 +176,7 @@ function install() {
 
     # Enable multilib
     arch-chroot /mnt sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
-    arch-chroot /mnt pacman -Syyu
+    arch-chroot /mnt pacman -Syyu $PACMAN_ARGS
 
     # Generate initial fstab using UUIDs
     genfstab -U /mnt > /mnt/etc/fstab
@@ -307,7 +310,7 @@ function install() {
     echo "7. DE & audio system configuration"
     echo "=================================="
     # Install Gnome
-    arch-chroot /mnt pacman -S --noconfirm --needed \
+    arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS \
         gnome                       `# Gnome DE` \
         gnome-themes-extra          `# Adwaita-dark theme for legacy GTK apps` \
         gnome-tweaks                `# Gnome tweak tool` \
@@ -360,24 +363,24 @@ function install() {
 
     # Drivers for VM guest installations
     if [[ "$INTEL_GPU" == "false" && "$AMD_GPU" == "false" && "$NVIDIA_GPU" == "false" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa
+        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS $COMMON_VULKAN_PACKAGES mesa lib32-mesa
     fi
     
     if [[ "$INTEL_GPU" == "true" ]]; then
         # Note: installing newer intel-media-driver (iHD) instead of libva-intel-driver (i965)
         # Intel drivers only supports VA-API
-        arch-chroot /mnt pacman -S --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
+        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
         arch-chroot /mnt echo "LIBVA_DRIVER_NAME=iHD" >> /etc/environment
     fi
 
     if [[ "$AMD_GPU" == "true" ]]; then
         # AMDGPU supports both VA-API and VDPAU, but we're only installing support for VA-API
-        arch-chroot /mnt pacman -S --noconfirm --needed $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver libva-utils
+        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver libva-utils
         arch-chroot /mnt echo "LIBVA_DRIVER_NAME=radeonsi" >> /etc/environment
     fi
     
     if [[ "$NVIDIA_GPU" == "true" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed $COMMON_VULKAN_PACKAGES nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings
+        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS $COMMON_VULKAN_PACKAGES nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings
 
         # Configure pacman to rebuild the initramfs each time the nvidia package is updated
         configure_pacman_nvidia_hook
