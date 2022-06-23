@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-06-21-11:44:23
+# recipe.sh : 2022-06-23-10:52:04
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -17,6 +17,9 @@ sudo pacman -Syu --noconfirm --needed
 # System
 # --------------------------------------------------------------------------
 #./ingredients/system/btop.sh #btop: a terminal based system monitoring tool (like htop but better)
+#./ingredients/system/dnsutils.sh #Various DNS related utilities including dig
+#./ingredients/system/networkmanager-openvpn.sh #OpenVPN support for networkmanager
+#./ingredients/system/rsync.sh #Command line utility for syncing filesystems (useful for backup)
 #./ingredients/system/seahorse.sh #GUI application for managing Gnome keyring
 
 # Editors
