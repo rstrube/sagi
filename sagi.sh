@@ -4,8 +4,6 @@
 # Configuration
 #################################################
 
-LOG_FILE="sagi.log"
-
 # HD Configuration
 # Run "lsblk" to determine HD device name
 # To check for TRIM support, run "lsblk --discard". If DISC-GRAN && DISC-MAX are > 0, your HD supports TRIM.
@@ -50,10 +48,16 @@ USER_PASSWORD=""
 # Additional Linux Command Line Params
 CMDLINE_LINUX="" #"msr.allow_writes=on"
 
+# Uncomment to enable the installation log
+#LOG_FILE="sagi.log"
+
 # Installation Scripts
 #################################################
 
-exec > >(tee ./${LOG_FILE}) 2>&1
+if [ -n "$LOG_FILE" ]; then
+    exec > >(tee ./${LOG_FILE}) 2>&1
+    echo "Installation logging enabled to: ${LOG_FILE}"
+fi
 
 function main() {
     check_critical_prereqs
@@ -121,9 +125,11 @@ function install() {
     # Force a refresh of the archlinux-keyring package for the arch installation environment
     pacman -Sy --noconfirm archlinux-keyring
 
-    # Bootstrap new environment
-    pacstrap /mnt \
-        base \
+    # Bootstrap new environment (base)
+    pacstrap /mnt
+
+    # Install essential packages
+    arch-chroot /mnt pacman -S --noconfirm --needed \
         base-devel              `# Core development libraries (gcc, etc.)` \
         linux linux-headers     `# Linux kernel and headers` \
         linux-firmware          `# Linux firmawre` \
@@ -400,10 +406,10 @@ function install() {
     echo "========================================="
     # Clone sagi git repo so that user can run post-install recipe
     arch-chroot -u $USER_NAME /mnt git clone https://github.com/rstrube/sagi.git /home/${USER_NAME}/sagi
-    
-    echo "===================================================================="
-    echo "12. Copy sagi installation log file to /mnt/${USER_NAME}/${LOG_FILE}"
-    echo "===================================================================="
+
+    if [ -n "$LOG_FILE" ]; then
+        cp ./${LOG_FILE} /mnt/home/${USER_NAME}/
+    fi
 
     echo -e "${LBLUE}Installation has completed! Run 'reboot' to reboot your machine.${NC}"
 }
