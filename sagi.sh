@@ -123,7 +123,7 @@ function install() {
 
     # Bootstrap new environment
     pacstrap /mnt \
-        base
+        base \
         base-devel              `# Core development libraries (gcc, etc.)` \
         linux linux-headers     `# Linux kernel and headers` \
         linux-firmware          `# Linux firmawre` \
