@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-08-18-13:33:52
+# recipe.sh : 2022-11-05-11:30:37
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -43,6 +43,7 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/dev/3_dotnet.sh #.NET Core SDK and Runtimes
 #./ingredients/dev/4_dotnet-https-dev-cert.sh #ASP.NET Dev HTTPS Cert [Requires /dev/dotnet ingredient]
 #./ingredients/dev/android.sh #Android development tools (ADB, etc.)
+#./ingredients/dev/docker.sh #Docker
 #./ingredients/dev/git-credential-manager-core.sh #Git Crendential Manager (.NET Core based)
 #./ingredients/dev/postman.sh #Postman
 #./ingredients/dev/vscode-vim.sh #vim extension for VSCode [Requires /dev/1_vscode ingredient]
@@ -92,6 +93,7 @@ sudo pacman -Syu --noconfirm --needed
 
 # Theming
 # --------------------------------------------------------------------------
+#./ingredients/theme/dracula-theme-fish-shell.sh #Dracula theme for fish shell [Requires /shell/fish ingredient]
 #./ingredients/themes/dracula-theme-vscode.sh #Dracula theme for VSCode [Requires /dev/1_vscode ingredient]
 #./ingredients/themes/gnome-adwaita-dark-legacy-gtk.sh #Set Adwaita-dark as default theme for legacy GTK apps
 #./ingredients/themes/gnome-dracula-theme-gnome-terminal.sh #Dracula theme for Gnome Terminal
