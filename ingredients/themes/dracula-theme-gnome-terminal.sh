@@ -1,5 +1,5 @@
 #!/bin/bash
-#|#./ingredients/themes/gnome-dracula-theme-gnome-terminal.sh #Dracula theme for Gnome Terminal
+#|#./ingredients/themes/dracula-theme-gnome-terminal.sh #Dracula theme for Gnome Terminal
 
 # Please refer to https://draculatheme.com/contribute/ for a full list of hex codes
 
@@ -18,9 +18,9 @@ GT_PROFILE_BACKGROUND_COLOR="'#282A36'"
 GT_PROFILE_BOLD_COLOR="'#BD93F9'"
 GT_PROFILE_FOREGROUND_COLOR="'#F8F8F2'"
 
-# Term Colors		 Black		B-Red	   B-Green	  B-Yellow	 B-Blue		B-Magenta  B-Cyan	  B-White	 B-Black	Red		   Green	  Yellow	 Blue		Magenta	   Cyan		  White																
-# Eq Dracula Colors  Background B-Pink     B-Green    B-Yellow   B-Purple   B-Red      B-Cyan     B-Orange   Curr Line  Pink       Green      Yellow     Purple     Red        Cyan       Orange
-GT_PROFILE_PALLETE="['#282A36', '#FF79C6', '#50FA7B', '#F1FA8C', '#BD93F9', '#FF5555', '#8BE9FD', '#FFB86C', '#44475A', '#FF79C6', '#50FA7B', '#F1FA8C', '#BD93F9', '#FF5555', '#8BE9FD', '#FFB86C']"
+# Term Colors		 Black		Red         Green	  Yellow	 Blue       Magenta     Cyan      B-White	 B-Black	B-Red       B-Green	  B-Yellow	 B-Blue		B-Magenta  B-Cyan     B-White																
+# Eq Dracula Colors  Background Red         Green     Yellow     Purple     Pink        Cyan      Foreground Curr Line  B-Red       B-Green   B-Yellow   B-Purple   B-Pink     B-Cyan     Foreground
+GT_PROFILE_PALLETE="['#282A36', '#FF5555', '#50FA7B', '#F1FA8C', '#BD93F9', '#FF79C6', '#8BE9FD', '#F8F8F2', '#44475A', '#FF6E67', '#5AF78D', '#F4F99D', '#CAA8FA', '#FF92D0', '#9AEDFE', '#F8F8F2']"
 
 dconf write ${GT_DCONF_DIR}/default "'$GT_PROFILE_ID'"
 dconf write ${GT_DCONF_DIR}/list "['$GT_PROFILE_ID']"

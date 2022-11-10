@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-11-05-11:30:37
+# recipe.sh : 2022-11-10-12:44:01
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -93,10 +93,11 @@ sudo pacman -Syu --noconfirm --needed
 
 # Theming
 # --------------------------------------------------------------------------
-#./ingredients/theme/dracula-theme-fish-shell.sh #Dracula theme for fish shell [Requires /shell/fish ingredient]
+#./ingredients/themes/dracula-theme-fish-shell.sh #Dracula theme for fish shell [Requires /shell/fish ingredient]
+#./ingredients/themes/dracula-theme-gnome-terminal.sh #Dracula theme for Gnome Terminal
+#./ingredients/themes/dracula-theme-tilix.sh #Dracula theme for tilix terminal
 #./ingredients/themes/dracula-theme-vscode.sh #Dracula theme for VSCode [Requires /dev/1_vscode ingredient]
 #./ingredients/themes/gnome-adwaita-dark-legacy-gtk.sh #Set Adwaita-dark as default theme for legacy GTK apps
-#./ingredients/themes/gnome-dracula-theme-gnome-terminal.sh #Dracula theme for Gnome Terminal
 
 # Gnome Extensions
 # --------------------------------------------------------------------------
