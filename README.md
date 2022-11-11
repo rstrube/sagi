@@ -19,11 +19,12 @@ If you are using an ethernet connection your networking should be automatically 
 
 If you're using WiFi you'll need to use the `iwctl` utility to connect to your wireless network.
 
-1. `iwctl device list` to identify your WiFi device (e.g. `wlp0s20f3`).  Use in place of `{DEVICE}` for the following commands:
-1. `iwctl station {DEVICE} scan`
-1. `iwctl station {DEVICE} get-networks` should get you a list of SSIDs.  Use your SSID in place of `{SSID}` for the following command:
-1. `iwctl station {DEVICE} connect {SSID}` should prompt you to enter in your password to connect to specified network.
-
+```shell
+$> iwctl device list # Lists WiFi devices. Note your device and use in place of {DEVICE} (e.g. wlp0s20f3):
+$> iwctl station {DEVICE} scan
+$> iwctl station {DEVICE} get-networks # List SSIDs. Note your SSID and use in place of {SSID}
+$> iwctl station {DEVICE} connect {SSID} # Attempts to connect to SSID, if neccessary you'll be prompted for a password
+```
 Sagi does **not** install `iwctl`, instead NetworkManager is installed, including `nmcli` for command line operations, and `nmtui` for a terminal based graphical way to configure your network settings. `iwctl` should *only* be used for installation and is recommended because it comes by default with the Arch Linux Installation ISO.
 
 ### 3. Download script
