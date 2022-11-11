@@ -1,6 +1,8 @@
 # sagi (Simple Arch Gnome Installer)
 Sagi is a concise, easy to follow installation script for Arch linux which results in a minimal Arch "vanilla" Gnome installation.
 
+Sagi was last tested and confirmed working with Arch Linux ISO: `archlinux-2022.11.01-x86_64.iso`.
+
 ## Using sagi to install Arch Linux
 1. Boot off of latest version of the Arch Linux ISO
 1. Configure networking
@@ -43,9 +45,7 @@ nvme0n1     259:0    0 931.5G  0 disk
 ├─nvme0n1p1 259:1    0   511M  0 part /boot
 └─nvme0n1p2 259:2    0   931G  0 part /
 ```
-Note the HD device you wish to install Arch Linux to.
-
-*Common HD device names are:*
+Note the HD device where you want to install Arch Linux. Common HD device names are:
 * SATA HDs are usually something like: `/dev/sdx` (e.g. `/dev/sda`)
 * NVME HDs are usually something like: `/dev/nvme0n1`
 * KVM/Qemu VM HDs are usually: `/dev/vda`
