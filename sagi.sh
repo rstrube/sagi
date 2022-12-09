@@ -221,7 +221,7 @@ function install() {
     echo "--save /etc/pacman.d/mirrorlist" > /mnt/etc/xdg/reflector/reflector.conf
     echo "--country \"$REFLECTOR_COUNTRY\"" >> /mnt/etc/xdg/reflector/reflector.conf
     echo "--protocol https" >> /mnt/etc/xdg/reflector/reflector.conf
-    echo "--latest 25" >> /mnt/etc/xdg/reflector/reflector.conf
+    echo "--latest 15" >> /mnt/etc/xdg/reflector/reflector.conf
     echo "--sort rate" >> /mnt/etc/xdg/reflector/reflector.conf
 
     echo "=========================================="
@@ -335,6 +335,12 @@ function install() {
         pipewire wireplumber        `# Pipewire and wireplumber session manager` \
         pipewire-pulse              `# Pipewire drop in replacement for PulseAudio` \
         pipewire-jack               `# Pipewire JACK support` \
+        gst-plugin-pipewire         `# Additional GStreamer plugins` \
+        gst-libav \
+        gst-plugins-good \
+        gst-plugins-bad \
+        gst-plugins-ugly \
+        gstreamer-vaapi \
         xdg-desktop-portal          `# Support for screensharing in pipewire for Gnome` \
         xdg-desktop-portal-gtk \
         xdg-desktop-portal-gnome \

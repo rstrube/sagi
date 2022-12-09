@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-11-10-12:44:01
+# recipe.sh : 2022-12-08-19:53:06
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -40,11 +40,11 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/dev/0_git.sh "Firstname Lastname" "myname@mydomain.com" #Git installation and configuration
 #./ingredients/dev/1_vscode.sh #Visual Studio Code
 #./ingredients/dev/2_gnome-vscode-wayland.sh #Native Wayland Support for VSCode [Requires /dev/1_vscode ingredient]
-#./ingredients/dev/3_dotnet.sh #.NET Core SDK and Runtimes
+#./ingredients/dev/3_dotnet-6.sh #.NET Core SDK and Runtimes (version 6.x)
+#./ingredients/dev/3_dotnet-latest.sh #.NET Core SDK and Runtimes (latest stable version)
 #./ingredients/dev/4_dotnet-https-dev-cert.sh #ASP.NET Dev HTTPS Cert [Requires /dev/dotnet ingredient]
 #./ingredients/dev/android.sh #Android development tools (ADB, etc.)
 #./ingredients/dev/docker.sh #Docker
-#./ingredients/dev/git-credential-manager-core.sh #Git Crendential Manager (.NET Core based)
 #./ingredients/dev/postman.sh #Postman
 #./ingredients/dev/vscode-vim.sh #vim extension for VSCode [Requires /dev/1_vscode ingredient]
 
@@ -62,7 +62,6 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/media/blanket.sh #Whitenoise generation application
 #./ingredients/media/codecs.sh #Codecs for Audio, Images, and Video
 #./ingredients/media/gpodder.sh #Excellent podcast manager
-#./ingredients/media/gstreamer.sh #Additional GStreamer plugins
 #./ingredients/media/tauon-music-box.sh #Tauon Music Box
 #./ingredients/media/vlc.sh #VLC media player
 
