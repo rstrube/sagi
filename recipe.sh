@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-12-08-19:53:06
+# recipe.sh : 2022-12-19-17:54:27
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -18,6 +18,7 @@ sudo pacman -Syu --noconfirm --needed
 # --------------------------------------------------------------------------
 #./ingredients/system/btop.sh #btop: a terminal based system monitoring tool (like htop but better)
 #./ingredients/system/dnsutils.sh #Various DNS related utilities including dig
+#./ingredients/system/kitty.sh #kitty: a lightweight GPU accelerated terminal emulator
 #./ingredients/system/networkmanager-openvpn.sh #OpenVPN support for networkmanager
 #./ingredients/system/rsync.sh #Command line utility for syncing filesystems (useful for backup)
 #./ingredients/system/seahorse.sh #GUI application for managing Gnome keyring
@@ -83,6 +84,7 @@ sudo pacman -Syu --noconfirm --needed
 # Fonts
 # --------------------------------------------------------------------------
 #./ingredients/fonts/0_gnome-fonts.sh #Install and configure sane fonts for Gnome
+#./ingredients/fonts/kitty-jetbrains-mono.sh #JetBrains Mono font for Kitty terminal emulator [Requires /system/kitty and /fonts/0_xxx-fonts ingredients]
 #./ingredients/fonts/vscode-jetbrains-mono.sh #JetBrains Mono font for Visual Studio Code [Requires /dev/1_vscode and /fonts/0_xxx-fonts ingredients]
 
 # Hardware
@@ -94,6 +96,7 @@ sudo pacman -Syu --noconfirm --needed
 # --------------------------------------------------------------------------
 #./ingredients/themes/dracula-theme-fish-shell.sh #Dracula theme for fish shell [Requires /shell/fish ingredient]
 #./ingredients/themes/dracula-theme-gnome-terminal.sh #Dracula theme for Gnome Terminal
+#./ingredients/themes/dracula-theme-kitty.sh #Dracula theme for kitty terminal emulator
 #./ingredients/themes/dracula-theme-tilix.sh #Dracula theme for tilix terminal
 #./ingredients/themes/dracula-theme-vscode.sh #Dracula theme for VSCode [Requires /dev/1_vscode ingredient]
 #./ingredients/themes/gnome-adwaita-dark-legacy-gtk.sh #Set Adwaita-dark as default theme for legacy GTK apps
