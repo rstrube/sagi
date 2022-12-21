@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-12-21-11:00:06
+# recipe.sh : 2022-12-21-12:42:23
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -20,6 +20,7 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/system/dnsutils.sh #Various DNS related utilities including dig
 #./ingredients/system/kitty.sh #kitty: a lightweight GPU accelerated terminal emulator
 #./ingredients/system/networkmanager-openvpn.sh #OpenVPN support for networkmanager
+#./ingredients/system/openssh.sh #OpenSSH: supports remote login via SSH protocol
 #./ingredients/system/rsync.sh #Command line utility for syncing filesystems (useful for backup)
 #./ingredients/system/seahorse.sh #GUI application for managing Gnome keyring
 
@@ -89,7 +90,6 @@ sudo pacman -Syu --noconfirm --needed
 
 # Hardware
 # --------------------------------------------------------------------------
-#./ingredients/hardware/cpu-amd-undervolt-support.sh #Support for undervolting AMD CPUs [Requires additional configuration]
 #./ingredients/hardware/mouse-logitec-solaar.sh #GUI application for managing logitec unifying receivers
 
 # Theming
