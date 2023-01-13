@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2022-12-21-12:42:23
+# recipe.sh : 2023-01-12-20:46:32
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -57,6 +57,7 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/productivity/obsidian.sh #Excellent markdown based note manager and "second brain"
 #./ingredients/productivity/obsidian-wayland.sh #Configure Obsidian to run as a native Wayland application
 #./ingredients/productivity/pdftk.sh #PDF Toolkit allows for merging, splitting, etc.
+#./ingredients/productivity/teams.sh #Teams for Linux (uses electron wrapper)
 #./ingredients/productivity/xournalpp.sh #Xournal++ PDF annotation application
 
 # Media

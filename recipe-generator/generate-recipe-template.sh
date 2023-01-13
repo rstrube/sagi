@@ -12,6 +12,7 @@ rm ../ingredients/icons/0_kde-papirus-icons.sh
 rm ../ingredients/system/kde-configure-baloo-basic-indexing.sh
 rm ../ingredients/system/kde-overview-and-shortcuts.sh
 rm ../ingredients/system/kde-remove-sddm.sh
+rm ../ingredients/themes/kde-layan-theme.sh
 
 echo "Generating recipe..."
 DATE=$(date +%Y-%m-%d-%H:%M:%S)
