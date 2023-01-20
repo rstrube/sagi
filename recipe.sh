@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2023-01-20-10:50:23
+# recipe.sh : 2023-01-20-11:25:49
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -64,6 +64,7 @@ sudo pacman -Syu --noconfirm --needed
 # --------------------------------------------------------------------------
 #./ingredients/media/blanket.sh #Whitenoise generation application
 #./ingredients/media/codecs.sh #Codecs for Audio, Images, and Video
+#./ingredients/media/dvd.sh #Support for CD & DVD playback [Requires player e.g. vlc]
 #./ingredients/media/gpodder.sh #Excellent podcast manager
 #./ingredients/media/tauon-music-box.sh #Tauon Music Box
 #./ingredients/media/vlc.sh #VLC media player
