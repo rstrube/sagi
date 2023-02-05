@@ -5,7 +5,6 @@ DIR=$(dirname "$0")
 source $DIR/_helper/_font-common-functions.sh
 
 install_fonts
-setup_local_fontconfig
 
 # Configure Gnome to use newly installed fonts
 gsettings set org.gnome.desktop.interface font-name "Roboto 10"
