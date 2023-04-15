@@ -354,24 +354,6 @@ function install() {
         noto-fonts noto-fonts-emoji `# Noto fonts to support emojis` \
         rust                        `# Rust for paru AUR helper`
 
-    # Note: systemctl enable --user doesn't work via arch-chroot, performing manual creation of symlinks
-    # systemctl enable --user --now pipewire.service
-    # systemctl enable --user --now pipewire-pulse.service
-    arch-chroot -u $USER_NAME /mnt mkdir -p /home/${USER_NAME}/.config/systemd/user/default.target.wants
-    arch-chroot -u $USER_NAME /mnt mkdir -p /home/${USER_NAME}/.config/systemd/user/sockets.target.wants
-
-    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire.service /home/${USER_NAME}/.config/systemd/user/default.target.wants/pipewire.service
-    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire.socket /home/${USER_NAME}/.config/systemd/user/sockets.target.wants/pipewire.socket
-
-    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire-pulse.service /home/${USER_NAME}/.config/systemd/user/default.target.wants/pipewire-pulse.service
-    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/pipewire-pulse.socket /home/${USER_NAME}/.config/systemd/user/sockets.target.wants/pipewire-pulse.socket
-
-    # systemctl enable --user --now wireplumber.service
-    arch-chroot -u $USER_NAME /mnt mkdir -p /home/${USER_NAME}/.config/systemd/user/pipewire.service.wants
-
-    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/wireplumber.service /home/${USER_NAME}/.config/systemd/user/pipewire-session-manager.service
-    arch-chroot -u $USER_NAME /mnt ln -s /usr/lib/systemd/user/wireplumber.service /home/${USER_NAME}/.config/systemd/user/pipewire.service.wants/wireplumber.service
-
     # Xorg installs
     if [[ "$XORG_INSTALL" == "true" ]]; then
         arch-chroot /mnt sed -i "s/#WaylandEnable=false/WaylandEnable=false/" /etc/gdm/custom.conf
