@@ -2,16 +2,10 @@
 # Generate Recipe Template for sagi
 
 BLACKLIST_ARRAY=("aur.sh"
-                 "2_kde-vscode-wayland.sh"
-                 "kdiff3.sh"
-                 "0_kde-fonts.sh"
-                 "0_kde-papirus-icons.sh"
                  "kasts.sh"
                  "kde-configure-baloo-basic-indexing.sh"
-                 "kde-overview-and-shortcuts.sh"
                  "kde-remove-sddm.sh"
-                 "kde-layan-theme.sh"
-                 "kde-tela-icons.sh")
+                 "kde-layan-theme.sh")
 
 DATE=$(date +%Y-%m-%d-%H:%M:%S)
 GENERATED_RECIPE_TEMPLATE_NAME="recipe.sh"

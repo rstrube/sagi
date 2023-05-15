@@ -56,7 +56,7 @@ USER_PASSWORD=""
 CMDLINE_LINUX="" #"msr.allow_writes=on"
 
 # Uncomment to enable the installation log
-#LOG_FILE="sagi.log"
+LOG_FILE="sagi.log"
 
 # Installation Scripts
 #################################################
@@ -75,26 +75,18 @@ function main() {
 
 function install() {
 
-    local PACMAN_ARGS=""
-
-    if [ -n "$LOG_FILE" ]; then
-        exec > >(tee ./${LOG_FILE}) 2>&1
-        echo "Installation logging enabled to: ${LOG_FILE}"
-        PACMAN_ARGS="--noprogressbar"
-    fi
-
-    echo "=========================================="
-    echo "1. System clock and initial reflector pass"
-    echo "=========================================="
+    echo_to_log "=========================================="
+    echo_to_log "1. System clock and initial reflector pass"
+    echo_to_log "=========================================="
     # Update system clock
     timedatectl set-ntp true
 
     # Select the fastest pacman mirrors
     reflector --verbose --country "$REFLECTOR_COUNTRY" --latest 25 --sort rate --save /etc/pacman.d/mirrorlist
 
-    echo "================================="
-    echo "2. HD partitioning and formatting"
-    echo "================================="
+    echo_to_log "================================="
+    echo_to_log "2. HD partitioning and formatting"
+    echo_to_log "================================="
     # Partion the drive with a single 512 MB ESP partition, and the rest of the drive as the root partition
     parted -s $HD_DEVICE mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root ext4 512MiB 100% set 1 esp on
 
@@ -129,17 +121,17 @@ function install() {
     chmod 600 /mnt"$SWAPFILE"
     mkswap /mnt"$SWAPFILE"
 
-    echo "====================================="
-    echo "3. Initial pacstrap and core packages"
-    echo "====================================="
+    echo_to_log "====================================="
+    echo_to_log "3. Initial pacstrap and core packages"
+    echo_to_log "====================================="
     # Force a refresh of the archlinux-keyring package for the arch installation environment
-    pacman -Sy --noconfirm $PACMAN_ARGS archlinux-keyring
+    pacman -Sy --noconfirm --noprogressbar archlinux-keyring | tee -a "$LOG_FILE"
 
     # Bootstrap new environment (base)
     pacstrap /mnt
 
     # Install essential packages
-    arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS \
+    arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar \
         base-devel              `# Core development libraries (gcc, etc.)` \
         linux linux-headers     `# Linux kernel and headers` \
         linux-firmware          `# Linux firmawre` \
@@ -154,21 +146,22 @@ function install() {
         cpupower                `# Tool for managing your CPU frequency and governor` \
         reflector               `# Utility to manage pacman mirrors` \
         terminus-font           `# Terminus font for tty` \
-        pacman-contrib          `# Additional pacman utilities (paccache, etc.)`
+        pacman-contrib          `# Additional pacman utilities (paccache, etc.)` \
+        | tee -a "$LOG_FILE"
 
     # Install additional firmware and uCode
     if [[ "$AMD_CPU" == "true" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS linux-firmware amd-ucode
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar linux-firmware amd-ucode | tee -a "$LOG_FILE"
         local MICROCODE="amd-ucode.img"
 
     elif [[ "$INTEL_CPU" == "true" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS linux-firmware intel-ucode
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar linux-firmware intel-ucode | tee -a "$LOG_FILE"
         local MICROCODE="intel-ucode.img"
     fi
 
-    echo "============================"
-    echo "4. Core system configuration"
-    echo "============================"
+    echo_to_log "============================"
+    echo_to_log "4. Core system configuration"
+    echo_to_log "============================"
     # Enable systemd-resolved local caching DNS provider
     # Note: NetworkManager uses systemd-resolved by default
     arch-chroot /mnt systemctl enable systemd-resolved.service
@@ -185,7 +178,7 @@ function install() {
 
     # Enable multilib
     arch-chroot /mnt sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
-    arch-chroot /mnt pacman -Syyu $PACMAN_ARGS
+    arch-chroot /mnt pacman -Syyu --noprogressbar | tee -a "$LOG_FILE"
 
     # Generate initial fstab using UUIDs
     genfstab -U /mnt > /mnt/etc/fstab
@@ -232,9 +225,9 @@ function install() {
     echo "--latest 15" >> /mnt/etc/xdg/reflector/reflector.conf
     echo "--sort rate" >> /mnt/etc/xdg/reflector/reflector.conf
 
-    echo "=========================================="
-    echo "5. Bootloader configuration (systemd-boot)"
-    echo "=========================================="
+    echo_to_log "=========================================="
+    echo_to_log "5. Bootloader configuration (systemd-boot)"
+    echo_to_log "=========================================="
     # Add KMS if using a NVIDIA GPU
     if [[ "$NVIDIA_GPU" == "true" ]]; then
         CMDLINE_LINUX="$CMDLINE_LINUX nvidia-drm.modeset=1"
@@ -315,9 +308,9 @@ function install() {
     printf "$USER_PASSWORD\n$USER_PASSWORD" | arch-chroot /mnt passwd $USER_NAME
     arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
-    echo "=================================="
-    echo "7. DE & audio system configuration"
-    echo "=================================="
+    echo_to_log "=================================="
+    echo_to_log "7. Compositor & audio system configuration"
+    echo_to_log "=================================="
     # Install Gnome
     arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS \
         gnome                       `# Gnome DE` \
@@ -336,7 +329,8 @@ function install() {
         xdg-desktop-portal-gtk \
         xdg-desktop-portal-gnome \
         noto-fonts noto-fonts-emoji `# Noto fonts to support emojis` \
-        rust                        `# Rust for paru AUR helper`
+        rust                        `# Rust for paru AUR helper` \
+        | tee -a "$LOG_FILE"
 
     # Xorg installs
     if [[ "$XORG_INSTALL" == "true" ]]; then
@@ -352,49 +346,49 @@ function install() {
 	# Also configure a pacman hook for GDM to reapply the fix if gdm package is ever updated
 	configure_pacman_gdm_hook
 
-    echo "===================="
-    echo "8. GPU Configuration"
-    echo "===================="
+    echo_to_log "===================="
+    echo_to_log "8. GPU Configuration"
+    echo_to_log "===================="
     # Install GPU Drivers
     COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
 
     # Drivers for VM guest installations
     if [[ "$INTEL_GPU" == "false" && "$AMD_GPU" == "false" && "$NVIDIA_GPU" == "false" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS $COMMON_VULKAN_PACKAGES mesa lib32-mesa
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES mesa lib32-mesa | tee -a "$LOG_FILE"
     fi
     
     if [[ "$INTEL_GPU" == "true" ]]; then
         # Note: installing newer intel-media-driver (iHD) instead of libva-intel-driver (i965)
         # Intel drivers only supports VA-API
-        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils
-        arch-chroot /mnt echo "LIBVA_DRIVER_NAME=iHD" >> /etc/environment
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils | tee -a "$LOG_FILE"
+        echo "LIBVA_DRIVER_NAME=iHD" >> /mnt/etc/environment
     fi
 
     if [[ "$AMD_GPU" == "true" ]]; then
         # AMDGPU supports both VA-API and VDPAU, but we're only installing support for VA-API
-        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver libva-utils
-        arch-chroot /mnt echo "LIBVA_DRIVER_NAME=radeonsi" >> /etc/environment
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver libva-utils | tee -a "$LOG_FILE"
+        echo "LIBVA_DRIVER_NAME=radeonsi" >> /mnt/etc/environment
     fi
     
     if [[ "$NVIDIA_GPU" == "true" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS $COMMON_VULKAN_PACKAGES nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings | tee -a "$LOG_FILE"
 
         # Configure pacman to rebuild the initramfs each time the nvidia package is updated
         configure_pacman_nvidia_hook
     fi
 
-    echo "===================="
-    echo "9. AUR configuration"
-    echo "===================="
+    echo_to_log "===================="
+    echo_to_log "9. AUR configuration"
+    echo_to_log "===================="
     # Install AUR helper
     install_aur_helper
 
     # Install AUR packages
-    # exec_as_user "paru -S --noconfirm --needed xxx"
+    # exec_as_user "paru -S --noconfirm --needed --noprogressbar xxx | tee -a $LOG_FILE"
 
-    echo "==========================="
-    echo "10. Additional pacman hooks"
-    echo "==========================="
+    echo_to_log "==========================="
+    echo_to_log "10. Additional pacman hooks"
+    echo_to_log "==========================="
     # Configure pacman hook for upgrading pacman-mirrorlist package
     configure_pacman_mirror_upgrade_hook
 
@@ -404,17 +398,23 @@ function install() {
     # Configure pacman hook for updating systemd-boot when systemd is updated
     configure_pacman_systemd_boot_hook
 
-    echo "========================================="
-    echo "11. Clone repo for additional ingredients"
-    echo "========================================="
+    echo_to_log "========================================="
+    echo_to_log "11. Clone repo for additional ingredients"
+    echo_to_log "========================================="
     # Clone sagi git repo so that user can run post-install recipe
-    arch-chroot -u $USER_NAME /mnt git clone https://github.com/rstrube/sagi.git /home/${USER_NAME}/sagi
+    arch-chroot -u $USER_NAME /mnt git clone --recursive https://github.com/rstrube/sagi.git /home/${USER_NAME}/sagi
 
     if [ -n "$LOG_FILE" ]; then
         cp ./${LOG_FILE} /mnt/home/${USER_NAME}/
     fi
 
     echo -e "${LBLUE}Installation has completed! Run 'reboot' to reboot your machine.${NC}"
+}
+
+function echo_to_log()
+{
+    echo "$@" 
+    echo "$@" >> "$LOG_FILE"
 }
 
 function check_critical_prereqs() {
