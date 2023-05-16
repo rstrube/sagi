@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2023-05-15-17:34:44
+# recipe.sh : 2023-05-16-09:26:50
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -88,7 +88,8 @@ sudo pacman -Syu --noconfirm --needed
 
 # Theming
 # --------------------------------------------------------------------------
-#./ingredients/themes/dracula-theme.sh #Dracula theme
+#./ingredients/themes/arc-theme.sh #Arc Theme for Qt and GTK apps
+#./ingredients/themes/dracula-colors.sh #Dracula colors terminal, IDEs
 
 # Gnome Extensions
 # --------------------------------------------------------------------------

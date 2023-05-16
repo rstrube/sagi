@@ -4,8 +4,7 @@
 BLACKLIST_ARRAY=("aur.sh"
                  "kasts.sh"
                  "kde-configure-baloo-basic-indexing.sh"
-                 "kde-remove-sddm.sh"
-                 "kde-layan-theme.sh")
+                 "kde-remove-sddm.sh")
 
 DATE=$(date +%Y-%m-%d-%H:%M:%S)
 GENERATED_RECIPE_TEMPLATE_NAME="recipe.sh"
