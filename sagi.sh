@@ -385,7 +385,8 @@ function install() {
     install_aur_helper
 
     # Install AUR packages
-    # exec_as_user "paru -S --noconfirm --needed --noprogressbar xxx | tee -a $LOG_FILE"
+    # gnome-defaults-list: default Gnome MIME handling
+    exec_as_user "paru -S --noconfirm --needed --noprogressbar gnome-defaults-list | tee -a $LOG_FILE"
 
     echo_to_log "==========================="
     echo_to_log "10. Additional pacman hooks"
