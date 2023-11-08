@@ -314,6 +314,7 @@ function install() {
     # Install Gnome
     arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS \
         gnome                       `# Gnome DE` \
+        power-profiles-daemon       `# CPU power profile support via Gnome settings UI` \
         gnome-themes-extra          `# Adwaita-dark theme for legacy GTK apps` \
         gnome-tweaks                `# Gnome tweak tool` \
         pipewire wireplumber        `# Pipewire and wireplumber session manager` \
