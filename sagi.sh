@@ -361,18 +361,18 @@ function install() {
     if [[ "$INTEL_GPU" == "true" ]]; then
         # Note: installing newer intel-media-driver (iHD) instead of libva-intel-driver (i965)
         # Intel drivers only supports VA-API
-        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils | tee -a "$LOG_FILE"
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils libva lib32-libva | tee -a "$LOG_FILE"
         echo "LIBVA_DRIVER_NAME=iHD" >> /mnt/etc/environment
     fi
 
     if [[ "$AMD_GPU" == "true" ]]; then
         # AMDGPU supports both VA-API and VDPAU, but we're only installing support for VA-API
-        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver libva-utils | tee -a "$LOG_FILE"
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver libva-utils libva lib32-libva | tee -a "$LOG_FILE"
         echo "LIBVA_DRIVER_NAME=radeonsi" >> /mnt/etc/environment
     fi
     
     if [[ "$NVIDIA_GPU" == "true" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings | tee -a "$LOG_FILE"
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings libva-utils libva lib32-libva | tee -a "$LOG_FILE"
 
         # Configure pacman to rebuild the initramfs each time the nvidia package is updated
         configure_pacman_nvidia_hook
