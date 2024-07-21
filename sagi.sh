@@ -22,10 +22,6 @@ AMD_GPU="false"
 INTEL_GPU="false"
 NVIDIA_GPU="false"
 
-# Install Xorg and configure Gnome to use it by default?
-# If set to "false" Gnome will be configured to use Wayland by default
-XORG_INSTALL="false"
-
 # Hostname to ping to check network connection
 PING_HOSTNAME="www.google.com"
 
@@ -52,7 +48,7 @@ ROOT_PASSWORD=""
 USER_NAME=""
 USER_PASSWORD=""
 
-# Additional Linux Command Line Params
+# Additional Custom Linux Commandline Parameters (Note: GPU specific commandline parameters are configured automatically for you)
 CMDLINE_LINUX="" #"msr.allow_writes=on"
 
 # Uncomment to enable the installation log
@@ -78,6 +74,7 @@ function install() {
     echo_to_log "=========================================="
     echo_to_log "1. System clock and initial reflector pass"
     echo_to_log "=========================================="
+    
     # Update system clock
     timedatectl set-ntp true
 
@@ -87,6 +84,7 @@ function install() {
     echo_to_log "================================="
     echo_to_log "2. HD partitioning and formatting"
     echo_to_log "================================="
+    
     # Partion the drive with a single 512 MB ESP partition, and the rest of the drive as the root partition
     parted -s $HD_DEVICE mklabel gpt mkpart ESP fat32 1MiB 512MiB mkpart root ext4 512MiB 100% set 1 esp on
 
@@ -124,6 +122,7 @@ function install() {
     echo_to_log "====================================="
     echo_to_log "3. Initial pacstrap and core packages"
     echo_to_log "====================================="
+    
     # Force a refresh of the archlinux-keyring package for the arch installation environment
     pacman -Sy --noconfirm --noprogressbar archlinux-keyring | tee -a "$LOG_FILE"
 
@@ -152,16 +151,15 @@ function install() {
     # Install additional firmware and uCode
     if [[ "$AMD_CPU" == "true" ]]; then
         arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar linux-firmware amd-ucode | tee -a "$LOG_FILE"
-        local MICROCODE="amd-ucode.img"
 
     elif [[ "$INTEL_CPU" == "true" ]]; then
         arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar linux-firmware intel-ucode | tee -a "$LOG_FILE"
-        local MICROCODE="intel-ucode.img"
     fi
 
     echo_to_log "============================"
     echo_to_log "4. Core system configuration"
     echo_to_log "============================"
+    
     # Enable systemd-resolved local caching DNS provider
     # Note: NetworkManager uses systemd-resolved by default
     arch-chroot /mnt systemctl enable systemd-resolved.service
@@ -228,15 +226,20 @@ function install() {
     echo_to_log "=========================================="
     echo_to_log "5. Bootloader configuration (systemd-boot)"
     echo_to_log "=========================================="
-    # Add KMS if using a NVIDIA GPU
+    
+    # Nvidia GPUs do not support automatic KMS (Kernel Mode Setting) late loading, as such we must enable DRM (Direct Rendering Manager) KMS by adding kernel parameters
+    # This is neccessary to properly support Wayland
+    # See: https://wiki.archlinux.org/title/NVIDIA#DRM_kernel_mode_setting
+    # In addition, we are enabling FB support and also preserving video memory on suspend to properly support GDM (Gnome Display Manager) with Wayland
     if [[ "$NVIDIA_GPU" == "true" ]]; then
-        CMDLINE_LINUX="$CMDLINE_LINUX nvidia-drm.modeset=1"
+        CMDLINE_LINUX="$CMDLINE_LINUX nvidia-drm.modeset=1 nvidia_drm.fbdev=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1"
     fi
 
     CMDLINE_LINUX=$(trim_variable "$CMDLINE_LINUX")
 
     # Standard hooks for /etc/mkinitcpio.conf with systemd boot support
-    local MKINITCPIO_HOOKS="base systemd autodetect keyboard sd-vconsole modconf block fsck filesystems"
+    # See: https://wiki.archlinux.org/title/Mkinitcpio#HOOKS
+    local MKINITCPIO_HOOKS="base systemd autodetect microcode modconf kms keyboard sd-vconsole block fsck filesystems"
 
     # Modules for /etc/mkinitcpio.conf based on GPU
     if [[ "$INTEL_GPU" == "true" ]]; then
@@ -248,6 +251,8 @@ function install() {
     fi
     
     if [[ "$NVIDIA_GPU" == "true" ]]; then
+        # For nvidia GPUS we need to remove default early KMS hook ("kms") as this would include the nouveau kernel in the initrd (initial ramdisk)
+        local MKINITCPIO_HOOKS="base systemd autodetect microcode modconf keyboard sd-vconsole block fsck filesystems"
         local MKINITCPIO_MODULES="nvidia nvidia_modeset nvidia_uvm nvidia_drm"
     fi
 
@@ -276,33 +281,25 @@ function install() {
     # Config for normal boot
     echo "title Arch Linux" >> "/mnt/boot/loader/entries/archlinux.conf"
     echo "efi /vmlinuz-linux" >> "/mnt/boot/loader/entries/archlinux.conf"
-    if [ -n "$MICROCODE" ]; then
-        echo "initrd /$MICROCODE" >> "/mnt/boot/loader/entries/archlinux.conf"
-    fi
     echo "initrd /initramfs-linux.img" >> "/mnt/boot/loader/entries/archlinux.conf"
     echo "options initrd=initramfs-linux.img $CMDLINE_LINUX_ROOT rw $CMDLINE_LINUX" >> "/mnt/boot/loader/entries/archlinux.conf"
 
     # Config for booting into terminal only
     echo "title Arch Linux (terminal)" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
     echo "efi /vmlinuz-linux" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
-    if [ -n "$MICROCODE" ]; then
-        echo "initrd /$MICROCODE" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
-    fi
     echo "initrd /initramfs-linux.img" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
     echo "options initrd=initramfs-linux.img $CMDLINE_LINUX_ROOT rw $CMDLINE_LINUX systemd.unit=multi-user.target" >> "/mnt/boot/loader/entries/archlinux-terminal.conf"
 
     # Config for fallback boot (uses old initramfs)
     echo "title Arch Linux (fallback)" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
     echo "efi /vmlinuz-linux" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
-    if [ -n "$MICROCODE" ]; then
-        echo "initrd /$MICROCODE" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
-    fi
     echo "initrd /initramfs-linux-fallback.img" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
     echo "options initrd=initramfs-linux-fallback.img $CMDLINE_LINUX_ROOT rw $CMDLINE_LINUX" >> "/mnt/boot/loader/entries/archlinux-fallback.conf"
 
     echo "======================"
     echo "6. User configuration"
     echo "======================"
+    
     # Setup user and allow user to use "sudo"
     arch-chroot /mnt useradd -m -G wheel,storage,optical -s /bin/bash $USER_NAME
     printf "$USER_PASSWORD\n$USER_PASSWORD" | arch-chroot /mnt passwd $USER_NAME
@@ -311,6 +308,7 @@ function install() {
     echo_to_log "=================================="
     echo_to_log "7. Compositor & audio system configuration"
     echo_to_log "=================================="
+    
     # Install Gnome
     arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS \
         gnome                       `# Gnome DE` \
@@ -333,23 +331,12 @@ function install() {
         rust                        `# Rust for paru AUR helper` \
         | tee -a "$LOG_FILE"
 
-    # Xorg installs
-    if [[ "$XORG_INSTALL" == "true" ]]; then
-        arch-chroot /mnt sed -i "s/#WaylandEnable=false/WaylandEnable=false/" /etc/gdm/custom.conf
-    fi
-
     arch-chroot /mnt systemctl enable gdm.service
-
-    # Hack to work around GDM startup race condition (bug). Add small delay when starting up GDM
-    # https://bugs.archlinux.org/task/63763	
-	arch-chroot /mnt sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
-
-	# Also configure a pacman hook for GDM to reapply the fix if gdm package is ever updated
-	configure_pacman_gdm_hook
 
     echo_to_log "===================="
     echo_to_log "8. GPU Configuration"
     echo_to_log "===================="
+    
     # Install GPU Drivers
     COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
 
@@ -372,15 +359,27 @@ function install() {
     fi
     
     if [[ "$NVIDIA_GPU" == "true" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings libva-utils libva lib32-libva | tee -a "$LOG_FILE"
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES nvidia-open nvidia-utils lib32-nvidia-utils nvidia-settings libva-utils libva lib32-libva | tee -a "$LOG_FILE"
+        
+        # Force GBM buffer API (rather than EGLStreams)
+        # Note: most compositors already use GBM by default, but this is recommended nonetheless
+        # See: https://wiki.archlinux.org/title/Wayland#Requirements
+        echo "GBM_BACKEND=nvidia-drm" >> /mnt/etc/environment
+        echo "__GLX_VENDOR_LIBRARY_NAME=nvidia" >> /mnt/etc/environment
 
-        # Configure pacman to rebuild the initramfs each time the nvidia package is updated
+        # Enable viarious systemd services that are required for GDM + Wayland to work correctly
+        arch-chroot /mnt systemctl enable nvidia-suspend.service
+        arch-chroot /mnt systemctl enable nvidia-hibernate.service
+        arch-chroot /mnt systemctl enable nvidia-resume.service
+
+        # Configure pacman to rebuild the initramfs each time the nvidia package or the linux kernel package is updated
         configure_pacman_nvidia_hook
     fi
 
     echo_to_log "===================="
     echo_to_log "9. AUR configuration"
     echo_to_log "===================="
+    
     # Install AUR helper
     install_aur_helper
 
@@ -391,6 +390,7 @@ function install() {
     echo_to_log "==========================="
     echo_to_log "10. Additional pacman hooks"
     echo_to_log "==========================="
+    
     # Configure pacman hook for upgrading pacman-mirrorlist package
     configure_pacman_mirror_upgrade_hook
 
@@ -403,6 +403,7 @@ function install() {
     echo_to_log "========================================="
     echo_to_log "11. Clone repo for additional ingredients"
     echo_to_log "========================================="
+    
     # Clone sagi git repo so that user can run post-install recipe
     arch-chroot -u $USER_NAME /mnt git clone --recursive https://github.com/rstrube/sagi.git /home/${USER_NAME}/sagi
 
@@ -443,7 +444,6 @@ function check_variables() {
     check_variables_boolean "AMD_GPU" "$AMD_GPU"
     check_variables_boolean "INTEL_GPU" "$INTEL_GPU"
     check_variables_boolean "NVIDIA_GPU" "$NVIDIA_GPU"
-    check_variables_boolean "XORG_INSTALL" "$XORG_INSTALL"
     check_variables_value "PING_HOSTNAME" "$PING_HOSTNAME"
     check_variables_value "HOSTNAME" "$HOSTNAME"
     check_variables_value "TIMEZONE" "$TIMEZONE"
@@ -547,10 +547,6 @@ function confirm_install() {
     print_variables_boolean "AMD_GPU" "$AMD_GPU"
     print_variables_boolean "INTEL_GPU" "$INTEL_GPU"
     print_variables_boolean "NVIDIA_GPU" "$NVIDIA_GPU"
-    echo ""
-
-    echo -e "${LBLUE}DE Configuration:${NC}"
-    print_variables_boolean "XORG_INSTALL" "$XORG_INSTALL"
     echo ""
 
     echo -e "${LBLUE}Host Configuration:${NC}"
@@ -658,27 +654,6 @@ EOT
 
 }
 
-function configure_pacman_gdm_hook() {	
-    if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then	
-        arch-chroot /mnt mkdir -p /etc/pacman.d/hooks	
-    fi	
-
-    cat <<EOT > "/mnt/etc/pacman.d/hooks/gdm.hook"	
-[Trigger]
-Operation=Install
-Operation=Upgrade
-Type=Package
-Target=gdm	
-
-[Action]
-Description=Adding a small delay to /usr/lib/systemd/system/gdm.service to work around a GDM bug...
-Depends=coreutils
-When=PostTransaction
-Exec=/usr/bin/sed -i '/^\[Service\]/a ExecStartPre=\/bin\/sleep 2' /usr/lib/systemd/system/gdm.service
-EOT
-
-}
-
 function configure_pacman_nvidia_hook() {
     if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then
         arch-chroot /mnt mkdir -p /etc/pacman.d/hooks
@@ -690,16 +665,16 @@ Operation=Install
 Operation=Upgrade
 Operation=Remove
 Type=Package
-Target=nvidia
+Target=nvidia-open
+# If running a different kernel, modify below to match
 Target=linux
-# Change the linux part above and in the Exec line if a different kernel is used
 
 [Action]
-Description=Updating initcpio with latest nvidia kernel module...
+Description=Updating NVIDIA module in initcpio
 Depends=mkinitcpio
 When=PostTransaction
 NeedsTargets
-Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux) exit 0; esac; done; /usr/bin/mkinitcpio -P'
+Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
 EOT
 
 }
