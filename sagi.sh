@@ -230,9 +230,8 @@ function install() {
     # Nvidia GPUs do not support automatic KMS (Kernel Mode Setting) late loading, as such we must enable DRM (Direct Rendering Manager) KMS by adding kernel parameters
     # This is neccessary to properly support Wayland
     # See: https://wiki.archlinux.org/title/NVIDIA#DRM_kernel_mode_setting
-    # In addition, we are enabling FB support and also preserving video memory on suspend to properly support GDM (Gnome Display Manager) with Wayland
     if [[ "$NVIDIA_GPU" == "true" ]]; then
-        CMDLINE_LINUX="$CMDLINE_LINUX nvidia-drm.modeset=1 nvidia_drm.fbdev=1 nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+        CMDLINE_LINUX="$CMDLINE_LINUX nvidia-drm.modeset=1 nvidia_drm.fbdev=1"
     fi
 
     CMDLINE_LINUX=$(trim_variable "$CMDLINE_LINUX")
@@ -366,6 +365,10 @@ function install() {
         # See: https://wiki.archlinux.org/title/Wayland#Requirements
         echo "GBM_BACKEND=nvidia-drm" >> /mnt/etc/environment
         echo "__GLX_VENDOR_LIBRARY_NAME=nvidia" >> /mnt/etc/environment
+
+        # Add additional nvidia module configuration options
+        #1. Preserve all video memory on suspend, this solves an issue with GDM when using Wayland
+        echo "options nvidia NVreg_PreserveVideoMemoryAllocations=1" >> /mnt/etc/modprobe.d/nvidia.conf
 
         # Enable viarious systemd services that are required for GDM + Wayland to work correctly
         arch-chroot /mnt systemctl enable nvidia-suspend.service
