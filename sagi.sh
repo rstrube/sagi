@@ -241,7 +241,7 @@ function install() {
     # See: https://wiki.archlinux.org/title/Mkinitcpio#HOOKS
     local MKINITCPIO_HOOKS="base systemd autodetect microcode modconf kms keyboard sd-vconsole block fsck filesystems"
 
-    # Modules for /etc/mkinitcpio.conf based on GPU
+    # Kernel modules for /etc/mkinitcpio.conf based on GPU to support KMS
     if [[ "$INTEL_GPU" == "true" ]]; then
         local MKINITCPIO_MODULES="i915"
     fi
@@ -310,7 +310,7 @@ function install() {
     echo_to_log "=================================="
     
     # Install Gnome
-    arch-chroot /mnt pacman -S --noconfirm --needed $PACMAN_ARGS \
+    arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar \
         gnome                       `# Gnome DE` \
         power-profiles-daemon       `# CPU power profile support via Gnome settings UI` \
         gnome-themes-extra          `# Adwaita-dark theme for legacy GTK apps` \
@@ -319,11 +319,12 @@ function install() {
         pipewire-pulse              `# Pipewire drop in replacement for PulseAudio` \
         pipewire-jack               `# Pipewire JACK support` \
         gst-plugin-pipewire         `# Additional GStreamer plugins` \
-        gst-libav \
+        gst-libav                   `# GStreamer plugin for libavcodec (part of ffmpeg project which has now split from libva)` \
+        gst-plugins-base \
         gst-plugins-good \
         gst-plugins-bad \
         gst-plugins-ugly \
-        gstreamer-vaapi \
+        gst-plugin-va \
         xdg-desktop-portal          `# Support for screensharing in pipewire for Gnome` \
         xdg-desktop-portal-gtk \
         xdg-desktop-portal-gnome \
@@ -338,42 +339,36 @@ function install() {
     echo_to_log "===================="
     
     # Install GPU Drivers
-    COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
+    local COMMON_VULKAN_PACKAGES="vulkan-icd-loader lib32-vulkan-icd-loader vulkan-tools"
+    local COMMON_LIBVA_PACKAGES="libva-utils libva lib32-libva"
 
     # Drivers for VM guest installations
     if [[ "$INTEL_GPU" == "false" && "$AMD_GPU" == "false" && "$NVIDIA_GPU" == "false" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES mesa lib32-mesa | tee -a "$LOG_FILE"
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES $COMMON_LIBVA_PACKAGES mesa lib32-mesa | tee -a "$LOG_FILE"
     fi
     
     if [[ "$INTEL_GPU" == "true" ]]; then
-        # Note: installing newer intel-media-driver (iHD) instead of libva-intel-driver (i965)
         # Intel drivers only supports VA-API
-        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-utils libva lib32-libva | tee -a "$LOG_FILE"
+        # Note: installing newer intel-media-driver (iHD) instead of libva-intel-driver (i965) for VA-API support
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES $COMMON_LIBVA_PACKAGES mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver | tee -a "$LOG_FILE"
         echo "LIBVA_DRIVER_NAME=iHD" >> /mnt/etc/environment
     fi
 
     if [[ "$AMD_GPU" == "true" ]]; then
         # AMDGPU supports both VA-API and VDPAU, but we're only installing support for VA-API
-        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver libva-utils libva lib32-libva | tee -a "$LOG_FILE"
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES $COMMON_LIBVA_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver | tee -a "$LOG_FILE"
         echo "LIBVA_DRIVER_NAME=radeonsi" >> /mnt/etc/environment
     fi
     
     if [[ "$NVIDIA_GPU" == "true" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES nvidia-open nvidia-utils lib32-nvidia-utils nvidia-settings libva-utils libva lib32-libva | tee -a "$LOG_FILE"
-        
-        # Force GBM buffer API (rather than EGLStreams)
-        # Note: most compositors already use GBM by default, but this is recommended nonetheless
-        # See: https://wiki.archlinux.org/title/Wayland#Requirements
-        echo "GBM_BACKEND=nvidia-drm" >> /mnt/etc/environment
-        echo "__GLX_VENDOR_LIBRARY_NAME=nvidia" >> /mnt/etc/environment
+        # Nvidia driver supports NVDEC / NVENC (provided by nvidia-utils) and VA-API (provided by libva-nvidia-driver bridge)
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES $COMMON_LIBVA_PACKAGES nvidia-open-dkms nvidia-utils lib32-nvidia-utils nvidia-settings libva-nvidia-driver | tee -a "$LOG_FILE"
+        echo "LIBVA_DRIVER_NAME=nvidia" >> /mnt/etc/environment
 
         # Enable viarious systemd services that are required for GDM + Wayland to work correctly
         arch-chroot /mnt systemctl enable nvidia-suspend.service
         arch-chroot /mnt systemctl enable nvidia-hibernate.service
         arch-chroot /mnt systemctl enable nvidia-resume.service
-
-        # Configure pacman to rebuild the initramfs each time the nvidia package or the linux kernel package is updated
-        configure_pacman_nvidia_hook
     fi
 
     echo_to_log "===================="
@@ -654,30 +649,6 @@ EOT
 
 }
 
-function configure_pacman_nvidia_hook() {
-    if [[ ! -d "/mnt/etc/pacman.d/hooks" ]]; then
-        arch-chroot /mnt mkdir -p /etc/pacman.d/hooks
-    fi
-
-    cat <<EOT > "/mnt/etc/pacman.d/hooks/nvidia.hook"
-[Trigger]
-Operation=Install
-Operation=Upgrade
-Operation=Remove
-Type=Package
-Target=nvidia-open
-# If running a different kernel, modify below to match
-Target=linux
-
-[Action]
-Description=Updating NVIDIA module in initcpio
-Depends=mkinitcpio
-When=PostTransaction
-NeedsTargets
-Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
-EOT
-
-}
 
 # Console Colors
 NC='\033[0m'
