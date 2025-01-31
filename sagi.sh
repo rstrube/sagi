@@ -344,7 +344,7 @@ function install() {
 
     # Drivers for VM guest installations
     if [[ "$INTEL_GPU" == "false" && "$AMD_GPU" == "false" && "$NVIDIA_GPU" == "false" ]]; then
-        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES $COMMON_LIBVA_PACKAGES mesa lib32-mesa | tee -a "$LOG_FILE"
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES $COMMON_LIBVA_PACKAGES mesa lib32-mesa vulkan-virtio | tee -a "$LOG_FILE"
     fi
     
     if [[ "$INTEL_GPU" == "true" ]]; then
@@ -356,7 +356,7 @@ function install() {
 
     if [[ "$AMD_GPU" == "true" ]]; then
         # AMDGPU supports both VA-API and VDPAU, but we're only installing support for VA-API
-        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES $COMMON_LIBVA_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver | tee -a "$LOG_FILE"
+        arch-chroot /mnt pacman -S --noconfirm --needed --noprogressbar $COMMON_VULKAN_PACKAGES $COMMON_LIBVA_PACKAGES mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon | tee -a "$LOG_FILE"
         echo "LIBVA_DRIVER_NAME=radeonsi" >> /mnt/etc/environment
     fi
     
