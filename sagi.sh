@@ -135,6 +135,7 @@ function install() {
         linux linux-headers     `# Linux kernel and headers` \
         linux-firmware          `# Linux firmawre` \
         fwupd                   `# Support for updating firmware from Linux Vendor Firmware Service [https://fwupd.org/]` \
+        udisks2                 `# Essential system service for managing storage devices` \
         man-db man-pages        `# man pages` \
         texinfo                 `# GUN documentation format` \
         dosfstools exfatprogs   `# Tools and utilities for FAT and exFAT filesystems` \
