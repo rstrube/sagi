@@ -1,10 +1,7 @@
 #!/bin/bash
 # Generate Recipe Template for sagi
 
-BLACKLIST_ARRAY=("aur.sh"
-                 "kasts.sh"
-                 "kde-configure-baloo-basic-indexing.sh"
-                 "kde-remove-sddm.sh")
+BLACKLIST_ARRAY=("aur.sh")
 
 DATE=$(date +%Y-%m-%d-%H:%M:%S)
 GENERATED_RECIPE_TEMPLATE_NAME="recipe.sh"

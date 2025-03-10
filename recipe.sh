@@ -1,5 +1,5 @@
 #!/bin/bash
-# recipe.sh : 2023-05-31-17:14:47
+# recipe.sh : 2025-03-09-22:11:03
 # NOTE: Please uncomment the ingredients you wish to install before running!
 # --------------------------------------------------------------------------
 
@@ -18,8 +18,8 @@ sudo pacman -Syu --noconfirm --needed
 # --------------------------------------------------------------------------
 #./ingredients/system/btop.sh #btop: a terminal based system monitoring tool (like htop but better)
 #./ingredients/system/dnsutils.sh #Various DNS related utilities including dig
-#./ingredients/system/kitty.sh #kitty: a lightweight GPU accelerated terminal emulator
 #./ingredients/system/networkmanager-openvpn.sh #OpenVPN support for networkmanager
+#./ingredients/system/nfs.sh #NFS support
 #./ingredients/system/openssh.sh #OpenSSH: supports remote login via SSH protocol
 #./ingredients/system/rsync.sh #Command line utility for syncing filesystems (useful for backup)
 #./ingredients/system/seahorse.sh #GUI application for managing Gnome keyring
@@ -39,7 +39,6 @@ sudo pacman -Syu --noconfirm --needed
 # --------------------------------------------------------------------------
 #./ingredients/dev/0_git.sh "Firstname Lastname" "myname@mydomain.com" #Git installation and configuration
 #./ingredients/dev/1_vscode.sh #Visual Studio Code
-#./ingredients/dev/2_dotnet-6.sh #.NET Core SDK and Runtimes (version 6.x)
 #./ingredients/dev/2_dotnet-latest.sh #.NET Core SDK and Runtimes (latest stable version)
 #./ingredients/dev/3_dotnet-https-dev-cert.sh #ASP.NET Dev HTTPS Cert [Requires /dev/dotnet ingredient]
 #./ingredients/dev/android.sh #Android development tools (ADB, etc.)
@@ -60,7 +59,6 @@ sudo pacman -Syu --noconfirm --needed
 #./ingredients/media/blanket.sh #Whitenoise generation application
 #./ingredients/media/codecs.sh #Codecs for Audio, Images, and Video
 #./ingredients/media/dvd.sh #Support for CD & DVD playback [Requires player e.g. vlc]
-#./ingredients/media/gpodder.sh #Excellent podcast manager
 #./ingredients/media/tauon-music-box.sh #Tauon Music Box
 #./ingredients/media/vlc.sh #VLC media player
 
@@ -81,7 +79,7 @@ sudo pacman -Syu --noconfirm --needed
 
 # Fonts
 # --------------------------------------------------------------------------
-#./ingredients/fonts/jetbrains-mono.sh #Install and configure Jetbrains Mono font
+#./ingredients/fonts/jetbrains-mono.sh #Install and configure JetBrainsMono Nerd Font
 
 # Hardware
 # --------------------------------------------------------------------------
@@ -89,8 +87,8 @@ sudo pacman -Syu --noconfirm --needed
 
 # Theming
 # --------------------------------------------------------------------------
-#./ingredients/themes/arc-theme.sh #Arc Theme for Qt and GTK apps
 #./ingredients/themes/dracula-colors.sh #Dracula colors terminal, IDEs
+#./ingredients/themes/gnome-dark.sh #Gnome dark theme
 
 # Gnome Extensions
 # --------------------------------------------------------------------------
